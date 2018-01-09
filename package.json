@@ -1,0 +1,70 @@
+{
+  "name": "wevote-api",
+  "version": "0.0.1",
+  "description": "A CITIZENS MOBILISATION PLATFORM FOR THE 2019 ELECTIONS NIGERIA",
+  "main": "api.js",
+  "private": true,
+  "scripts": {
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./test,./coverage,./docs",
+    "start:dev": "babel-watch api.js",
+    "start": "node dist/api.js",
+    "test": "istanbul cover _mocha -- test/tests.spec.js --compilers js:babel-register --timeout 30000",
+    "test:watch": "npm test --watch",
+    "coveralls": "npm test && cat ./coverage/lcov.info | coveralls",
+    "migrate": "npm run sequelize db:migrate",
+    "sequelize": "./node_modules/.bin/babel-node ./node_modules/.bin/sequelize $*",
+    "seed": "npm run sequelize db:seed:all",
+    "db:prepare": "npm run migrate && npm run seed",
+    "lint": "eslint ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iykyvic/wevote-api.git"
+  },
+  "keywords": [
+    "vote",
+    "nodejs"
+  ],
+  "author": "wevote",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iykyvic/wevote-api/issues"
+  },
+  "homepage": "https://github.com/iykyvic/wevote-api#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.2",
+    "babel-watch": "^2.0.7",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.14.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "faker": "^4.1.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^4.1.0",
+    "should": "^13.2.0"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-latest-node": "^0.4.0",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "debug": "^3.1.0",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "helmet": "^3.9.0",
+    "morgan": "^1.9.0",
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2",
+    "rimraf": "^2.6.2",
+    "s": "^0.1.1",
+    "sequelize": "^4.28.6",
+    "sequelize-cli": "^3.2.0",
+    "winston": "^2.4.0"
+  },
+  "engines": {
+    "node": ">=7.0"
+  }
+}
