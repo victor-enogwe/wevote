@@ -1,7 +1,6 @@
 const path =  require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     devtool: 'inline-source-map',
@@ -23,9 +22,8 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract({
-                    use: ['css-loader', 'sass-loader']
-                })
+                use: ['style-loader', 'css-loader', 'sass-loader']
+
             },
             {
                 test: /\.(jpg|png|svg|gif)$/,
@@ -44,8 +42,7 @@ module.exports = {
         new webpack.optimize.OccurrenceOrderPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/index.html',
-        }),
-        new ExtractTextPlugin('style.css'),
+        })
     ],
     resolve: {
         extensions: ['.js', '.jsx']

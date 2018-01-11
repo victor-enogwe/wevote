@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import PrimaryLayout from './PrimaryLayout';
+import configureStore from "../store/configureStore";
+
+const store = configureStore();
+
 
 class App extends Component {
     render() {
         return (
-            <Router>
-                <h1> We are live </h1>
-            </Router>
+            <Provider store={store}>
+                <Router>
+                    <PrimaryLayout />
+                </Router>
+            </Provider>
         );
     }
 }
