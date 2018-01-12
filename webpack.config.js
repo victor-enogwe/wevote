@@ -35,7 +35,8 @@ module.exports = {
         contentBase: path.join(__dirname, "dist"),
         host: '127.0.0.1',
         compress: true,
-        port: 9000
+        port: 9000,
+        historyApiFallback: true,
     },
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),

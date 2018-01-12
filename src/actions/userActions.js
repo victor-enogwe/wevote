@@ -1,4 +1,6 @@
-import { TEST } from './constants';
+import actionTypes from './constants';
+
+const { TEST } = actionTypes;
 
 export function test(){
     return {
