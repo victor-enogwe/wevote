@@ -7,4 +7,4 @@ Object.defineProperty(exports, "__esModule", {
 var _express = require('express');
 
 /* GET api home. */
-exports.default = (0, _express.Router)().get('/', (req, res) => res.status(200).json({ message: 'Welcome to the WeVote api.' }));
+exports.default = (0, _express.Router)().get('/', (req, res) => res.status(200).json({ status: 'success', message: 'Welcome to the WeVote api.' }));

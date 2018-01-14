@@ -90,4 +90,6 @@ function SequelizeNoUpdateAttributes(sequelize) {
   });
 }
 
-exports.default = config;
+module.exports = config;
+module.exports.config = config;
+module.exports.SequelizeNoUpdateAttributes = SequelizeNoUpdateAttributes;

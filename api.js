@@ -103,7 +103,9 @@ app.use(bodyParser.json());
 Object.keys(Routes).map(route => (route === 'home' ? app
   .use('/api/v1/', Routes[route]) : app.use(`/api/v1/${route}`, Routes[route])));
 
-app.use((req, res) => res.status(404).send('This Api route does not exist!'));
+app.use((req, res) => res.status(404).json({
+  status: 'error', message: 'This Api route does not exist!'
+}));
 
 server.on('listening', onListening);
 server.on('error', onError);

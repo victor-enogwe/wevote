@@ -20,7 +20,7 @@ const logger = new _winston2.default.Logger({
     json: true,
     maxsize: 5242880, // 5MB
     maxFiles: 5,
-    colorize: true
+    colorize: false
   }), new _winston2.default.transports.Console({
     level: 'debug',
     handleExceptions: true,

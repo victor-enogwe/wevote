@@ -15,7 +15,8 @@
     "sequelize": "./node_modules/.bin/babel-node ./node_modules/.bin/sequelize $*",
     "seed": "npm run sequelize db:seed:all",
     "db:prepare": "npm run migrate && npm run seed",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "prestart": "npm run migrate && npm run build"
   },
   "repository": {
     "type": "git",
@@ -48,18 +49,22 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-latest-node": "^0.4.0",
+    "bcrypt": "^1.0.3",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "circular-json": "^0.5.1",
     "cors": "^2.8.4",
+    "crypto": "^1.0.1",
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
     "helmet": "^3.9.0",
+    "jsonwebtoken": "^8.1.0",
     "morgan": "^1.9.0",
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
     "rimraf": "^2.6.2",
-    "s": "^0.1.1",
     "sequelize": "^4.28.6",
     "sequelize-cli": "^3.2.0",
     "winston": "^2.4.0"
