@@ -1,6 +1,7 @@
 import React from 'react';
 import HomePage from './Pages/HomePage';
 import { Route } from 'react-router-dom';
+import VoterReadiness from './Pages/VoterReadiness'
 
 const PrimaryLayout = () => (
     <div className="primary-layout">
@@ -9,6 +10,7 @@ const PrimaryLayout = () => (
         </header>
         <main>
             <Route path="/" exact component={HomePage} />
+            <Route path="/voter_readiness" component={VoterReadiness} />
         </main>
         <footer>
             App Footer

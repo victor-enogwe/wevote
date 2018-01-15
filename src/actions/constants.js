@@ -1,1 +1,11 @@
-export const TEST = 'TEST';
+
+const actionTypes = {
+  TEST: "TEST",
+
+  //VRI = VOTER READINESS INDEX
+  CHECK_VRI: 'CHECK_VRI',
+  CHECK_VRI_SUCCESS: 'CHECK_VRI_SUCCESS',
+  CHECK_VRI_FAILURE: 'CHECK_VRI_FAILURE',
+}
+
+export default actionTypes;
