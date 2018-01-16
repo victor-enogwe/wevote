@@ -1,11 +1,14 @@
-
 const actionTypes = {
-  TEST: "TEST",
+    TEST: 'TEST',
 
-  //VRI = VOTER READINESS INDEX
-  CHECK_VRI: 'CHECK_VRI',
-  CHECK_VRI_SUCCESS: 'CHECK_VRI_SUCCESS',
-  CHECK_VRI_FAILURE: 'CHECK_VRI_FAILURE',
-}
+    // MODALS
+    MODAL_CHOICE: 'MODAL_CHOICE',
+    SIGN_UP_MODAL: 'SIGN_UP_MODAL',
+    SIGN_IN_MODAL: 'SIGN_IN_MODAL',
+
+    // VRI
+    CHECK_VRI: 'CHECK_VRI',
+
+};
 
 export default actionTypes;
