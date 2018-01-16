@@ -124,8 +124,17 @@ than 254 characters.');
    * @returns {null} no return
    */
   static associate(models) {
-    // add associations
-    return models;
+    const {
+      Permission,
+      Role
+    } = models;
+
+    User.belongsToMany(Permission, {
+      through: 'UserPermissions'
+    });
+    User.belongsToMany(Role, {
+      through: 'UserRoles'
+    });
   }
 
   /**

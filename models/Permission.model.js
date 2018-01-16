@@ -52,11 +52,11 @@ export default class Permission extends Model {
     const { User, Role } = models;
 
     Permission.belongsToMany(User, {
-      through: 'UserPermissions',
+      through: 'UserPermissions'
     });
 
     Permission.belongsToMany(Role, {
-      through: 'RolePermissions',
+      through: 'RolePermissions'
     });
   }
 }

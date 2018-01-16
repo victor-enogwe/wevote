@@ -28,7 +28,7 @@ export async function createUser(req, res) {
     await user.setRoles(role);
     await user.setPermissions(permissions);
 
-    return res.status(201).json({ status: 'success' });
+    return res.status(201).json({ status: 'success', message: 'user created!' });
   } catch (error) {
     return handleSequelizeError(error, res);
   }
@@ -121,3 +121,36 @@ export async function getUsers(req, res) {
     return handleSequelizeError(error, res);
   }
 }
+
+/**
+ * Reset a users password
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response obbject
+ *
+ * @return {object} the response
+ */
+export async function resetUserPassword(req, res) {}
+
+/**
+ * Update a users email
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response obbject
+ *
+ * @return {object} the response
+ */
+export async function updateUserEmail(req, res) {}
+
+/**
+ * Update a users phone
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response obbject
+ *
+ * @return {object} the response
+ */
+export async function updateUserPhone(req, res) {}

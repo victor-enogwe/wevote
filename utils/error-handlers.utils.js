@@ -24,7 +24,8 @@ export function handleSequelizeError(error, res) {
     } = original;
     error.errors = [err];
   }
-  const { errors: [message = `${error.parent}`] } = error;
+  const { errors: [err = `${error.parent}`] } = error;
+  const { message } = err;
 
   return res.status(500).json({ status: 'fail', message });
 }
