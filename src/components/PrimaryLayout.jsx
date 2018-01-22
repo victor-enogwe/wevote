@@ -6,6 +6,10 @@ import HomePage from './Pages/HomePage';
 import VoterReadiness from './Pages/VoterReadiness';
 import NavigationBar from './Layouts/NavigationBar';
 
+import { selectModal } from '../actions/userActions';
+import actionTypes from '../actions/constants';
+import VoterReadiness from './Pages/VoterReadiness'
+
 class PrimaryLayout extends Component {
     render() {
         return (
