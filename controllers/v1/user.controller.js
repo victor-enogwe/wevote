@@ -1,4 +1,5 @@
 import database from '../../models';
+import { checkRole, checkOwnership } from './auth.controller';
 import { handleSequelizeError } from '../../utils/error-handlers.utils';
 
 const { User, Role } = database;
@@ -7,8 +8,32 @@ const allowedFields = [
   'surname',
   'email',
   'phone',
+  'age',
+  'sex',
   'password'
 ];
+/**
+ * Create User
+ *
+ * @export
+ * @param {any} data the user data
+ *
+ * @returns {object} the created User
+ */
+export async function createUser(data) {
+  try {
+    const role = await Role.findOne({ where: { name: 'USER' } });
+    const permissions = await role.getPermissions();
+    const user = await User.create(data, { fields: allowedFields });
+
+    await user.setRoles(role);
+    await user.setPermissions(permissions);
+
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
 
 /**
  * Creates a user
@@ -19,14 +44,9 @@ const allowedFields = [
  *
  * @returns {object} the response
  */
-export async function createUser(req, res) {
+export async function registerUser(req, res) {
   try {
-    const role = await Role.findOne({ where: { name: 'USER' } });
-    const permissions = await role.getPermissions();
-    const user = await User.create(req.body, { fields: allowedFields });
-
-    await user.setRoles(role);
-    await user.setPermissions(permissions);
+    createUser(req.body);
 
     return res.status(201).json({ status: 'success', message: 'user created!' });
   } catch (error) {
@@ -45,19 +65,29 @@ export async function createUser(req, res) {
  */
 export async function updateUser(req, res) {
   try {
-    const update = await User
-      .update(req.body, {
-        where: { uuid: req.params.uuid || req.decoded.uuid },
-        attributes: { exclude: ['id', 'createdAt', 'updatedAt'] }
-      }, { fields: allowedFields });
+    const {
+      role, user, decoded: { uuid: userUuid }, params: { uuid }
+    } = req;
+    const isOwner = checkOwnership(uuid, userUuid);
+    const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
+    const canUpdate = isOwner || isSuperUser;
 
-    if (update[0] === 1) {
-      return res.status(200).json({ status: 'success' });
+    if (!canUpdate) {
+      throw new Error('un-authorized access');
     }
 
-    return res.status(404).json({ status: 'fail', message: 'user not found' });
+    if (isOwner) {
+      await user.update(req.body, { fields: ['firstname', 'surname', 'age'] });
+    } else if (isSuperUser) {
+      await User
+        .update(req.body, {
+          where: { uuid },
+          attributes: { exclude: ['id', 'createdAt', 'updatedAt'] }
+        }, { fields: allowedFields });
+    }
+    return res.status(200).json({ status: 'success', message: 'User updated!' });
   } catch (error) {
-    return handleSequelizeError(error, res);
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 }
 
@@ -72,9 +102,18 @@ export async function updateUser(req, res) {
  */
 export async function getUser(req, res) {
   try {
-    const { uuid } = req.user;
-    const currentUser = uuid === req.decoded.uuid || uuid === req.params.uuid;
-    const data = currentUser ? req.user : await User
+    const {
+      role, user, decoded: { uuid: userUuid }, params: { uuid }
+    } = req;
+    const isOwner = checkOwnership(uuid, userUuid);
+    const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
+    const canFetch = isOwner || isSuperUser;
+
+    if (!canFetch) {
+      throw new Error('un-authorized access');
+    }
+
+    const data = isOwner ? user : await User
       .findOne({
         where: { uuid: req.params.uuid },
         attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt'] }
@@ -101,6 +140,13 @@ export async function getUser(req, res) {
  */
 export async function getUsers(req, res) {
   try {
+    const { role } = req;
+    const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
+
+    if (!isSuperUser) {
+      throw new Error('un-authorized access');
+    }
+
     const limit = req.query.limit || 10;
     const offset = req.query.offset || 0;
     const data = await User.findAndCount({

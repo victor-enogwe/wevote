@@ -11,7 +11,8 @@ export default {
       },
       UserId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       RoleId: {
         type: Sequelize.INTEGER,
@@ -24,6 +25,11 @@ export default {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      version: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true
       }
     }).catch(error => logger.error(error));
   },

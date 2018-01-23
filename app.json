@@ -1,0 +1,7 @@
+{
+  "name": "We Vote APi",
+  "description": "A CITIZENS MOBILISATION PLATFORM FOR THE 2019 ELECTIONS",
+  "repository": "https://github.com/iykyvic/wevote-api.git",
+  "logo": "https://static2.stuff.co.nz/1406525193/462/10320462.jpg",
+  "keywords": ["node", "Vote"]
+}

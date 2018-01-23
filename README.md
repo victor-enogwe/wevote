@@ -1,3 +1,6 @@
+[![Dependency Status](https://david-dm.org/wevote-api/wevote-api-node/status.svg)](https://david-dm.org/wevote-api/wevote-api-node/)
+[![devDependency Status](https://david-dm.org/wevote-api/wevote-api-node/dev-status.svg)](https://david-dm.org/wevote-api/wevote-api-node/#info=devDependencies)
+
 # wevote-api
 A CITIZENS MOBILISATION PLATFORM FOR THE 2019 ELECTIONS.
 

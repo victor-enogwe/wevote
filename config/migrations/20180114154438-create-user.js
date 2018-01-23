@@ -36,6 +36,20 @@ export default {
           allowNull: true,
           unique: true
         },
+        sex: {
+          type: Sequelize.ENUM,
+          values: ['male', 'female'],
+          allowNull: true,
+        },
+        age: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+        },
+        verified: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: false
+        },
         password: {
           type: Sequelize.STRING,
           allowNull: false
@@ -47,6 +61,11 @@ export default {
         updatedAt: {
           allowNull: false,
           type: Sequelize.DATE
+        },
+        version: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          autoIncrement: true
         }
       }))
       .catch(error => logger.error(error));

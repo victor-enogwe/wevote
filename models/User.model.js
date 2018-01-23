@@ -84,6 +84,29 @@ than 254 characters.');
         this.setDataValue('phone', value.trim());
       }
     },
+    sex: {
+      type: Sequelize.ENUM,
+      values: ['male', 'female'],
+      allowNull: true,
+    },
+    age: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      validate: {
+        is: {
+          args: /\d+/,
+          msg: 'please enter a valid age'
+        }
+      },
+      set(value) {
+        this.setDataValue('age', value.trim());
+      }
+    },
+    verified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
     password: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -99,6 +122,7 @@ than 254 characters.');
       }
     }
   };
+
   /**
    * initializes the User model
    *
@@ -110,7 +134,7 @@ than 254 characters.');
    * @returns {object} the User model
    */
   static init(sequelize) {
-    return super.init(User.modelFields, { sequelize });
+    return super.init(User.modelFields, { sequelize, version: true });
   }
 
   /**
@@ -126,15 +150,15 @@ than 254 characters.');
   static associate(models) {
     const {
       Permission,
-      Role
+      Role,
+      SocialAccount,
+      Vri
     } = models;
 
-    User.belongsToMany(Permission, {
-      through: 'UserPermissions'
-    });
-    User.belongsToMany(Role, {
-      through: 'UserRoles'
-    });
+    User.belongsToMany(Permission, { through: 'UserPermissions' });
+    User.belongsToMany(Role, { through: 'UserRoles' });
+    User.hasMany(SocialAccount, { foreignKey: 'userUuid', sourceKey: 'uuid' });
+    User.belongsToMany(Vri, { through: 'UserVris' });
   }
 
   /**

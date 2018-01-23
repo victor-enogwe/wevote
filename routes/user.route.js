@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator/check';
 import { checkRequestValidity } from '../middlewares/validators.middleware';
-import { verifyToken } from '../controllers/v1/auth.controller';
+import { verifyToken, setRole, setUser } from '../controllers/v1/auth.controller';
 import {
-  createUser,
+  registerUser,
   updateUser,
   getUser,
   getUsers,
@@ -19,13 +19,15 @@ userRoutes
     '/create',
     body('firstname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
     body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
+    body('age', 'enter a valid integer').isInt().optional(),
     body('email').isEmail(),
     body('password', 'min of 8 chars').isLength({ min: 8 }),
-    body('phone').matches(/0\d{10}/).optional(),
+    body('phone').matches(/0\d{10}/),
+    body('sex').isIn(['male', 'female']).optional(),
     checkRequestValidity,
-    createUser
+    registerUser
   )
-  .use(verifyToken)
+  .use(verifyToken, setUser, setRole)
   .get(
     '/fetch',
     query('limit', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
@@ -34,7 +36,7 @@ userRoutes
     getUsers
   )
   .get(
-    '/:uuid',
+    '/fetch/:uuid',
     param('uuid').isUUID(4).optional(),
     checkRequestValidity,
     getUser
@@ -44,6 +46,7 @@ userRoutes
     param('uuid').isUUID(4),
     body('firstname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g').optional(),
     body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g').optional(),
+    body('age', 'enter a valid integer').isInt().optional(),
     checkRequestValidity,
     updateUser
   )
