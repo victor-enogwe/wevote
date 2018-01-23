@@ -2,17 +2,21 @@ import logger from 'winston';
 
 export default {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Permissions', {
+    return queryInterface.createTable('UserVris', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      access: {
+      question: {
         allowNull: false,
-        unique: true,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      completed: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
@@ -31,7 +35,7 @@ export default {
   },
 
   down(queryInterface) {
-    return queryInterface.dropTable('Permissions')
+    return queryInterface.dropTable('UserVris')
       .catch(error => logger.error(error));
   }
 };

@@ -35,7 +35,7 @@ export default class Permission extends Model {
    * @returns {object} the Permission model
    */
   static init(sequelize) {
-    return super.init(Permission.modelFields, { sequelize });
+    return super.init(Permission.modelFields, { sequelize, version: true });
   }
 
   /**

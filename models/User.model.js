@@ -92,7 +92,6 @@ than 254 characters.');
     verified: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      values: [true, false],
       defaultValue: false
     },
     password: {
@@ -122,7 +121,7 @@ than 254 characters.');
    * @returns {object} the User model
    */
   static init(sequelize) {
-    return super.init(User.modelFields, { sequelize });
+    return super.init(User.modelFields, { sequelize, version: true });
   }
 
   /**
@@ -139,12 +138,14 @@ than 254 characters.');
     const {
       Permission,
       Role,
-      SocialAccount
+      SocialAccount,
+      Vri
     } = models;
 
     User.belongsToMany(Permission, { through: 'UserPermissions' });
     User.belongsToMany(Role, { through: 'UserRoles' });
     User.hasMany(SocialAccount, { foreignKey: 'userUuid', sourceKey: 'uuid' });
+    User.belongsToMany(Vri, { through: 'UserVris' });
   }
 
   /**

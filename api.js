@@ -1,6 +1,7 @@
 import compression     from 'compression';
 import dotenv          from 'dotenv';
 import express         from 'express';
+import session         from 'express-session';
 import httpLogger      from 'morgan';
 import bodyParser      from 'body-parser';
 import http            from 'http';
@@ -14,6 +15,7 @@ import Logger          from './config/logger';
 
 dotenv.config();
 
+const { NODE_ENV, TWITTER_CONSUMER_SECRET, PORT } = process.env;
 const app = express();
 
 /**
@@ -33,9 +35,9 @@ const normalizePort = (val) => {
   return false;
 };
 
-const environment = process.env.NODE_ENV || 'production';
+const environment = NODE_ENV || 'production';
 const logLevel = environment !== 'production' ? 'dev' : 'common';
-const port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(PORT || '5000');
 const server = http.createServer(app);
 
 /**
@@ -147,6 +149,11 @@ app.use((req, res, next) => {
   next();
 });
 app.use(httpLogger(logLevel, { stream: Logger.stream }));
+app.use(session({
+  secret: TWITTER_CONSUMER_SECRET,
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(responseTime({ digits: 4 }));
@@ -160,7 +167,7 @@ app.use(genericErrorHandler);
 server.on('listening', onListening);
 server.on('error', onError);
 
-database.sequelize.sync({ ALTER: true })
+database.sequelize.sync()
   .then(() => server.listen(port))
   .catch(err => Logger.error(err));
 

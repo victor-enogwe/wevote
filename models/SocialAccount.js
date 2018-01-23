@@ -20,10 +20,6 @@ export default class SocialAccount extends Model {
     socialId: {
       type: Sequelize.STRING,
       allowNull: true,
-      unique: {
-        args: true,
-        msg: 'Oops. There is an existing account with this social Id.',
-      },
       validate: {
         is: {
           args: /\w+/,
@@ -38,10 +34,6 @@ export default class SocialAccount extends Model {
     email: {
       allowNull: false,
       type: Sequelize.STRING,
-      unique: {
-        args: true,
-        msg: 'Oops. There is an existing account with this email address.',
-      },
       validate: {
         isEmail: {
           args: true,
@@ -56,8 +48,15 @@ than 254 characters.');
       },
       set(value) {
         this.setDataValue('email', value);
-      }
-    }
+      },
+      noUpdate: true
+    },
+    provider: {
+      type: Sequelize.ENUM,
+      allowNull: false,
+      noUpdate: true,
+      values: ['twitter', 'facebook'],
+    },
   };
 
   /**
@@ -71,7 +70,7 @@ than 254 characters.');
    * @returns {object} the Social Account model
    */
   static init(sequelize) {
-    return super.init(SocialAccount.modelFields, { sequelize });
+    return super.init(SocialAccount.modelFields, { sequelize, version: true });
   }
 
   /**

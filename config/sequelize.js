@@ -13,7 +13,16 @@ export const config = {
   dialectOptions: {
     multipleStatements: true
   },
-  operatorsAliases: false
+  operatorsAliases: false,
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000,
+  },
+  define: {
+    underscored: false,
+    version: true
+  },
 };
 
 if (!devMode) {

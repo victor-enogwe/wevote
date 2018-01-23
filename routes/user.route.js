@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator/check';
 import { checkRequestValidity } from '../middlewares/validators.middleware';
-import { verifyToken } from '../controllers/v1/auth.controller';
+import { verifyToken, setRole, setUser } from '../controllers/v1/auth.controller';
 import {
   registerUser,
   updateUser,
@@ -26,7 +26,7 @@ userRoutes
     checkRequestValidity,
     registerUser
   )
-  .use(verifyToken)
+  .use(verifyToken, setUser, setRole)
   .get(
     '/fetch',
     query('limit', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
@@ -35,7 +35,7 @@ userRoutes
     getUsers
   )
   .get(
-    '/:uuid',
+    '/fetch/:uuid',
     param('uuid').isUUID(4).optional(),
     checkRequestValidity,
     getUser

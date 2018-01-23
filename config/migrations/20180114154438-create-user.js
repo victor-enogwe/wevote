@@ -42,9 +42,8 @@ export default {
           allowNull: true,
         },
         verified: {
-          type: Sequelize.ENUM,
+          type: Sequelize.BOOLEAN,
           allowNull: false,
-          values: [true, false],
           defaultValue: false
         },
         password: {
@@ -58,6 +57,11 @@ export default {
         updatedAt: {
           allowNull: false,
           type: Sequelize.DATE
+        },
+        version: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          autoIncrement: true
         }
       }))
       .catch(error => logger.error(error));

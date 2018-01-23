@@ -34,7 +34,7 @@ export default class Role extends Model {
    * @returns {object} the Role model
    */
   static init(sequelize) {
-    return super.init(Role.modelFields, { sequelize });
+    return super.init(Role.modelFields, { sequelize, version: true });
   }
 
   /**
