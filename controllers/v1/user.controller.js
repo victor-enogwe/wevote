@@ -8,6 +8,7 @@ const allowedFields = [
   'surname',
   'email',
   'phone',
+  'age',
   'sex',
   'password'
 ];
@@ -76,7 +77,7 @@ export async function updateUser(req, res) {
     }
 
     if (isOwner) {
-      await user.update(req.body, { fields: ['firstname', 'surname'] });
+      await user.update(req.body, { fields: ['firstname', 'surname', 'age'] });
     } else if (isSuperUser) {
       await User
         .update(req.body, {

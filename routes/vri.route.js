@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator/check';
-import { verifyToken, setRole, setUser } from '../controllers/v1/auth.controller';
+import {
+  verifyToken, setRole, setUser, isAdminOrSuperUser
+} from '../controllers/v1/auth.controller';
 import { checkRequestValidity } from '../middlewares/validators.middleware';
 import {
   createVri, updateVri, getVris, updateVris, deleteVris, deleteVri
@@ -9,7 +11,20 @@ import {
 const vriRoutes = Router();
 
 vriRoutes
-  .use(verifyToken, setUser, setRole)
+  .get(
+    '/fecth',
+    query('limit', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
+    query('offset', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
+    checkRequestValidity,
+    getVris
+  )
+  .get(
+    '/fetch/:id',
+    param('id').isInt(),
+    checkRequestValidity,
+    updateVris
+  )
+  .use(verifyToken, setUser, setRole, isAdminOrSuperUser)
   .post(
     '/create',
     body('question').exists(),
@@ -17,10 +32,8 @@ vriRoutes
     checkRequestValidity,
     createVri
   )
-  .patch('/update/:uuid', param('uuid').isUUID(4), updateVri)
-  .get('/fecth', getVris)
-  .get('/fetch/uuid', updateVris)
-  .delete('/delete', query('uuids').exists(), deleteVris)
-  .delete('/delete/:uuid', deleteVri);
+  .patch('/update/:id', param('id').isInt(), updateVri)
+  .delete('/delete', query('ids').exists(), deleteVris)
+  .delete('/delete/:id', param('id').isInt(), deleteVri);
 
 export default vriRoutes;

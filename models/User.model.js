@@ -89,6 +89,19 @@ than 254 characters.');
       values: ['male', 'female'],
       allowNull: true,
     },
+    age: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      validate: {
+        is: {
+          args: /\d+/,
+          msg: 'please enter a valid age'
+        }
+      },
+      set(value) {
+        this.setDataValue('age', value.trim());
+      }
+    },
     verified: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

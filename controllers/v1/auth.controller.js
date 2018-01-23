@@ -283,3 +283,27 @@ export function checkOwnership(creatorId, userId) {
     throw error;
   }
 }
+/**
+ * Check If User is superUser or Admin
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response object
+ *  @param {Function} next the callback
+ *
+ * @returns {object} the response object
+ */
+export function isAdminOrSuperUser(req, res, next) {
+  try {
+    const { role } = req;
+    if (!role) {
+      throw new Error('role not present huh!');
+    } else if (!['ADMIN', 'SUPER_USER'].includes(req.role)) {
+      throw new Error('unauthorized access');
+    }
+
+    return next();
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: error.message });
+  }
+}
