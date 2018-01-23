@@ -41,6 +41,10 @@ export default {
           values: ['male', 'female'],
           allowNull: true,
         },
+        age: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+        },
         verified: {
           type: Sequelize.BOOLEAN,
           allowNull: false,

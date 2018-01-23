@@ -19,10 +19,11 @@ userRoutes
     '/create',
     body('firstname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
     body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
+    body('age', 'enter a valid integer').isInt().optional(),
     body('email').isEmail(),
     body('password', 'min of 8 chars').isLength({ min: 8 }),
     body('phone').matches(/0\d{10}/),
-    body('sex').isIn(['male', 'female']),
+    body('sex').isIn(['male', 'female']).optional(),
     checkRequestValidity,
     registerUser
   )
@@ -45,6 +46,7 @@ userRoutes
     param('uuid').isUUID(4),
     body('firstname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g').optional(),
     body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g').optional(),
+    body('age', 'enter a valid integer').isInt().optional(),
     checkRequestValidity,
     updateUser
   )
