@@ -84,6 +84,17 @@ than 254 characters.');
         this.setDataValue('phone', value.trim());
       }
     },
+    sex: {
+      type: Sequelize.ENUM,
+      values: ['male', 'female'],
+      allowNull: true,
+    },
+    verified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      values: [true, false],
+      defaultValue: false
+    },
     password: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -99,6 +110,7 @@ than 254 characters.');
       }
     }
   };
+
   /**
    * initializes the User model
    *
@@ -126,15 +138,13 @@ than 254 characters.');
   static associate(models) {
     const {
       Permission,
-      Role
+      Role,
+      SocialAccount
     } = models;
 
-    User.belongsToMany(Permission, {
-      through: 'UserPermissions'
-    });
-    User.belongsToMany(Role, {
-      through: 'UserRoles'
-    });
+    User.belongsToMany(Permission, { through: 'UserPermissions' });
+    User.belongsToMany(Role, { through: 'UserRoles' });
+    User.hasMany(SocialAccount, { foreignKey: 'userUuid', sourceKey: 'uuid' });
   }
 
   /**

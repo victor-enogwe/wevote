@@ -3,7 +3,7 @@ import { body, param, query } from 'express-validator/check';
 import { checkRequestValidity } from '../middlewares/validators.middleware';
 import { verifyToken } from '../controllers/v1/auth.controller';
 import {
-  createUser,
+  registerUser,
   updateUser,
   getUser,
   getUsers,
@@ -21,9 +21,10 @@ userRoutes
     body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
     body('email').isEmail(),
     body('password', 'min of 8 chars').isLength({ min: 8 }),
-    body('phone').matches(/0\d{10}/).optional(),
+    body('phone').matches(/0\d{10}/),
+    body('sex').isIn(['male', 'female']),
     checkRequestValidity,
-    createUser
+    registerUser
   )
   .use(verifyToken)
   .get(

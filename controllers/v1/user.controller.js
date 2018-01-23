@@ -7,8 +7,31 @@ const allowedFields = [
   'surname',
   'email',
   'phone',
+  'sex',
   'password'
 ];
+/**
+ * Create User
+ *
+ * @export
+ * @param {any} data the user data
+ *
+ * @returns {object} the created User
+ */
+export async function createUser(data) {
+  try {
+    const role = await Role.findOne({ where: { name: 'USER' } });
+    const permissions = await role.getPermissions();
+    const user = await User.create(data, { fields: allowedFields });
+
+    await user.setRoles(role);
+    await user.setPermissions(permissions);
+
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
 
 /**
  * Creates a user
@@ -19,14 +42,9 @@ const allowedFields = [
  *
  * @returns {object} the response
  */
-export async function createUser(req, res) {
+export async function registerUser(req, res) {
   try {
-    const role = await Role.findOne({ where: { name: 'USER' } });
-    const permissions = await role.getPermissions();
-    const user = await User.create(req.body, { fields: allowedFields });
-
-    await user.setRoles(role);
-    await user.setPermissions(permissions);
+    createUser(req.body);
 
     return res.status(201).json({ status: 'success', message: 'user created!' });
   } catch (error) {

@@ -1,17 +1,18 @@
+import compression     from 'compression';
 import dotenv          from 'dotenv';
-import debug           from 'debug';
 import express         from 'express';
 import httpLogger      from 'morgan';
 import bodyParser      from 'body-parser';
 import http            from 'http';
+import https           from 'https';
 import cors            from 'cors';
+import responseTime    from 'response-time';
 import helmet          from 'helmet';
 import database        from './models/';
 import Routes          from './routes/';
 import Logger          from './config/logger';
 
 dotenv.config();
-debug('wevote-api');
 
 const app = express();
 
@@ -36,12 +37,15 @@ const environment = process.env.NODE_ENV || 'production';
 const logLevel = environment !== 'production' ? 'dev' : 'common';
 const port = normalizePort(process.env.PORT || '5000');
 const server = http.createServer(app);
+
 /**
  * Event listener for HTTP server "error" event.
+ *
  * @param {any} error an error message
+ *
  * @returns {null} error already thrown
  */
-const onError = (error) => {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -60,20 +64,59 @@ const onError = (error) => {
     default:
       throw error;
   }
-};
+}
 
 /**
  * Event listener for HTTP server "listening" event.
+ *
  * @returns {null} server process is continous here, so no returns
  */
-const onListening = () => {
-  const addr = server.address();
+function onListening() {
+  const serverDetails = server.address();
+  const protocol = `http${(server instanceof https.Server ? 's' : '')}`;
   const bind = typeof addr === 'string'
-    ? `pipe ${addr}`
-    : `port ${addr.port}`;
-  debug(`🚧 App is Listening on ${bind}`);
-};
-const headers1 = 'Origin, X-Requested-With, Content-Type, Authorization';
+    ? `pipe ${serverDetails}`
+    : `port ${port}`;
+  const { address } = serverDetails;
+  return Logger.info(`🚧 WeVote Api is Listening on ${protocol}://${address} ${bind}`);
+}
+
+/**
+ * Error 404 Handler for APi
+ *
+ * @param {Object} req the http request obbject
+ * @param {Object} res the http response object
+ *
+ * @returns {Object} the response
+ */
+function error404Handler(req, res) {
+  return res.status(404).json({
+    status: 'error', message: 'This Api route does not exist!'
+  });
+}
+
+/**
+ * Error Handler for APi
+ *
+ * @param {Object} error the error object
+ * @param {Object} req the http request obbject
+ * @param {Object} res the http response object
+ * @param {Function} next the callback
+ *
+ * @returns {Object} the response
+ */
+function genericErrorHandler(error, req, res) {
+  const isProduction = environment === 'production' || false;
+  const { status, message } = error;
+
+  if (isProduction) {
+    return res.status(status).json({ status: 'error', message });
+  }
+
+  return res.status(status).json({ status: 'error', error });
+}
+
+const headers1 = 'Origin, X-Requested-With, Content-Type';
 const headers2 = 'Accept, Access-Control-Allow-Credentials, x-access-token';
 const whitelist = process.env.CLIENT_URL;
 const corsOptionsDelegate = (req, callback) => {
@@ -87,6 +130,13 @@ const corsOptionsDelegate = (req, callback) => {
 };
 
 app.set('port', port);
+app.set('json spaces', 2);
+app.set('json replacer', (key, value) => {
+  const excludes = ['password', '_raw', '_json'];
+
+  return excludes.includes(key) ? undefined : value;
+});
+app.use(compression());
 app.use(helmet());
 app.use(cors(corsOptionsDelegate));
 app.use((req, res, next) => {
@@ -99,21 +149,19 @@ app.use((req, res, next) => {
 app.use(httpLogger(logLevel, { stream: Logger.stream }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(responseTime({ digits: 4 }));
 
 Object.keys(Routes).map(route => (route === 'home' ? app
   .use('/api/v1/', Routes[route]) : app.use(`/api/v1/${route}`, Routes[route])));
 
-app.use((req, res) => res.status(404).json({
-  status: 'error', message: 'This Api route does not exist!'
-}));
+app.use(error404Handler);
+app.use(genericErrorHandler);
 
 server.on('listening', onListening);
 server.on('error', onError);
 
 database.sequelize.sync({ ALTER: true })
   .then(() => server.listen(port))
-  .then(() => Logger
-    .info(`🚧 WeVote Api is Listening on ${port}`))
   .catch(err => Logger.error(err));
 
 export default app;

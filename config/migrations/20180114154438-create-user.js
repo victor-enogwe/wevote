@@ -36,6 +36,17 @@ export default {
           allowNull: true,
           unique: true
         },
+        sex: {
+          type: Sequelize.ENUM,
+          values: ['male', 'female'],
+          allowNull: true,
+        },
+        verified: {
+          type: Sequelize.ENUM,
+          allowNull: false,
+          values: [true, false],
+          defaultValue: false
+        },
         password: {
           type: Sequelize.STRING,
           allowNull: false
