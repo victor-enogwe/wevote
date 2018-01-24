@@ -31,8 +31,12 @@ class VriForm extends Component {
   constructor(props){
     super(props);
     this.onChange = this.onChange.bind(this);
+    this.checkVRI = this.checkVRI.bind(this);
     this.state = {
-      option: "A"
+      card: "A",
+      proximity: "F",
+      candidate: "I",
+      vriStatus: true
     }
   }
 
@@ -41,35 +45,61 @@ class VriForm extends Component {
     console.log(event.target.value)
   }
 
+  checkVRI(){
+    const {card, proximity, candidate} = this.state;
+    const score = scores[card] + scores[proximity] + scores[candidate];
+    alert (score)
+  }
+
 
   render(){
-    const {card, proximity, candidate} = this.state;
+    const {card, proximity, candidate, vriStatus} = this.state;
     return (
-      <form>
-        <select value={card} onChange={this.onChange} name="card">
-          <option value="A">{resposes.A}</option>
-          <option value="B">{resposes.B}</option>
-          <option value="C">{resposes.C}</option>
-          <option value="D">{resposes.D}</option>
-          <option value="E">{resposes.E}</option>
-        </select>
-        {card == "D" || card == "E" ? 
-          <select value={card}>
-            <option value={card}>{resposes[card]}</option>
-          </select>
-           :
-          <select value={proximity} onChange={this.onChange} name="proximity">
-            <option value="F">{resposes.F}</option>
-            <option value="G">{resposes.G}</option>
-            <option value="H">{resposes.H}</option>
-          </select>
+      <div className="container-flex">
+        <div className="col-md-7">
+          <h1 > Voter's Readiness </h1>
+          <p >Your readiness to vote is very important </p>
+        </div>
+        {vriStatus ==true ? <div id="donutchart" /> :
+        <form className="col-md-5 form-vri">
+          <div className="form-group">
+            <label htmlFor="card"> <b>Registration/Card Collection:</b> </label>
+            <select className="form-control" value={card} onChange={this.onChange} name="card">
+              <option value="A">{resposes.A}</option>
+              <option value="B">{resposes.B}</option>
+              <option value="C">{resposes.C}</option>
+              <option value="D">{resposes.D}</option>
+              <option value="E">{resposes.E}</option>
+            </select>
+            <small className="form-text text-muted">At what stage are you with your registration?</small>
+          </div>
+          <div className="form-group">
+            <label htmlFor="proximity"> <b>Proximity:</b> </label>
+            {card == "D" || card == "E" ? 
+              <select className="form-control" value={card} name="proximity">
+                <option value={card}>{resposes[card]}</option>
+              </select>
+              :
+              <select className="form-control" value={proximity} onChange={this.onChange} name="proximity">
+                <option value="F">{resposes.F}</option>
+                <option value="G">{resposes.G}</option>
+                <option value="H">{resposes.H}</option>
+              </select>
+            }
+            <small className="form-text text-muted">Tell us how close to your registration center you live.</small>
+          </div>
+          <div className="form-group">
+            <label htmlFor="candidate"> <b>Clarity of Choice:</b> </label>
+            <select className="form-control" value={candidate} onChange={this.onChange} name="candidate">
+              <option value="I">{resposes.I}</option>
+              <option value="J">{resposes.J}</option>
+            </select>
+            <small className="form-text text-muted">How clear are you about whom to vote for?</small>
+          </div>
+          <input type="button" onClick={this.checkVRI} value="Check Your Readiness" />
+        </form>
         }
-        <select value={candidate} onChange={this.onChange} name="candidate">
-          <option value="I">{resposes.I}</option>
-          <option value="J">{resposes.J}</option>
-        </select>
-        <button type="submit"> Check Your Readiness</button>
-      </form>
+      </div>
     );
   }
 }
