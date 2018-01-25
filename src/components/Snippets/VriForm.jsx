@@ -32,11 +32,14 @@ class VriForm extends Component {
     super(props);
     this.onChange = this.onChange.bind(this);
     this.checkVRI = this.checkVRI.bind(this);
+    this.drawChart = this.drawChart.bind(this);
+    this.chartDiv = null;
     this.state = {
       card: "A",
       proximity: "F",
       candidate: "I",
-      vriStatus: true
+      vriStatus: false,
+      score: 0
     }
   }
 
@@ -48,7 +51,35 @@ class VriForm extends Component {
   checkVRI(){
     const {card, proximity, candidate} = this.state;
     const score = scores[card] + scores[proximity] + scores[candidate];
+    localStorage.score = score;
+    // this.setState({vriStatus: true});
+    // this.drawChart();
     alert (score)
+  }
+
+  drawChart() {
+    const data = google.visualization.arrayToDataTable([
+      ['Task', 'Hours per Day'],
+      ['Score',     this.state.score],
+      ['Remaining',      100 - this.state.score]
+    ]);
+  
+    const options = {
+      title: 'Your Voter Readiness Index',
+      pieHole: 0.8,
+      colors: ['green', 'red'],
+      chartArea: {width: "400", height: "400", left: '50'},
+      legend: 'none',
+      pieStartAngle: 114
+    };
+  
+    const donutchart = document.getElementById('donutchart');
+    console.log(this.chartDiv)
+  
+    if (donutchart) {
+      const chart = new google.visualization.PieChart(donutchart);
+      chart.draw(data, options);
+    }
   }
 
 
@@ -60,7 +91,7 @@ class VriForm extends Component {
           <h1 > Voter's Readiness </h1>
           <p >Your readiness to vote is very important </p>
         </div>
-        {vriStatus ==true ? <div id="donutchart" /> :
+        {vriStatus ==true ? <div id="donutchart" ref={div => this.chartDiv = div} /> :
         <form className="col-md-5 form-vri">
           <div className="form-group">
             <label htmlFor="card"> <b>Registration/Card Collection:</b> </label>
