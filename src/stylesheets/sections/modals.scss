@@ -1,3 +1,5 @@
+@import "variables";
+
 .modal {
   background-color: rgba(0,0,0,0.5);
   position: fixed;
@@ -8,5 +10,194 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  label {
+    display: none;
+  }
+
+  .modal-section {
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    .inner-modal-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      width: 80%;
+      min-height: 60%;
+
+      .modal-header {
+        margin-top: 10px;
+        font-weight: 500;
+      }
+
+      .close-modal {
+        margin-left: auto;
+      }
+
+      .email {
+        background: $email-color;
+      }
+
+      .facebook {
+        background: $facebook-color;
+      }
+
+      .twitter {
+        background: $twitter-color;
+      }
+
+      .sign-up-agreement {
+        font-size: 0.9em;
+        text-align: center;
+        margin-top: 5px;
+        width: 85%;
+      }
+
+      .social-buttons {
+        width: 95%;
+        height: 50px;
+        border-radius: 2px;
+        position: relative;
+        margin-bottom: 10px;
+
+        i {
+          color: white;
+          position: absolute;
+          top: 50%;
+          left: 8%;
+          transform: translateY(-50%);
+        }
+
+        p {
+          text-align: center;
+          color: white;
+          font-weight: 400;
+          letter-spacing: 1px;
+        }
+      }
+
+      .sign-up-form {
+        width: 95%;
+
+        .sign-up-select-fields {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+
+          .select-input {
+            border: 1px solid silver;
+            border-radius: 2px;
+            height: 40px;
+            width: 43%;
+
+            select {
+              width: 100%;
+              height: 100%;
+              font-size: 0.8em;
+              outline: none;
+              padding-left: 20px;
+              color: grey;
+            }
+          }
+        }
+
+        .submit-button {
+          width: 100%;
+          height: 50px;
+          color: white;
+          background-color: $email-color;
+          font-size: 1em;
+          border: none;
+          border-radius: 2px;
+
+          p {
+            text-align: center;
+            color: white;
+          }
+        }
+
+        .text-input {
+          position: relative;
+          border: 1px solid silver;
+          border-radius: 2px;
+          height: 40px;
+          padding-left: 20px;
+          margin-bottom: 15px;
+
+          .show-password {
+            position: absolute;
+            top: 50%;
+            right: 3%;
+            transform: translateY(-50%);
+          }
+
+          i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          input {
+            width: 80%;
+            height: 86%;
+            padding-left: 10px;
+            margin-left: 30px;
+            font-size: 0.8em;
+            outline: none;
+          }
+        }
+      }
+    }
+
+    aside {
+      width: 100%;
+      margin-bottom: 15px;
+
+      hr {
+        width: 100%;
+      }
+
+      section {
+        width: 78%;
+        margin: 15px auto 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .we-voter {
+          width: 60%;
+          margin: 0;
+        }
+
+        div {
+          width: 93px;
+          height: 37px;
+          border: 1px solid green;
+          border-radius: 2px;
+
+          p {
+            text-align: center;
+            color: green;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
 }
 
+@media screen and (min-width: $tablet){
+  .modal {
+    .modal-section {
+      width: 500px;
+      height: 600px;
+    }
+  }
+}
