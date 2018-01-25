@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import News from './Pages/News';
 import HomePage from './Pages/HomePage';
 import VoterReadiness from './Pages/VoterReadiness';
 import ModalController from './Modals/ModalController';
@@ -34,6 +35,7 @@ class PrimaryLayout extends Component {
         return (
             <div className="primary-layout">
                 <header>
+
                     WeVote App
                     <button
                         onClick={() => this.handleShow(SIGN_UP_MODAL)}
@@ -45,12 +47,14 @@ class PrimaryLayout extends Component {
                     </button>
                     {this.state.showModal &&
                     <ModalController
+                        handleShow={this.handleShow}
                         handleHide={this.handleHide}
                     />}
                 </header>
                 <main>
                     <Route path="/" exact component={HomePage} />
                     <Route path="/voter-readiness" component={VoterReadiness} />
+                    <Route path="/news" component={News} />
                 </main>
                 <footer>
                     App Footer
