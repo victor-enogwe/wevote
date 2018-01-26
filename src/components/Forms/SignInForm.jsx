@@ -6,7 +6,7 @@ const SignIn = ({handleHide, handleChange, signInDetails, showPassword, toggleSh
     <div className="modal-section">
         <section className="inner-modal-section">
             <i onClick={handleHide} className="fas fa-times fa-lg close-modal"></i>
-            <h2 className="modal-header"> Sign Up </h2>
+            <h2 className="modal-header"> Sign In </h2>
             <div className="facebook social-buttons sign-in-social-buttons">
                 <i className="fab fa-facebook fa-lg"></i>
                 <p>Sign Up with Facebook</p>
