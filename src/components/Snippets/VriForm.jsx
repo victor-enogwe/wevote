@@ -87,47 +87,49 @@ class VriForm extends Component {
     const {card, proximity, candidate, vriStatus} = this.state;
     return (
       <div className="container-flex">
-        <div className="col-md-7">
+        <div className="vri-text-area">
           <h1 > Voter's Readiness </h1>
           <p >Your readiness to vote is very important </p>
         </div>
         {vriStatus ==true ? <div id="donutchart" ref={div => this.chartDiv = div} /> :
-        <form className="col-md-5 form-vri">
-          <div className="form-group">
-            <label htmlFor="card"> <b>Registration/Card Collection:</b> </label>
-            <select className="form-control" value={card} onChange={this.onChange} name="card">
-              <option value="A">{resposes.A}</option>
-              <option value="B">{resposes.B}</option>
-              <option value="C">{resposes.C}</option>
-              <option value="D">{resposes.D}</option>
-              <option value="E">{resposes.E}</option>
-            </select>
-            <small className="form-text text-muted">At what stage are you with your registration?</small>
-          </div>
-          <div className="form-group">
-            <label htmlFor="proximity"> <b>Proximity:</b> </label>
-            {card == "D" || card == "E" ? 
-              <select className="form-control" value={card} name="proximity">
-                <option value={card}>{resposes[card]}</option>
+        <form className="form-vri">
+          <div className="form-vri-inner">
+            <div className="form-group">
+              <label htmlFor="card"> <b>Registration/Card Collection:</b> </label>
+              <select className="form-control" value={card} onChange={this.onChange} name="card">
+                <option value="A">{resposes.A}</option>
+                <option value="B">{resposes.B}</option>
+                <option value="C">{resposes.C}</option>
+                <option value="D">{resposes.D}</option>
+                <option value="E">{resposes.E}</option>
               </select>
-              :
-              <select className="form-control" value={proximity} onChange={this.onChange} name="proximity">
-                <option value="F">{resposes.F}</option>
-                <option value="G">{resposes.G}</option>
-                <option value="H">{resposes.H}</option>
+              <small className="form-text text-muted">At what stage are you with your registration?</small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="proximity"> <b>Proximity:</b> </label>
+              {card == "D" || card == "E" ? 
+                <select className="form-control" value={card} name="proximity">
+                  <option value={card}>{resposes[card]}</option>
+                </select>
+                :
+                <select className="form-control" value={proximity} onChange={this.onChange} name="proximity">
+                  <option value="F">{resposes.F}</option>
+                  <option value="G">{resposes.G}</option>
+                  <option value="H">{resposes.H}</option>
+                </select>
+              }
+              <small className="form-text text-muted">Tell us how close to your registration center you live.</small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="candidate"> <b>Clarity of Choice:</b> </label>
+              <select className="form-control" value={candidate} onChange={this.onChange} name="candidate">
+                <option value="I">{resposes.I}</option>
+                <option value="J">{resposes.J}</option>
               </select>
-            }
-            <small className="form-text text-muted">Tell us how close to your registration center you live.</small>
+              <small className="form-text text-muted">How clear are you about whom to vote for?</small>
+            </div>
+            <input type="button" onClick={this.checkVRI} value="Check Your Readiness" />
           </div>
-          <div className="form-group">
-            <label htmlFor="candidate"> <b>Clarity of Choice:</b> </label>
-            <select className="form-control" value={candidate} onChange={this.onChange} name="candidate">
-              <option value="I">{resposes.I}</option>
-              <option value="J">{resposes.J}</option>
-            </select>
-            <small className="form-text text-muted">How clear are you about whom to vote for?</small>
-          </div>
-          <input type="button" onClick={this.checkVRI} value="Check Your Readiness" />
         </form>
         }
       </div>

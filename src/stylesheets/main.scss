@@ -3,6 +3,7 @@
 @import "sections/layouts";
 @import "sections/homepage";
 @import "sections/variables";
+@import "sections/vri";
 
 body {
   margin: 0;
@@ -24,31 +25,4 @@ body {
   .background {
     height: 500px;
   }
-}
-
-.form-vri {
-  margin: 20px auto;
-  width: 90%;
-  background: rgb(118, 197, 118);
-  padding: 30px 20px;
-}
-
-main > div > div > div > form > div > select {
-  font-size: 14px;
-  width: 95%;
-  color: black
-}
-
-.container-flex {
-  display: flex;
-  align-items: center;
-}
-
-.align-center {
-  vertical-align: middle;
-}
-
-#donutchart {
-  height: 500px;
-  width: 500px;
 }

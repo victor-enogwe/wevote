@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
 
 import News from './Pages/News';
 import HomePage from './Pages/HomePage';
