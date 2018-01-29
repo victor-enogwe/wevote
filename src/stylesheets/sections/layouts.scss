@@ -5,7 +5,7 @@
   align-items: center;
   background-color: green;
   color: white;
-  padding:  0 20px;
+  padding: 0 20px;
 
   .nav-brand {
     margin-right: auto;
@@ -17,39 +17,57 @@
 
   .nav-menu {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
     position: absolute;
     margin: 0;
-    background-color: cadetblue;
-    padding: 20px;
-    top: 5%;
+    padding: 0;
+    background-color: seagreen;
+    top: 8.7%;
     right: 0;
-    z-index: -9;
-    height: 200px;
     width: 200px;
-    -webkit-transform: translateY(-100%);
-    transform: translateY(-100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
     transition: transform 0.3s ease;
   }
 
   .nav-menu li {
+    font-size: 1em;
+    border-bottom: 1px solid white;
+    padding: 15px 0 15px 20px;
 
     .sign-up-button {
       color: white;
       font-size: 1em;
       padding: 0;
       margin-left: -1px;
+      border: 0;
+      outline: 0;
+      background-color: transparent;
     }
   }
 
-  ul.open {
-    -webkit-transform: translateY(5%);
-    transform: translateY(5%);
+  .nav-menu li:last-child {
+    border-bottom: 0;
   }
 
+  ul.open {
+    z-index: 0;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
 
+footer {
+  height: 100px;
+  background-color: #262626;
+  color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    text-align: center;
+    margin-left: 10px;
+  }
 }
 
 
@@ -57,12 +75,14 @@
   .nav-bar {
     background-color: transparent;
     color: black;
+    padding: 10px 20px;
 
     .nav-hamburger {
       display: none;
     }
 
     .nav-menu {
+      display: flex;
       flex-direction: row;
       align-items: center;
       padding: 0;
@@ -71,17 +91,16 @@
       height: inherit;
       width: 50%;
       background-color: transparent;
-      -webkit-transform: translateY(5%);
-      transform: translateY(5%);
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
     }
 
     .nav-menu li {
       margin-right: 10px;
+      border-bottom: 0;
 
       .sign-up-button {
         background-color: green;
-        border: 0;
-        outline: 0;
         height: 50px;
         width: 110px;
         border-top-left-radius: 30%30px;

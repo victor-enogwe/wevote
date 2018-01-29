@@ -1,6 +1,8 @@
 @import "sections/modals";
 @import "sections/toastr";
 @import "sections/layouts";
+@import "sections/homepage";
+@import "sections/variables";
 
 body {
   margin: 0;
@@ -9,7 +11,17 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.name {
-  font-size: 15em;
-  text-transform: uppercase;
+.background {
+  padding: 20px;
+  height: 300px;
+  background: url('../assets/nigeria-bgrd.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media screen and (min-width: $tablet){
+  .background {
+    margin-top: -100px;
+    height: 500px;
+  }
 }

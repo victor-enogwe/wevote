@@ -19,7 +19,8 @@ class PrimaryLayout extends Component {
                     <Route path="/news" component={News} />
                 </main>
                 <footer>
-                    App Footer
+                    <p>WeVote</p>
+                    <p>&copy; All Rights Reserved</p>
                 </footer>
             </div>
         );
