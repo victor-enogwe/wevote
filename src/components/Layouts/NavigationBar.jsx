@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { selectModal } from '../../actions/userActions';
 import actionTypes from '../../actions/constants';
@@ -37,7 +38,7 @@ class NavigationBar extends Component {
         const { navOpen } = this.state;
         return (
             <nav className="nav-bar" role="navigation">
-                <h1 className="nav-brand"><a>WeVote</a></h1>
+                <h1 className="nav-brand"><a href="/">WeVote</a></h1>
                 <span
                     className="far fa-bell fa-lg nav-notification"
                 >
@@ -50,8 +51,8 @@ class NavigationBar extends Component {
 
                 </span>
                 <ul className={navOpen ? `nav-menu open` : `nav-menu`}>
-                    <li>Voter Readiness</li>
-                    <li>News</li>
+                    <li><Link to="/voter-readiness">Voter Readiness</Link></li>
+                    <li><Link to="/news">News</Link></li>
                     <li
                         onClick={() => this.handleShow(SIGN_IN_MODAL)}
                     >

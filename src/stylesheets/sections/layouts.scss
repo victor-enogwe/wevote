@@ -21,7 +21,7 @@
     margin: 0;
     padding: 0;
     background-color: seagreen;
-    top: 8.7%;
+    top: 6.2%;
     right: 0;
     width: 200px;
     -webkit-transform: translateX(100%);
@@ -29,10 +29,16 @@
     transition: transform 0.3s ease;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .nav-menu li {
     font-size: 1em;
     border-bottom: 1px solid white;
     padding: 15px 0 15px 20px;
+    cursor: pointer;
 
     .sign-up-button {
       color: white;
@@ -73,8 +79,6 @@ footer {
 
 @media screen and (min-width: $tablet){
   .nav-bar {
-    background-color: transparent;
-    color: black;
     padding: 10px 20px;
 
     .nav-hamburger {
@@ -85,6 +89,7 @@ footer {
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: space-around;
       padding: 0;
       position: relative;
       z-index: 9999;
@@ -100,7 +105,8 @@ footer {
       border-bottom: 0;
 
       .sign-up-button {
-        background-color: green;
+        background-color: white;
+        color: green;
         height: 50px;
         width: 110px;
         border-top-left-radius: 30%30px;
@@ -108,6 +114,14 @@ footer {
         border-top-right-radius: 30%30px;
         border-bottom-right-radius: 30%30px;
       }
+    }
+  }
+}
+
+@media screen and (min-width: $large-desktop){
+  .nav-bar {
+    .nav-menu {
+      width: 40%;
     }
   }
 }

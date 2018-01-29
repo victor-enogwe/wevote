@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import account from '../../assets/signup_icon.png';
 import checkVri from '../../assets/readiness.png';
@@ -9,12 +10,8 @@ import receiveNews from '../../assets/news.png';
 class HomePage extends Component {
     constructor(props){
         super(props);
-        this.showUsername = this.showUsername.bind(this);
     }
 
-    showUsername(){
-        this.props.test()
-    }
 
     render(){
         return (
@@ -23,9 +20,11 @@ class HomePage extends Component {
                     <div className="keyword">
                         <p>Great societies don't just happen</p>
                         <p>They must be made to happen.</p>
-                        <button className="vri-button">
-                            Check Readiness
-                        </button>
+                        <Link to="/voter-readiness">
+                            <button className="vri-button">
+                                Check Readiness
+                            </button>
+                        </Link>
                     </div>
                 </section>
                 <section className="about">
