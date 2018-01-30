@@ -3,8 +3,8 @@ import { Route } from 'react-router-dom';
 
 import News from './Pages/News';
 import HomePage from './Pages/HomePage';
-import VoterReadiness from './Pages/VoterReadiness';
 import NavigationBar from './Layouts/NavigationBar';
+import VoterReadiness from './Pages/VoterReadiness'
 
 class PrimaryLayout extends Component {
     render() {
@@ -13,7 +13,7 @@ class PrimaryLayout extends Component {
                 <header>
                     <NavigationBar />
                 </header>
-                <main>
+                <main className="container">
                     <Route path="/" exact component={HomePage} />
                     <Route path="/voter-readiness" component={VoterReadiness} />
                     <Route path="/news" component={News} />

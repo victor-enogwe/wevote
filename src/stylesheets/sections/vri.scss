@@ -1,0 +1,49 @@
+.form-vri {
+  margin: 20px auto;
+  width: 50%;
+  background: green;
+  padding: 50px;
+  padding-right: 20px;
+}
+
+.vri-text-area {
+  width:50%;
+
+}
+
+.form-group {
+  margin-bottom: 30px 
+}
+
+main > div > div > div > form > div > div > select {
+  font-size: 14px;
+  width: 95%;
+  color: black;
+  background: white
+}
+
+.container-flex {
+  display: flex;
+  align-items: center;
+  padding: 5%;
+}
+
+.form-control {
+  height: 50px;
+  display: block;
+}
+
+.form-vri-inner {
+  height: 100%;
+  width: 100%;
+  margin: 0% auto;
+}
+
+.align-center {
+  vertical-align: middle;
+}
+
+#donutchart {
+  height: 500px;
+  width: 500px;
+}
