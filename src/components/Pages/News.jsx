@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { getNews, getImage } from '../../actions/newsActions';
 
+import inecLogo from '../../assets/inec-logo.png';
+
 class News extends Component {
     constructor(props){
         super(props);
@@ -32,15 +34,29 @@ class News extends Component {
         const { news } = this.props;
         console.log('News', news);
         return (
-            <div>
+            <div className="news-page">
+                <header>
+                    <h1>Latest News from INEC</h1>
+                    <small>Visit <a href="www.inecnews.com">www.inecnews.com</a> for more election news</small>
+                </header>
+                <div className="news">
                 {news && news.map(newsItem =>
-                    <div key={newsItem.id}>
-                        {newsItem.image && <img src={newsItem.image} width='50px' />}
-                        <p>
-                            {newsItem.title}
-                        </p>
-                    </div>
+                    <article key={newsItem.id}>
+                        <a className="read-more" href={newsItem.link} target="_blank">
+                            <section>
+                                <div className="preview">
+                                    <img className="news-image" src={newsItem.image || inecLogo} />
+                                </div>
+                                <h4>{newsItem.title}</h4>
+                            </section>
+                            <div className="news-content" dangerouslySetInnerHTML=
+                                   {{ __html: `${newsItem.excerpt.slice(0, -16)}...` }}>
+                            </div>
+                            <p className="news-date">{new Date(newsItem.date).toLocaleDateString()}</p>
+                        </a>
+                    </article>
                 )}
+                </div>
             </div>
         );
     }

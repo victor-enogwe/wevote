@@ -53,6 +53,7 @@ class NavigationBar extends Component {
                 <ul className={navOpen ? `nav-menu open` : `nav-menu`}>
                     <li><Link to="/voter-readiness">Voter Readiness</Link></li>
                     <li><Link to="/news">News</Link></li>
+                    <li><Link to="/extras">Learn</Link></li>
                     <li
                         onClick={() => this.handleShow(SIGN_IN_MODAL)}
                     >

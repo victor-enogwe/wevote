@@ -1,0 +1,98 @@
+@import "variables";
+
+.news-page {
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h1{
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: green;
+      text-decoration: none;
+    }
+  }
+
+  .news {
+
+    article {
+      position: relative;
+      min-height: 400px;
+      width: 90%;
+      margin: 0 auto 20px;
+      box-shadow: 0 7px 6px -6px #777,
+      7px 0 6px -6px #777,
+      0 -7px 6px -6px #777,
+      -7px 0 6px -6px #777;
+
+      .preview {
+        height: 220px;
+        overflow: hidden;
+        margin: 0;
+        img {
+          width: 100%;
+          max-width: 550px;
+        }
+      }
+
+      h4 {
+        margin: 10px;
+        text-transform: uppercase;
+        color: green;
+      }
+
+      .news-date {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        color: green;
+        margin: 10px;
+      }
+
+      .news-content {
+        p {
+          margin: 10px;
+          color: black;
+        }
+      }
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $large-mobile){
+  .news-page {
+    .news {
+      display: flex;
+      flex-flow: row wrap;
+      article {
+        width: 48%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px){
+  .news-page {
+    .news {
+      article {
+        width: 32%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1400px){
+  .news-page {
+    .news {
+      article {
+        width: 24%;
+      }
+    }
+  }
+}
