@@ -49,9 +49,9 @@ export async function createUser(data) {
  */
 export async function registerUser(req, res) {
   try {
-    const user = await createUser(req.body);
+    const token = await createUser(req.body);
 
-    return res.status(201).json({ status: 'success', data: user });
+    return res.status(201).json({ status: 'success', data: token });
   } catch (error) {
     return handleSequelizeError(error, res);
   }
