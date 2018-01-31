@@ -3,58 +3,50 @@ import React from 'react';
 import TextInput from './TextInput';
 import SelectInput from "./SelectInput";
 
+import ageFields from '../../utils/ageFields';
+
 const sexFields = {
     male: 'Male',
     female: 'Female'
 };
 
-const ageFields = {
-    age1: '17',
-    age2: '18',
-    age3: '25',
-    age4: '36',
-    age5: '40'
-};
 
-/**
- *
- * @param handleHide
- * @param handleChange
- * @param signUpDetails
- * @returns {jsx}
- */
-const SignUpForm = ({ handleHide, handleChange, signUpDetails, showPassword, toggleShowPassword }) => (
+const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, showPassword, toggleShowPassword }) => (
     <div className="modal-section">
         <section className="inner-modal-section">
-            <i onClick={handleHide} className="fas fa-times fa-lg close-modal"></i>
+            <i
+                onClick={handleHide}
+                className="fas fa-times fa-lg close-modal"
+            >
+            </i>
             <h2 className="modal-header"> Sign Up </h2>
-            <form className="sign-up-form">
+            <form onSubmit={onSignUpSubmit} className="sign-up-form">
                 <TextInput
-                    id="sign-up-first-name"
-                    name="first_name"
+                    id="sign-up-firstname"
+                    name="firstname"
                     type="text"
                     placeholder="First Name"
                     icon="fas fa-user fa-lg"
                     handleChange={handleChange}
-                    value={signUpDetails.first_name}
+                    value={signUpDetails.firstname}
                 />
                 <TextInput
-                    id="sign-up-last-name"
-                    name="last_name"
+                    id="sign-up-surname"
+                    name="surname"
                     type="text"
-                    placeholder="Last Name"
+                    placeholder="Surname"
                     icon="fas fa-user fa-lg"
                     handleChange={handleChange}
-                    value={signUpDetails.last_name}
+                    value={signUpDetails.surname}
                 />
                 <TextInput
-                    id="sign-up-phone-number"
-                    name="phone_number"
+                    id="sign-up-phone"
+                    name="phone"
                     type="tel"
                     placeholder="Phone Number"
                     icon="fas fa-mobile-alt fa-lg"
                     handleChange={handleChange}
-                    value={signUpDetails.phone_number}
+                    value={signUpDetails.phone}
                 />
                 <div className="sign-up-select-fields">
                     <SelectInput
@@ -94,7 +86,11 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, showPassword, tog
                     showPassword={showPassword}
                     toggleShowPassword={toggleShowPassword}
                 />
-                <button type="submit" className="submit-button">
+                <button
+                    type="submit"
+                    className="submit-button"
+                    onClick={onSignUpSubmit}
+                >
                     Sign Up
                 </button>
             </form>

@@ -1,5 +1,5 @@
 export default {
-    user: '',
+    user: { isAuthenticated: false },
     currentModal: '',
     news: [],
 };

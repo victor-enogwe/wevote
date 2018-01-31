@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 const TextInput = ({id, name, type, placeholder, icon, value, handleChange, showPassword, toggleShowPassword}) => (
     <div className="text-input">
         {name === "password" &&
-        <button
+        <p
             className="show-password"
             onClick={toggleShowPassword}>
             {showPassword ? 'HIDE' : 'SHOW'}
-        </button>}
+        </p>}
         <i className={icon}></i>
         <label htmlFor={id}>{placeholder}</label>
         <input

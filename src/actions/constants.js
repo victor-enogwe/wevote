@@ -1,5 +1,4 @@
 const actionTypes = {
-    TEST: 'TEST',
 
     // MODALS
     MODAL_CHOICE: 'MODAL_CHOICE',
@@ -12,7 +11,12 @@ const actionTypes = {
 
     // NEWS
     DISPLAY_NEWS: 'DISPLAY_NEWS',
-    DISPLAY_IMAGE: 'DISPLAY_IMAGE'
+    DISPLAY_IMAGE: 'DISPLAY_IMAGE',
+
+    // AUTH
+    SIGN_IN: 'SIGN_IN',
+    SIGN_UP: 'SIGN_UP',
+    USER_DATA: 'USER_DATA',
 
 };
 

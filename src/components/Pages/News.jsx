@@ -32,7 +32,6 @@ class News extends Component {
 
     render(){
         const { news } = this.props;
-        console.log('News', news);
         return (
             <div className="news-page">
                 <header>

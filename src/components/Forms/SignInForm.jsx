@@ -2,7 +2,7 @@ import React from 'react';
 
 import TextInput from './TextInput';
 
-const SignIn = ({handleHide, handleChange, signInDetails, showPassword, toggleShowPassword}) => (
+const SignIn = ({handleHide, handleChange, signInDetails, onSignInSubmit, showPassword, toggleShowPassword}) => (
     <div className="modal-section">
         <section className="inner-modal-section">
             <i onClick={handleHide} className="fas fa-times fa-lg close-modal"></i>
@@ -16,7 +16,7 @@ const SignIn = ({handleHide, handleChange, signInDetails, showPassword, toggleSh
                 <p>Sign Up with Twitter</p>
             </div>
             <p>or with email</p>
-            <form className="sign-up-form">
+            <form onSubmit={onSignInSubmit} className="sign-up-form">
                 <TextInput
                     id="sign-in-email"
                     name="email"
@@ -37,7 +37,11 @@ const SignIn = ({handleHide, handleChange, signInDetails, showPassword, toggleSh
                     showPassword={showPassword}
                     toggleShowPassword={toggleShowPassword}
                 />
-                <button type="submit" className="submit-button">
+                <button
+                    type="submit"
+                    className="submit-button"
+                    onClick={onSignInSubmit}
+                >
                     Sign In
                 </button>
             </form>

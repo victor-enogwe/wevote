@@ -12,7 +12,6 @@ class HomePage extends Component {
         super(props);
     }
 
-
     render(){
         return (
             <div className="home-page">
@@ -22,7 +21,7 @@ class HomePage extends Component {
                         <p>They must be made to happen.</p>
                         <Link to="/voter-readiness">
                             <button className="vri-button">
-                                Check Readiness
+                                Check Your Readiness
                             </button>
                         </Link>
                     </div>

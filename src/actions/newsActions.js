@@ -11,7 +11,7 @@ export function getNews(){
             .then((res) => {
                 dispatch(displayNews(res.data));
             })
-            .catch(error => handleError(error, dispatch));
+            .catch(error => handleError(error));
     };
 }
 
@@ -21,7 +21,7 @@ export function getImage(media_id){
             .then((res) => {
                 dispatch(displayImage(res.data.post, res.data.source_url));
             })
-            .catch(error => handleError(error, dispatch));
+            .catch(error => handleError(error));
     };
 }
 

@@ -6,11 +6,8 @@ import toastr from 'toastr';
  * @param {function} dispatch
  * @returns {function} error display
  */
-export function handleError(error, dispatch) {
-    if (dispatch) {
-        return toastr.error(error);
-    }
-    return toastr.error('Something went wrong');
+export function handleError(error) {
+    return toastr.error(error);
 }
 
 /**

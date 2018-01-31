@@ -2,6 +2,11 @@ const path =  require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+require('dotenv').config();
+const envDefinePlugin = new webpack.DefinePlugin({
+    'process.env.API_URL': JSON.stringify(process.env.API_URL),
+});
+
 module.exports = {
     devtool: 'inline-source-map',
     entry: path.join(__dirname, '/src/index'),
@@ -21,7 +26,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.scss$/,
+                test: /\.s*css$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
 
             },
@@ -41,6 +46,7 @@ module.exports = {
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
+        envDefinePlugin,
         new HtmlWebpackPlugin({
             template: 'src/index.html',
         })
