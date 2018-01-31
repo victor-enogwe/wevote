@@ -28,7 +28,7 @@ export async function createUser(data) {
     await user.setRoles(role);
     await user.setPermissions(permissions);
 
-    const { uuid } = await user;
+    const { uuid } = user;
 
     const token = await generateJwt({ uuid });
 
@@ -51,7 +51,7 @@ export async function registerUser(req, res) {
   try {
     const token = await createUser(req.body);
 
-    return res.status(201).json({ status: 'success', data: token });
+    return res.status(201).json({ status: 'success', data: { token } });
   } catch (error) {
     return handleSequelizeError(error, res);
   }
