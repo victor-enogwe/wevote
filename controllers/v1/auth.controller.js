@@ -46,10 +46,6 @@ export async function basicAuth(req, res) {
       return res.status(404).json({ status: 'fail', message: 'user not found' });
     }
 
-    if (!user.verified) {
-      return res.status(401).json({ status: 'fail', message: 'user not verified' });
-    }
-
     const { uuid, password } = user;
     const canLogin = User.comparePassword(req.body.password, password);
 

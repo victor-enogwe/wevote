@@ -28,18 +28,9 @@ export async function createUser(data) {
     await user.setRoles(role);
     await user.setPermissions(permissions);
 
-    const {
-      firstname,
-      phone,
-      age,
-      email
-    } = await user;
+    const { uuid } = await user;
 
-    const userLite = await {
-      firstname, phone, age, email
-    };
-
-    const token = await generateJwt(userLite);
+    const token = await generateJwt({ uuid });
 
     return token;
   } catch (error) {
