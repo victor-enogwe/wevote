@@ -1,5 +1,5 @@
 import database from '../../models';
-import { checkRole, checkOwnership } from './auth.controller';
+import { checkRole, checkOwnership, generateJwt } from './auth.controller';
 import { handleSequelizeError } from '../../utils/error-handlers.utils';
 
 const { User, Role } = database;
@@ -25,11 +25,23 @@ export async function createUser(data) {
     const role = await Role.findOne({ where: { name: 'USER' } });
     const permissions = await role.getPermissions();
     const user = await User.create(data, { fields: allowedFields });
-
     await user.setRoles(role);
     await user.setPermissions(permissions);
 
-    return user;
+    const {
+      firstname,
+      phone,
+      age,
+      email
+    } = await user;
+
+    const userLite = await {
+      firstname, phone, age, email
+    };
+
+    const token = await generateJwt(userLite);
+
+    return token;
   } catch (error) {
     return error;
   }
@@ -46,9 +58,9 @@ export async function createUser(data) {
  */
 export async function registerUser(req, res) {
   try {
-    createUser(req.body);
+    const user = await createUser(req.body);
 
-    return res.status(201).json({ status: 'success', message: 'user created!' });
+    return res.status(201).json({ status: 'success', data: user });
   } catch (error) {
     return handleSequelizeError(error, res);
   }
