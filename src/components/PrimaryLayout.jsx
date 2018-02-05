@@ -5,12 +5,14 @@ import { withRouter } from 'react-router';
 
 import { login } from '../actions/userActions';
 import actionTypes from '../actions/constants';
-const { SIGN_IN } = actionTypes;
+const { SIGN_IN_AJAX } = actionTypes;
 
 import News from './Pages/News';
 import HomePage from './Pages/HomePage';
 import NavigationBar from './Layouts/NavigationBar';
 import VoterReadiness from './Pages/VoterReadiness'
+
+import loader from '../assets/loader.gif';
 
 class PrimaryLayout extends Component {
 
@@ -19,7 +21,7 @@ class PrimaryLayout extends Component {
             const tokenStorage = JSON.parse(localStorage.getItem('wevote'));
             const token = tokenStorage.jwt;
             if (token) {
-                this.props.login(token, SIGN_IN);
+                this.props.login(token, SIGN_IN_AJAX);
             }
         }
     }
@@ -34,6 +36,7 @@ class PrimaryLayout extends Component {
                     <Route path="/" exact component={HomePage} />
                     <Route path="/voter-readiness" component={VoterReadiness} />
                     <Route path="/news" component={News} />
+                    <Route path="*" render={() => this.props.loading && <img className="loader" src={loader} />}/>
                 </main>
                 <footer>
                     <p>WeVote</p>
@@ -44,4 +47,10 @@ class PrimaryLayout extends Component {
     }
 }
 
-export default withRouter(connect(null, { login })(PrimaryLayout));
+function mapStateToProps(state) {
+    return {
+        loading: state.ajaxCallsInProgress > 0
+    };
+}
+
+export default withRouter(connect(mapStateToProps, { login })(PrimaryLayout));

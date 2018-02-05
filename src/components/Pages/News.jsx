@@ -36,7 +36,7 @@ class News extends Component {
             <div className="news-page">
                 <header>
                     <h1>Latest News from INEC</h1>
-                    <small>Visit <a href="www.inecnews.com">www.inecnews.com</a> for more election news</small>
+                    <small>Visit <a href="http://www.inecnews.com">www.inecnews.com</a> for more election news</small>
                 </header>
                 <div className="news">
                 {news && news.map(newsItem =>

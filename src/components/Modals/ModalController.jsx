@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 
-import { signUp, signIn } from "../../actions/userActions";
+import { signUp, signIn, facebookAuth, twitterAuth } from "../../actions/userActions";
 import { handleError } from "../../utils/errorHandler";
 
 import Modal from './Modal';
@@ -10,6 +10,7 @@ import SignUp from './SignUp';
 import SignInForm from '../Forms/SignInForm';
 import SignUpForm from '../Forms/SignUpForm';
 
+import loader from '../../assets/loader.gif';
 
 class ModalController extends Component{
     constructor(props, context){
@@ -36,6 +37,8 @@ class ModalController extends Component{
         this.renderModal = this.renderModal.bind(this);
         this.onSignUpSubmit = this.onSignUpSubmit.bind(this);
         this.onSignInSubmit = this.onSignInSubmit.bind(this);
+        this.facebookAuthentication = this.facebookAuthentication.bind(this);
+        this.twitterAuthentication = this.twitterAuthentication.bind(this);
     }
 
     onSignUpSubmit(event) {
@@ -71,6 +74,16 @@ class ModalController extends Component{
         this.setState({ signInDetails });
     }
 
+    facebookAuthentication(){
+        this.props.facebookAuth();
+        this.props.handleHide();
+    }
+
+    twitterAuthentication(){
+        this.props.twitterAuth();
+        this.props.handleHide();
+    }
+
     toggleShowPassword(e){
         e.preventDefault();
         this.setState({showPassword: !this.state.showPassword});
@@ -85,6 +98,8 @@ class ModalController extends Component{
                     <SignUp
                         handleHide={handleHide}
                         handleShow={handleShow}
+                        facebookAuth={this.facebookAuthentication}
+                        twitterAuth={this.twitterAuthentication}
                     />
                 );
             case 'SIGN_IN_MODAL':
@@ -96,6 +111,8 @@ class ModalController extends Component{
                         showPassword={showPassword}
                         toggleShowPassword={this.toggleShowPassword}
                         onSignInSubmit={this.onSignInSubmit}
+                        facebookAuth={this.facebookAuthentication}
+                        twitterAuth={this.twitterAuthentication}
                     />
                 );
             case 'SIGN_UP_FORM':
@@ -119,6 +136,7 @@ class ModalController extends Component{
             <Modal>
                 <div className="modal">
                     {this.renderModal()}
+                    {this.props.loading && <img className="loader" src={loader} />}
                 </div>
             </Modal>
         );
@@ -127,8 +145,9 @@ class ModalController extends Component{
 
 function mapStateToProps(state){
     return {
-        currentModal: state.currentModal
+        currentModal: state.currentModal,
+        loading: state.ajaxCallsInProgress > 0
     }
 }
 
-export default connect(mapStateToProps, { signUp, signIn })(ModalController);
+export default connect(mapStateToProps, { signUp, signIn, facebookAuth, twitterAuth })(ModalController);

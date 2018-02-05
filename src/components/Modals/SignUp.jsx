@@ -4,9 +4,10 @@ import React from 'react';
  *
  * @param handleHide
  * @param handleShow
+ * @param facebookAuth
  * @returns {jsx}
  */
-const SignUp = ({ handleHide, handleShow }) => (
+const SignUp = ({ handleHide, handleShow, facebookAuth, twitterAuth }) => (
     <div className="modal-section">
         <section className="inner-modal-section">
             <i
@@ -14,14 +15,20 @@ const SignUp = ({ handleHide, handleShow }) => (
             >
             </i>
             <h2 className="modal-header"> Sign Up </h2>
-            <div className="facebook social-buttons">
+            <div
+                className="facebook social-buttons"
+                onClick={facebookAuth}
+            >
                 <i
                     className="fab fa-facebook fa-lg"
                 >
                 </i>
                 <p>Sign up with Facebook</p>
             </div>
-            <div className="twitter social-buttons">
+            <div
+                className="twitter social-buttons"
+                onClick={twitterAuth}
+            >
                 <i
                     className="fab fa-twitter fa-lg"
                 >

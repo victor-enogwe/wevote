@@ -54,7 +54,7 @@ class NavigationBar extends Component {
         const { user } = this.props;
         return (
             <nav className="nav-bar" role="navigation">
-                <h1 className="nav-brand"><a href="/">WeVote</a></h1>
+                <h1 className="nav-brand"><Link to="/">WeVote</Link></h1>
                 {user.isAuthenticated && <span
                     className="far fa-bell fa-lg nav-notification"
                 >

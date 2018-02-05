@@ -4,6 +4,10 @@
   background: green;
   padding: 50px;
   padding-right: 20px;
+
+  small, label {
+    color: white;
+  }
 }
 
 .vri-text-area {
@@ -21,10 +25,6 @@ main > div > div > div > form > div > div > select {
   color: black;
   background: white;
   margin: 10px 0;
-}
-
-small, label {
-  color: white;
 }
 
 .container-flex {

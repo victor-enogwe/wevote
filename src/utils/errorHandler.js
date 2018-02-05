@@ -1,4 +1,5 @@
 import toastr from 'toastr';
+import { ajaxCallError } from "../actions/ajaxStatusActions";
 
 /**
  * Handles errors from ajax calls
@@ -6,8 +7,14 @@ import toastr from 'toastr';
  * @param {function} dispatch
  * @returns {function} error display
  */
-export function handleError(error) {
-    return toastr.error(error);
+export function handleError(error, dispatch) {
+    if (dispatch) {
+        dispatch(ajaxCallError());
+    }
+    if (error.response) {
+        return toastr.error(error.response.data.message);
+    }
+    return toastr.error('Something went wrong');
 }
 
 /**
