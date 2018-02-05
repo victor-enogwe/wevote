@@ -29,6 +29,6 @@ export function generateJwt(data) {
 export async function ussd(req, res) {
   console.log(req, 'REqueest ......')
 
-  return res.status(200).json({ status: 'success', data: 'Fromm Ussd' });
+  return res.status(200).send('Welcome: Your USSD is coming soon!');
 }
 
