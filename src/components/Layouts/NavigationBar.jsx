@@ -65,7 +65,8 @@ class NavigationBar extends Component {
                 >
                 </span>
                 <ul className={navOpen ? `nav-menu open` : `nav-menu`}>
-                    <li><NavLink to="/voter-readiness">Voter Readiness</NavLink></li>
+                    <li><NavLink to="/voter-readiness">Voter Readiness </NavLink></li>
+                    <li> <img className="battery" src={require("../../../red-battery.png")} /> </li>
                     <li><NavLink to="/news">News</NavLink></li>
                     <li><NavLink to="/extras">Learn</NavLink></li>
                     {user.isAuthenticated && <li>
