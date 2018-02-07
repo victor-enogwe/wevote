@@ -2,18 +2,27 @@ import React from 'react';
 
 import TextInput from './TextInput';
 
-const SignIn = ({handleHide, handleChange, signInDetails, onSignInSubmit, showPassword, toggleShowPassword}) => (
+import actionTypes from '../../actions/constants';
+
+const { SIGN_UP_MODAL } = actionTypes;
+
+
+const SignIn = ({handleHide, handleShow, handleChange, signInDetails, signInErrors,
+                    onSignInSubmit, showPassword, toggleShowPassword}) => (
     <div className="modal-section">
         <section className="inner-modal-section">
-            <i onClick={handleHide} className="fas fa-times fa-lg close-modal"></i>
+            <i onClick={handleHide} className="fas fa-times fa-lg close-modal">
+            </i>
             <h2 className="modal-header"> Sign In </h2>
             <div className="facebook social-buttons sign-in-social-buttons">
-                <i className="fab fa-facebook fa-lg"></i>
-                <p>Sign Up with Facebook</p>
+                <i className="fab fa-facebook fa-lg">
+                </i>
+                <p>Sign in with Facebook</p>
             </div>
             <div className="twitter social-buttons sign-in-social-buttons">
-                <i className="fab fa-twitter fa-lg"></i>
-                <p>Sign Up with Twitter</p>
+                <i className="fab fa-twitter fa-lg">
+                </i>
+                <p>Sign in with Twitter</p>
             </div>
             <p>or with email</p>
             <form onSubmit={onSignInSubmit} className="sign-up-form">
@@ -25,6 +34,7 @@ const SignIn = ({handleHide, handleChange, signInDetails, onSignInSubmit, showPa
                     icon="far fa-envelope fa-lg"
                     handleChange={handleChange}
                     value={signInDetails.email}
+                    error={signInErrors.email}
                 />
                 <TextInput
                     id="sign-up-password"
@@ -34,6 +44,7 @@ const SignIn = ({handleHide, handleChange, signInDetails, onSignInSubmit, showPa
                     icon="fas fa-lock fa-lg"
                     handleChange={handleChange}
                     value={signInDetails.password}
+                    error={signInErrors.password}
                     showPassword={showPassword}
                     toggleShowPassword={toggleShowPassword}
                 />
@@ -52,8 +63,8 @@ const SignIn = ({handleHide, handleChange, signInDetails, onSignInSubmit, showPa
         <aside>
             <hr/>
             <section>
-                <p className="we-voter">Already have a WeVote account?</p>
-                <div><p>Log in</p></div>
+                <p className="we-voter">Don't have a WeVote account?</p>
+                <div onClick={() => handleShow(SIGN_UP_MODAL)}><p>Sign up</p></div>
             </section>
         </aside>
     </div>

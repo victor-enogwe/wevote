@@ -18,10 +18,11 @@ export function handleError(error, dispatch) {
 }
 
 /**
- * Ends ajax call and throws error to be handled in frontend
+ * Ends ajax call and throws error to be handled in component
  * @param {object} error
  * @param {function} dispatch
  */
 export function throwError(error, dispatch) {
+    dispatch(ajaxCallError());
     throw error;
 }

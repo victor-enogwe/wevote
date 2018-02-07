@@ -1,23 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextInput = ({id, name, type, placeholder, icon, value, handleChange, showPassword, toggleShowPassword}) => (
+const TextInput = ({id, name, type, placeholder, icon, value, required, error,
+                       handleChange, showPassword, toggleShowPassword}) => (
     <div className="text-input">
-        {name === "password" &&
-        <p
+        {name === "password" && <p
             className="show-password"
             onClick={toggleShowPassword}>
             {showPassword ? 'HIDE' : 'SHOW'}
         </p>}
-        <i className={icon}></i>
+        {error &&
+        <i title={error} className="error-icon fas fa-info-circle">
+        </i>}
+        <i className={icon}>
+        </i>
         <label htmlFor={id}>{placeholder}</label>
-        <input
+        <input className={error && "input-error"}
             id={id}
             name={name}
             type={type}
             value={value}
             onChange={handleChange}
-            placeholder={placeholder}
+            placeholder={error || placeholder}
+            required={required}
         />
     </div>
 );

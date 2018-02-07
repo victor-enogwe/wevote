@@ -14,23 +14,27 @@ class News extends Component {
     }
 
     componentDidMount() {
-        this.props.getNews();
+        if (!this.props.news.length > 0) {
+            this.props.getNews();
+        }
     }
 
     componentWillReceiveProps(nextProps){
         if (this.state.imagesRequested) return;
-        this.requestImages(nextProps.news);
+        if (nextProps.news.length > 0) {
+            this.requestImages(nextProps.news);
+        }
     }
 
     requestImages(posts){
-        posts.forEach(post =>
-            this.props.getImage(post.media)
-        );
+        posts.forEach(post => {
+            this.props.getImage(post.media);
+        });
         this.setState({imagesRequested: true});
     }
 
-
     render(){
+        console.log('Images', this.state.imagesRequested);
         const { news } = this.props;
         return (
             <div className="news-page">

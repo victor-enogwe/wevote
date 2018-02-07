@@ -24,7 +24,7 @@
     background-color: seagreen;
     top: 100%;
     right: 0;
-    width: 200px;
+    width: 0;
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
     transition: transform 0.3s ease;
@@ -41,13 +41,14 @@
     padding: 15px 0 15px 20px;
     cursor: pointer;
 
-    .sign-up-button {
+    .sign-up-button, .log-out-button {
       color: white;
       font-size: 1em;
       padding: 0;
       margin-left: -1px;
       border: 0;
       outline: 0;
+      width: 0;
       background-color: transparent;
     }
   }
@@ -60,6 +61,11 @@
     z-index: 0;
     -webkit-transform: translateX(0);
     transform: translateX(0);
+    width: 200px;
+
+    .sign-up-button, .log-out-button {
+      width: inherit;
+    }
   }
 }
 
