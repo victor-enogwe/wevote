@@ -1,6 +1,6 @@
-import Input from './SingleInput';
-import React, {Component} from 'react';
 
+import React, {Component} from 'react';
+import drawDonutChart from '../../assets/progressbar.js';
 const resposes = {
   A: "I have collected my Voter's Card",
   B: "I have registered and I know where to collect my card",
@@ -33,7 +33,6 @@ class VriForm extends Component {
     this.onChange = this.onChange.bind(this);
     this.checkVRI = this.checkVRI.bind(this);
     this.drawChart = this.drawChart.bind(this);
-    this.chartDiv = null;
     this.state = {
       card: "A",
       proximity: "F",
@@ -43,18 +42,27 @@ class VriForm extends Component {
     }
   }
 
+  componentDidMount() {
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(this.drawChart);
+  }
+
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
-    console.log(event.target.value)
   }
 
   checkVRI(){
     const {card, proximity, candidate} = this.state;
-    const score = scores[card] + scores[proximity] + scores[candidate];
+    let score = scores[card] + scores[proximity] + scores[candidate];
+    const donutchart = document.getElementById('donutchart');
+    if (card === 'D' || card === 'E') {
+      score = scores[card] + 0 + scores[candidate];
+    }
     localStorage.score = score;
-    // this.setState({vriStatus: true});
-    // this.drawChart();
-    alert (score)
+    this.setState({vriStatus: true, score}, () => {
+      drawDonutChart(donutchart, score, 500, 500, '.56em')
+    });
+
   }
 
   drawChart() {
@@ -66,17 +74,17 @@ class VriForm extends Component {
 
     const options = {
       title: 'Your Voter Readiness Index',
-      pieHole: 0.8,
+      pieHole: 0.5,
       colors: ['green', 'red'],
       chartArea: {width: "400", height: "400", left: '50'},
       legend: 'none',
-      pieStartAngle: 114
+      pieStartAngle: 114,
+      animation: {"startup": true, duration: 1000, easing: 'in',}
     };
 
     const donutchart = document.getElementById('donutchart');
-    console.log(this.chartDiv)
 
-    if (donutchart) {
+    if ( this.state.vriStatus ) {
       const chart = new google.visualization.PieChart(donutchart);
       chart.draw(data, options);
     }
@@ -91,47 +99,47 @@ class VriForm extends Component {
           <h1 > Voter's Readiness </h1>
           <p >Your readiness to vote is very important </p>
         </div>
-        {vriStatus ? <div id="donutchart" ref={div => this.chartDiv = div} /> :
-        <form className="form-vri">
-          <div className="form-vri-inner">
-            <div className="form-group">
-              <label htmlFor="card"> <b>Registration/Card Collection:</b> </label>
-              <select className="form-control" value={card} onChange={this.onChange} name="card">
-                <option value="A">{resposes.A}</option>
-                <option value="B">{resposes.B}</option>
-                <option value="C">{resposes.C}</option>
-                <option value="D">{resposes.D}</option>
-                <option value="E">{resposes.E}</option>
-              </select>
-              <small className="form-text text-muted">What stage are you with your registration?</small>
-            </div>
-            <div className="form-group">
-              <label htmlFor="proximity"> <b>Proximity:</b> </label>
-              {card == "D" || card == "E" ?
-                <select className="form-control" value={card} name="proximity">
-                  <option value={card}>{resposes[card]}</option>
+        <div id="donutchart">
+          <form className="form-vri">
+            <div className="form-vri-inner">
+              <div className="form-group">
+                <label htmlFor="card"> <b>Registration/Card Collection:</b> </label>
+                <select className="form-control" value={card} onChange={this.onChange} name="card">
+                  <option value="A">{resposes.A}</option>
+                  <option value="B">{resposes.B}</option>
+                  <option value="C">{resposes.C}</option>
+                  <option value="D">{resposes.D}</option>
+                  <option value="E">{resposes.E}</option>
                 </select>
-                :
-                <select className="form-control" value={proximity} onChange={this.onChange} name="proximity">
-                  <option value="F">{resposes.F}</option>
-                  <option value="G">{resposes.G}</option>
-                  <option value="H">{resposes.H}</option>
+                <small className="form-text text-muted">What stage are you with your registration?</small>
+              </div>
+              <div className="form-group">
+                <label htmlFor="proximity"> <b>Proximity:</b> </label>
+                {card == "D" || card == "E" ?
+                  <select className="form-control" value={card} name="proximity">
+                    <option value={card}>{resposes[card]}</option>
+                  </select>
+                  :
+                  <select className="form-control" value={proximity} onChange={this.onChange} name="proximity">
+                    <option value="F">{resposes.F}</option>
+                    <option value="G">{resposes.G}</option>
+                    <option value="H">{resposes.H}</option>
+                  </select>
+                }
+                <small className="form-text text-muted">How close are you to your registration center?</small>
+              </div>
+              <div className="form-group">
+                <label htmlFor="candidate"> <b>Clarity of Choice:</b> </label>
+                <select className="form-control" value={candidate} onChange={this.onChange} name="candidate">
+                  <option value="I">{resposes.I}</option>
+                  <option value="J">{resposes.J}</option>
                 </select>
-              }
-              <small className="form-text text-muted">How close are you to your registration center?</small>
+                <small className="form-text text-muted">How clear are you about whom to vote for?</small>
+              </div>
+              <input className="vri-submit" type="button" onClick={this.checkVRI} value="Check Your Readiness" />
             </div>
-            <div className="form-group">
-              <label htmlFor="candidate"> <b>Clarity of Choice:</b> </label>
-              <select className="form-control" value={candidate} onChange={this.onChange} name="candidate">
-                <option value="I">{resposes.I}</option>
-                <option value="J">{resposes.J}</option>
-              </select>
-              <small className="form-text text-muted">How clear are you about whom to vote for?</small>
-            </div>
-            <input className="vri-submit" type="button" onClick={this.checkVRI} value="Check Your Readiness" />
-          </div>
-        </form>
-        }
+          </form>
+        </div>
       </div>
     );
   }
