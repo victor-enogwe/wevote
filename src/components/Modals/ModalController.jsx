@@ -93,12 +93,10 @@ class ModalController extends Component{
 
     facebookAuthentication(){
         this.props.facebookAuth();
-        this.props.handleHide();
     }
 
     twitterAuthentication(){
         this.props.twitterAuth();
-        this.props.handleHide();
     }
 
     toggleShowPassword(e){

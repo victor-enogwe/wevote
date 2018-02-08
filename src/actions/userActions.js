@@ -120,7 +120,7 @@ export function getUser(uuid){
  */
 export function facebookAuth(){
     return (dispatch) => {
-        return axios.get(`${API_URL}/auth/facebook/callback`)
+        return axios.get(`${API_URL}/auth/facebook`)
             .then((res) => {
                 console.log('Res', res.data);
             })
@@ -136,7 +136,7 @@ export function facebookAuth(){
  */
 export function twitterAuth(){
     return (dispatch) => {
-        return axios.get(`${API_URL}/auth/twitter/callback`)
+        return axios.get(`${API_URL}/auth/twitter`)
             .then((res) => {
                 console.log('Res', res.data);
             })

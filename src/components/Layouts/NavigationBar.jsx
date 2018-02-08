@@ -68,7 +68,14 @@ class NavigationBar extends Component {
                     <li><NavLink to="/voter-readiness">Voter Readiness </NavLink></li>
                     <li> <img className="battery" src={require("../../../red-battery.png")} /> </li>
                     <li><NavLink to="/news">News</NavLink></li>
-                    <li><NavLink to="/extras">Learn</NavLink></li>
+                    <li className="learn">
+                        <NavLink to="/extras">Learn</NavLink>
+                        <ul>
+                            <li>Know Your Candidate</li>
+                            <li>Why You Should Vote</li>
+                            <li>Election Structure</li>
+                        </ul>
+                    </li>
                     {user.isAuthenticated && <li>
                         <button
                             onClick={this.logout}
