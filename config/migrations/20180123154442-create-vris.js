@@ -2,21 +2,24 @@ import logger from 'winston';
 
 export default {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('UserVris', {
+    return queryInterface.createTable('Vris', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      UserId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      VriId: {
-        type: Sequelize.INTEGER,
+      code: {
         allowNull: false,
-        unique: true
+        type: Sequelize.TEXT
+      },
+      choice: {
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      weight: {
+        allowNull: false,
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -35,7 +38,7 @@ export default {
   },
 
   down(queryInterface) {
-    return queryInterface.dropTable('UserVris')
+    return queryInterface.dropTable('Vris')
       .catch(error => logger.error(error));
   }
 };

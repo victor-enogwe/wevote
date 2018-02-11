@@ -1,8 +1,10 @@
+import { Op } from 'sequelize';
 import database from '../../models';
 import { checkRole, checkOwnership, generateJwt } from './auth.controller';
 import { handleSequelizeError } from '../../utils/error-handlers.utils';
 
-const { User, Role } = database;
+
+const { User, Role, Vri } = database;
 const allowedFields = [
   'firstname',
   'surname',
@@ -168,6 +170,39 @@ export async function getUsers(req, res) {
     return res.status(404).json({ status: 'fail', message: 'no user found' });
   } catch (error) {
     return handleSequelizeError(error, res);
+  }
+}
+
+/**
+ * update a user's VRI
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response obbject
+ *
+ * @return {object} the response
+ */
+export async function addUserVri(req, res) {
+  try {
+    const {
+      role, user, decoded: { uuid: userUuid },
+    } = req;
+    const { vris } = req.body;
+    const isOwner = checkOwnership(user.uuid, userUuid);
+    const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
+    const canAddVri = isOwner || isSuperUser;
+
+    if (!canAddVri) {
+      throw new Error('un-authorized access');
+    }
+
+    if (isOwner) {
+      const UserVris = await Vri.findAll({ where: { code: { [Op.in]: vris } } });
+      await user.setVris(UserVris);
+    }
+    return res.status(200).json({ status: 'success', message: 'Vri Added!' });
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 }
 

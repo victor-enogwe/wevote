@@ -8,7 +8,7 @@ import { Sequelize, Model } from 'sequelize';
  */
 export default class Vri extends Model {
   static modelFields = {
-    question: {
+    choice: {
       type: Sequelize.TEXT,
       allowNull: false,
       validate: {
@@ -18,7 +18,20 @@ export default class Vri extends Model {
         }
       },
       set(value) {
-        this.setDataValue('question', value.trim());
+        this.setDataValue('choice', value.trim());
+      }
+    },
+    code: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      validate: {
+        is: {
+          args: /\w+/ig,
+          msg: 'please enter a valid choice code.'
+        }
+      },
+      set(value) {
+        this.setDataValue('code', value.trim());
       }
     },
     weight: {
