@@ -25,6 +25,7 @@ class NavigationBar extends Component {
         this.handleShow = this.handleShow.bind(this);
         this.handleHide = this.handleHide.bind(this);
         this.toggleNav = this.toggleNav.bind(this);
+        this.closeNav = this.closeNav.bind(this);
         this.logout = this.logout.bind(this);
         this.batteryTitle = this.batteryTitle.bind(this);
     }
@@ -46,6 +47,10 @@ class NavigationBar extends Component {
 
     toggleNav(){
         this.setState({navOpen: !this.state.navOpen})
+    }
+
+    closeNav(){
+        if (this.state.navOpen) this.toggleNav();
     }
 
     logout(){
@@ -77,23 +82,23 @@ class NavigationBar extends Component {
                 >
                 </span>
                 <ul className={navOpen ? `nav-menu open` : `nav-menu`}>
-                    <li className="vri-nav">
-                        <NavLink to="/voter-readiness">Voter Readiness </NavLink>
+                    <li className="vri-nav" onClick={this.closeNav}>
+                        <NavLink to="/voter-readiness">Voter Readiness</NavLink>
                         <span
                             className={`tooltip fas fa-lg fa-${batteryType}`} style={{color: batteryColor}}
                             data-tooltip={batteryNotification}
                         >
                         </span>
                     </li>
-                    <li><NavLink to="/news">News</NavLink></li>
+                    <li onClick={this.closeNav}><NavLink to="/news">News</NavLink></li>
                     <li className="learn">
-                        <Link to="">Learn</Link>
+                        <a>Learn</a>
                         <ul>
-                            <li><NavLink to="/know-your-candidates">Know Your Candidates</NavLink></li>
-                            <li><NavLink to="/election-structure">Election Structure</NavLink></li>
+                            <li onClick={this.closeNav}><NavLink to="/know-your-candidates">Know Your Candidates</NavLink></li>
+                            <li onClick={this.closeNav}><NavLink to="/election-structure">Election Structure</NavLink></li>
                         </ul>
                     </li>
-                    {user.isAuthenticated && <li>
+                    {user.isAuthenticated && <li onClick={this.closeNav}>
                         <button
                             onClick={this.logout}
                             className="log-out-button"
@@ -102,11 +107,14 @@ class NavigationBar extends Component {
                         </button>
                     </li>}
                     {!user.isAuthenticated && <li
-                        onClick={() => this.handleShow(SIGN_IN_MODAL)}
+                        onClick={() => {
+                            this.handleShow(SIGN_IN_MODAL);
+                            this.closeNav()
+                        }}
                     >
                         Login
                     </li>}
-                    {!user.isAuthenticated && <li>
+                    {!user.isAuthenticated && <li onClick={this.closeNav}>
                         <button
                             onClick={() => this.handleShow(SIGN_UP_MODAL)}
                             className="sign-up-button"
