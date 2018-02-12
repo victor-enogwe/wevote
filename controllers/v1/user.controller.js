@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import database from '../../models';
 import { checkRole, checkOwnership, generateJwt } from './auth.controller';
 import { handleSequelizeError } from '../../utils/error-handlers.utils';
+import vriCalculator  from '../../utils/vriCalculator';
 
 
 const { User, Role, Vri } = database;
@@ -187,7 +188,7 @@ export async function addUserVri(req, res) {
     const {
       role, user, decoded: { uuid: userUuid },
     } = req;
-    const { vris } = req.body;
+    const { choice } = req.body;
     const isOwner = checkOwnership(user.uuid, userUuid);
     const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
     const canAddVri = isOwner || isSuperUser;
@@ -197,10 +198,42 @@ export async function addUserVri(req, res) {
     }
 
     if (isOwner) {
-      const UserVris = await Vri.findAll({ where: { code: { [Op.in]: vris } } });
+      const UserVris = await Vri.findAll({ where: { code: { [Op.in]: choice } } });
       await user.setVris(UserVris);
     }
     return res.status(200).json({ status: 'success', message: 'Vri Added!' });
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: error.message });
+  }
+}
+
+/**
+ * update a user's VRI
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response obbject
+ *
+ * @return {object} the response
+ */
+export async function getUserVri(req, res) {
+  try {
+    const {
+      role, user, decoded: { uuid: userUuid },
+    } = req;
+    const isOwner = checkOwnership(user.uuid, userUuid);
+    const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
+    const canGetVri = isOwner || isSuperUser;
+
+    if (!canGetVri) {
+      throw new Error('un-authorized access');
+    }
+    const data = await user.getVris();
+    if (data) {
+      const score = vriCalculator(data);
+      return res.status(200).json({ status: 'success', data, score });
+    }
+    return res.status(404).json({ status: 'fail', message: 'userVri not found' });
   } catch (error) {
     return res.status(500).json({ status: 'error', message: error.message });
   }

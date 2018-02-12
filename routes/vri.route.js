@@ -12,7 +12,7 @@ const vriRoutes = Router();
 
 vriRoutes
   .get(
-    '/fecth',
+    '/fetch',
     query('limit', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
     query('offset', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
     checkRequestValidity,

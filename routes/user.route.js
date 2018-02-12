@@ -10,7 +10,8 @@ import {
   resetUserPassword,
   updateUserEmail,
   updateUserPhone,
-  addUserVri
+  addUserVri,
+  getUserVri
 } from '../controllers/v1/user.controller';
 
 const userRoutes = Router();
@@ -74,6 +75,11 @@ userRoutes
     '/vri',
     checkRequestValidity,
     addUserVri
+  )
+  .get(
+    '/vri',
+    checkRequestValidity,
+    getUserVri
   );
 
 export default userRoutes;
