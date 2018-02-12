@@ -3,4 +3,5 @@ export default {
     currentModal: '',
     news: [],
     ajaxCallsInProgress: 0,
+    vri: {}
 };
