@@ -6,6 +6,7 @@ import account from '../../assets/signup_icon.png';
 import checkVri from '../../assets/readiness.png';
 import getNotifications from '../../assets/notification.png'
 import receiveNews from '../../assets/news.png';
+import { inecFiles } from "./Candidates";
 
 class HomePage extends Component {
     constructor(props){
@@ -34,6 +35,13 @@ class HomePage extends Component {
                     from coming out to vote during the elections.
                     WeVote seeks to bridge that information gap and ensure that all Nigerians,
                     especially the youth, cast their votes during the 2019 elections.</p>
+                    <p>In the 2015 elections, only 33.7% (67,422,005) of the general
+                        population registered to vote. Worse still, less than 50% of the
+                        67,422,005 eventually turned out to vote.
+                        <a href={`${inecFiles}2015/04/summary-of-results.pdf`}>Source
+                        </a>
+                    </p>
+                    <p>Let's work together to improve that percentage for the next election. </p>
                 </section>
                 <section className="how-it-works">
                     <h1>How WeVote Works</h1>

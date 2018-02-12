@@ -5,6 +5,7 @@
 @import "sections/variables";
 @import "sections/news";
 @import "sections/vri";
+@import "sections/learn-more.scss";
 
 body {
   margin: 0;
@@ -13,7 +14,7 @@ body {
   font-family: 'Roboto', sans-serif;
 
   main {
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 160px);
   }
 }
 

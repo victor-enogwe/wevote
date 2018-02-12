@@ -14,6 +14,25 @@
 
   .nav-notification {
     margin-right: 30px;
+    position: relative;
+
+    &:hover::after{
+      content: attr(data-tooltip);
+      position: absolute;
+      min-width: 15em;
+      font-weight: 100;
+      line-height: 1.3em;
+      margin: 0;
+      background: #4862A3;
+      color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      right: 0;
+      top: 23px;
+      z-index: 1;
+      font-size: .7em;
+      font-family: "Nunito", sans-serif;
+    }
   }
 
   .nav-menu {
@@ -28,6 +47,38 @@
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
     transition: transform 0.3s ease;
+
+    li.vri-nav {
+      display: flex;
+      justify-content: space-between;
+      height: 18px;
+
+      span {
+        margin-right: 10px;
+        position: relative;
+        color: #3B627E;
+        font-weight: bolder;
+        cursor: pointer;
+
+        &:hover::after{
+          content: attr(data-tooltip);
+          position: absolute;
+          min-width: 15em;
+          font-weight: 100;
+          line-height: 1.3em;
+          margin: 0;
+          background: #4862A3;
+          color: #fff;
+          padding: 15px;
+          border-radius: 5px;
+          right: 0;
+          top: 23px;
+          z-index: 1;
+          font-size: .7em;
+          font-family: "Nunito", sans-serif;
+        }
+      }
+    }
 
     ul {
       display: none;
@@ -44,28 +95,28 @@
       }
     }
 
-    .learn:hover > ul {
-      display: flex;
-    }
-
     .learn {
       padding-left: 0;
+
+      & > a {
+        margin-left: 20px;
+      }
+
+      &:hover, & a:hover {
+        padding-left: 0;
+        padding-bottom: 0;
+        color: green;
+        background: white;
+      }
+
+      &:hover > ul {
+        display: flex;
+      }
 
       li:hover, li a:hover {
         color: white;
         background: green;
       }
-    }
-
-    .learn:hover, .learn a:hover {
-      padding-left: 0;
-      padding-bottom: 0;
-      color: green;
-      background: white;
-    }
-
-    .learn > a {
-      margin-left: 20px;
     }
   }
 
@@ -145,17 +196,11 @@ footer {
       -webkit-transform: translateX(0);
       transform: translateX(0);
 
-      .learn > ul {
-        position: absolute;
-        width: 180px;
-        background: green;
-      }
-
       ul {
         padding-left: 0;
-        top: 15px;
+        top: -50px;
         left: -100%;
-        padding-top: 42px;
+        padding-top: 92px;
 
         li {
           font-size: 1em;
@@ -166,45 +211,60 @@ footer {
         }
       }
 
-      .learn {
+      & > li {
+        margin-right: 10px;
+        border-bottom: 0;
+
+        .log-out-button {
+          background-color: white;
+          color: green;
+          height: 50px;
+          width: 110px;
+          font-size: 1em;
+          border: none;
+        }
+
+        .sign-up-button {
+          background-color: white;
+          color: green;
+          height: 50px;
+          width: 110px;
+          border-top-left-radius: 30%30px;
+          border-bottom-left-radius: 30%30px;
+          border-top-right-radius: 30%30px;
+          border-bottom-right-radius: 30%30px;
+        }
+      }
+
+      li.vri-nav {
+        flex-direction: column;
+        align-items: center;
+
+        span {
+          margin-top: 8px;
+        }
+      }
+
+      li.learn {
         position: relative;
+
+        & > ul {
+          position: absolute;
+          width: 180px;
+          background: green;
+          z-index: -99;
+        }
+
+        &:hover, & a:hover {
+          padding-top: 0;
+          color: white;
+          background: green;
+        }
 
         li:hover, li a:hover {
           color: green;
           background: white;
         }
-      }
-
-      .learn:hover, .learn a:hover {
-        padding-left: 0;
-        padding-bottom: 0;
-        color: white;
-        background: green;
-      }
-    }
-
-    .nav-menu li {
-      margin-right: 10px;
-      border-bottom: 0;
-
-      .log-out-button {
-        background-color: white;
-        color: green;
-        height: 50px;
-        width: 110px;
-        font-size: 1em;
-        border: none;
-      }
-
-      .sign-up-button {
-        background-color: white;
-        color: green;
-        height: 50px;
-        width: 110px;
-        border-top-left-radius: 30%30px;
-        border-bottom-left-radius: 30%30px;
-        border-top-right-radius: 30%30px;
-        border-bottom-right-radius: 30%30px;
       }
     }
   }

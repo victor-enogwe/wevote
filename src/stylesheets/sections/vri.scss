@@ -49,6 +49,11 @@ main > div > div > div> div > form > div > div > select {
     width: 175px;
     font-size: 1em;
     border: 1px;
+
+    &:hover {
+      background-color: #00FF00;
+      color: black;
+    }
   }
 }
 
