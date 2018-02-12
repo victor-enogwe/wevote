@@ -21,6 +21,7 @@ export default function drawDonutChart(element, percent, width, height, text_y) 
         .outerRadius(radius);
   
   d3.select(element).select('form').remove("form");
+  d3.select(element).select('svg').remove("svg");
   var svg = d3.select(element).append("svg")
         .attr("width", width)
         .attr("height", height)

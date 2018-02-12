@@ -1,5 +1,7 @@
-
+import toastr from 'toastr';
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { getVri, saveVri, getUserVri } from '../../actions/vriActions';
 import drawDonutChart from '../../assets/progressbar.js';
 const resposes = {
   A: "I have collected my Voter's Card",
@@ -32,13 +34,22 @@ class VriForm extends Component {
     super(props);
     this.onChange = this.onChange.bind(this);
     this.checkVRI = this.checkVRI.bind(this);
-    this.drawChart = this.drawChart.bind(this);
+    this.alert = this.alert.bind(this);
     this.state = {
       card: "A",
       proximity: "F",
       candidate: "I",
       vriStatus: false,
-      score: 0
+      score: 0,
+      vris: {},
+      userVRI: []
+    }
+  }
+
+  componentWillMount(){
+    if (this.props.user.isAuthenticated){
+      this.props.getVri();
+      this.props.getUserVri();
     }
   }
 
@@ -47,8 +58,30 @@ class VriForm extends Component {
     google.charts.setOnLoadCallback(this.drawChart);
   }
 
+  componentWillReceiveProps({ vri }){
+    this.setState({ vris: vri.vris, userVRI: vri.userVRI })
+    if (vri.score) {
+      const choices = vri.userVRI.data;
+      if (choices.length === 2) {
+        this.setState({ card: choices[0].code, proximity: choices[0].code, candidate: choices[1].code})
+      } else {
+        this.setState({ card: choices[0].code, proximity: choices[1].code, candidate: choices[2].code})
+      }
+      const donutchart = document.getElementById('donutchart');
+      this.setState({ vriStatus: true, score: vri.score })
+      drawDonutChart(donutchart, vri.score, 500, 500, '.56em')
+    }
+  }
+
+  alert() {
+    toastr.success('Feature Comming Soon!')
+  }
+
   onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
+    if (event.target.value === 'D' || event.target.value === 'E') {
+      this.setState({ proximity: event.target.value });
+    }
   }
 
   checkVRI(){
@@ -60,34 +93,12 @@ class VriForm extends Component {
     }
     localStorage.score = score;
     this.setState({vriStatus: true, score}, () => {
+      if (this.props.user.isAuthenticated){
+        this.props.saveVri([card, proximity, candidate])
+      }
       drawDonutChart(donutchart, score, 500, 500, '.56em')
     });
 
-  }
-
-  drawChart() {
-    const data = google.visualization.arrayToDataTable([
-      ['Task', 'Hours per Day'],
-      ['Score',     this.state.score],
-      ['Remaining',      100 - this.state.score]
-    ]);
-
-    const options = {
-      title: 'Your Voter Readiness Index',
-      pieHole: 0.5,
-      colors: ['green', 'red'],
-      chartArea: {width: "400", height: "400", left: '50'},
-      legend: 'none',
-      pieStartAngle: 114,
-      animation: {"startup": true, duration: 1000, easing: 'in',}
-    };
-
-    const donutchart = document.getElementById('donutchart');
-
-    if ( this.state.vriStatus ) {
-      const chart = new google.visualization.PieChart(donutchart);
-      chart.draw(data, options);
-    }
   }
 
 
@@ -98,6 +109,7 @@ class VriForm extends Component {
         <div className="vri-text-area">
           <h1 > Voter's Readiness </h1>
           <p >Your readiness to vote is very important </p>
+          {vriStatus ? <input type="button" value="Retake VRI Check" /> : ''}
         </div>
         <div id="donutchart">
           <form className="form-vri">
@@ -145,4 +157,11 @@ class VriForm extends Component {
   }
 }
 
-export default VriForm;
+function mapStateToProps(state){
+  return {
+      vri: state.vri,
+      user: state.user,
+  };
+}
+
+export default connect(mapStateToProps, { getVri, saveVri, getUserVri })(VriForm);
