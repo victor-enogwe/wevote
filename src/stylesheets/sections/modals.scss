@@ -31,6 +31,7 @@
       padding-top: 20px;
       width: 80%;
       min-height: 60%;
+      overflow: scroll;
 
       .modal-header {
         margin-top: 10px;
@@ -98,6 +99,11 @@
             height: 40px;
             width: 43%;
 
+            .select-error {
+              color: red;
+              opacity: 1;
+            }
+
             select {
               width: 100%;
               height: 100%;
@@ -134,11 +140,22 @@
           padding-left: 20px;
           margin-bottom: 15px;
 
+          .input-error::placeholder {
+            color: red;
+            opacity: 1;
+          }
+
           .show-password {
             position: absolute;
             top: 3%;
-            right: 3%;
+            right: 8%;
             font-size: 0.8em;
+            cursor: pointer;
+          }
+
+          i.error-icon {
+            color: red;
+            right: 2%;
           }
 
           i {
@@ -185,6 +202,7 @@
           height: 37px;
           border: 1px solid green;
           border-radius: 2px;
+          cursor: pointer;
 
           p {
             text-align: center;

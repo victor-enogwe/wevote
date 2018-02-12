@@ -2,16 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import OptionFragments from './OptionFragments';
 
-const SelectInput = ({id, name, value, handleChange, placeholder, fields }) => (
+const SelectInput = ({id, name, value, handleChange, placeholder, fields, error }) => (
     <div className="select-input">
         <select
             id={id}
             name={name}
             onChange={handleChange}
-            value={value}>
+            value={value}
+            className={error && "select-error"}
+        >
             <OptionFragments
                 fields={fields}
-                placeholder={placeholder}
+                placeholder={error || placeholder}
             />
         </select>
     </div>

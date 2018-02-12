@@ -10,7 +10,9 @@ const { SIGN_IN_AJAX } = actionTypes;
 import News from './Pages/News';
 import HomePage from './Pages/HomePage';
 import NavigationBar from './Layouts/NavigationBar';
-import VoterReadiness from './Pages/VoterReadiness'
+import VoterReadiness from './Pages/VoterReadiness';
+import Candidates from './Pages/Candidates';
+import ElectionStructure from './Pages/ElectionStructure';
 
 import loader from '../assets/loader.gif';
 
@@ -36,6 +38,8 @@ class PrimaryLayout extends Component {
                     <Route path="/" exact component={HomePage} />
                     <Route path="/voter-readiness" component={VoterReadiness} />
                     <Route path="/news" component={News} />
+                    <Route path="/know-your-candidates" component={Candidates} />
+                    <Route path="/election-structure" component={ElectionStructure} />
                     <Route path="*" render={() => this.props.loading && <img className="loader" src={loader} />}/>
                 </main>
                 <footer>

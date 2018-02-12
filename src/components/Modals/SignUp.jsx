@@ -1,5 +1,9 @@
 import React from 'react';
 
+import actionTypes from '../../actions/constants';
+
+const { SIGN_IN_MODAL } = actionTypes;
+
 /**
  *
  * @param handleHide
@@ -54,7 +58,7 @@ const SignUp = ({ handleHide, handleShow, facebookAuth, twitterAuth }) => (
             <hr/>
             <section>
                 <p className="we-voter">Already have a WeVote account?</p>
-                <div><p>Log in</p></div>
+                <div onClick={() => handleShow(SIGN_IN_MODAL)}><p>Log in</p></div>
             </section>
         </aside>
     </div>

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { beginAjaxCall } from "./ajaxStatusActions";
 
 import setAccessToken from '../utils/setAccessToken';
-import { handleError } from '../utils/errorHandler';
+import { handleError, throwError } from '../utils/errorHandler';
 
 import actionTypes from './constants';
 
@@ -63,7 +63,7 @@ export function signUp(user){
             .then((res) => {
                 saveToken(res.data, SIGN_UP_AJAX, dispatch);
             })
-            .catch(error => handleError(error, dispatch));
+            .catch(error => throwError(error, dispatch));
     };
 }
 
@@ -79,7 +79,7 @@ export function signIn(user){
             .then((res) => {
                 saveToken(res.data, SIGN_IN_AJAX, dispatch);
             })
-            .catch(error => handleError(error, dispatch));
+            .catch(error => throwError(error, dispatch));
     };
 }
 
@@ -120,7 +120,7 @@ export function getUser(uuid){
  */
 export function facebookAuth(){
     return (dispatch) => {
-        return axios.get(`${API_URL}/auth/facebook/callback`)
+        return axios.get(`${API_URL}/auth/facebook`)
             .then((res) => {
                 console.log('Res', res.data);
             })
@@ -136,7 +136,7 @@ export function facebookAuth(){
  */
 export function twitterAuth(){
     return (dispatch) => {
-        return axios.get(`${API_URL}/auth/twitter/callback`)
+        return axios.get(`${API_URL}/auth/twitter`)
             .then((res) => {
                 console.log('Res', res.data);
             })

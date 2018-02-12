@@ -4,6 +4,9 @@ import TextInput from './TextInput';
 import SelectInput from "./SelectInput";
 
 import ageFields from '../../utils/ageFields';
+import actionTypes from '../../actions/constants';
+
+const { SIGN_IN_MODAL } = actionTypes;
 
 const sexFields = {
     male: 'Male',
@@ -11,7 +14,8 @@ const sexFields = {
 };
 
 
-const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, showPassword, toggleShowPassword }) => (
+const SignUpForm = ({ handleHide, handleShow, handleChange, signUpDetails, signUpErrors,
+                        onSignUpSubmit, showPassword, toggleShowPassword }) => (
     <div className="modal-section">
         <section className="inner-modal-section">
             <i
@@ -29,6 +33,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                     icon="fas fa-user fa-lg"
                     handleChange={handleChange}
                     value={signUpDetails.firstname}
+                    error={signUpErrors.firstname}
                 />
                 <TextInput
                     id="sign-up-surname"
@@ -38,6 +43,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                     icon="fas fa-user fa-lg"
                     handleChange={handleChange}
                     value={signUpDetails.surname}
+                    error={signUpErrors.surname}
                 />
                 <TextInput
                     id="sign-up-phone"
@@ -47,6 +53,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                     icon="fas fa-mobile-alt fa-lg"
                     handleChange={handleChange}
                     value={signUpDetails.phone}
+                    error={signUpErrors.phone}
                 />
                 <div className="sign-up-select-fields">
                     <SelectInput
@@ -56,6 +63,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                         fields={sexFields}
                         handleChange={handleChange}
                         value={signUpDetails.sex}
+                        error={signUpErrors.sex}
                     />
                     <SelectInput
                         id="sign-up-age"
@@ -64,6 +72,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                         fields={ageFields}
                         handleChange={handleChange}
                         value={signUpDetails.age}
+                        error={signUpErrors.age}
                     />
                 </div>
                 <TextInput
@@ -74,6 +83,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                     icon="far fa-envelope fa-lg"
                     handleChange={handleChange}
                     value={signUpDetails.email}
+                    error={signUpErrors.email}
                 />
                 <TextInput
                     id="sign-up-password"
@@ -83,6 +93,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
                     icon="fas fa-lock fa-lg"
                     handleChange={handleChange}
                     value={signUpDetails.password}
+                    error={signUpErrors.password}
                     showPassword={showPassword}
                     toggleShowPassword={toggleShowPassword}
                 />
@@ -102,7 +113,7 @@ const SignUpForm = ({ handleHide, handleChange, signUpDetails, onSignUpSubmit, s
             <hr/>
             <section>
                 <p className="we-voter">Already have a WeVote account?</p>
-                <div><p>Log in</p></div>
+                <div onClick={() => handleShow(SIGN_IN_MODAL)}><p>Log in</p></div>
             </section>
         </aside>
     </div>
