@@ -11,11 +11,13 @@ export default {
       },
       code: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        unique: true,
       },
       choice: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        unique: true,
       },
       weight: {
         allowNull: false,
