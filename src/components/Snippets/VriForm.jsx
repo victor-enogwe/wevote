@@ -107,9 +107,11 @@ class VriForm extends Component {
     return (
       <div className="container-flex">
         <div className="vri-text-area">
-          <h1 > Voter's Readiness </h1>
-          <p >Your readiness to vote is very important </p>
-          {vriStatus ? <input type="button" value="Retake VRI Check" /> : ''}
+          <h1> Voter Readiness Index</h1>
+          <p>The Voter Readiness Index helps you know what is required of you to vote and if you've met
+            those requirements. It consists of 3 questions, select the option that applies to you for
+            each question
+          </p>
         </div>
         <div id="donutchart">
           <form className="form-vri">

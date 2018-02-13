@@ -18,8 +18,8 @@ class HomePage extends Component {
             <div className="home-page">
                 <section className="background">
                     <div className="keyword">
-                        <p>Great societies don't just happen</p>
-                        <p>They must be made to happen.</p>
+                        <p>Great societies don't just happen. <br/> Good leaders make it happen.</p>
+                        <p>Let's vote them.</p>
                         <Link to="/voter-readiness">
                             <button className="vri-button">
                                 Check Your Readiness
@@ -41,7 +41,14 @@ class HomePage extends Component {
                         <a href={`${inecFiles}2015/04/summary-of-results.pdf`}>Source
                         </a>
                     </p>
-                    <p>Let's work together to improve that percentage for the next election. </p>
+                    <p>If <strong>WE</strong> want competent leaders, <strong>WE</strong> have to vote them in.
+                        <br/> Are you ready to vote?
+                    </p>
+                    <Link to="/voter-readiness">
+                        <button className="vri-button">
+                            Check Your Voter Readiness
+                        </button>
+                    </Link>
                 </section>
                 <section className="how-it-works">
                     <h1>How WeVote Works</h1>

@@ -1,6 +1,7 @@
 @import "variables";
 
 .home-page {
+
   .keyword {
     width: 50%;
     display: flex;
@@ -15,26 +16,32 @@
       font-size: 1.5em;
       font-weight: 500;
     }
+  }
 
-    button {
-      background-color: green;
-      color: white;
-      height: 50px;
-      width: 175px;
-      margin-top: 30px;
-      font-size: 1em;
-      border: none;
+  .vri-button {
+    background-color: green;
+    color: white;
+    height: 50px;
+    min-width: 175px;
+    margin-top: 30px;
+    font-size: 1em;
+    border: none;
 
-      &:hover {
-        background-color: #00FF00;
-        color: black;
-      }
+    &:hover {
+      background-color: #00FF00;
+      color: black;
     }
   }
 
   .about {
     padding: 20px;
     background-color: #EEEEEE;
+    display: flex;
+    flex-direction: column;
+
+    & > a {
+      align-self: center;
+    }
 
     h1 {
       text-align: center;

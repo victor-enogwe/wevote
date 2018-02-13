@@ -1,8 +1,8 @@
+@import "variables";
+
 .form-vri {
-  width: 100%;
   background: green;
-  padding: 50px;
-  padding-right: 20px;
+  padding: 50px 20px 50px 50px;
 
   small, label {
     color: white;
@@ -10,8 +10,18 @@
 }
 
 .vri-text-area {
-  width:50%;
+  h1 {
+    text-align: center;
+    font-size: 30px;
+  }
 
+  p {
+    font-size: 25px;
+    font-family: 'Nunito', sans-serif ;
+    line-height: 200%;
+    font-weight: 300;
+    color: #6a7583;
+  }
 }
 
 .form-group {
@@ -28,8 +38,10 @@ main > div > div > div> div > form > div > div > select {
 
 .container-flex {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 5%;
+  justify-content: center;
+  padding: 20px;
 }
 
 .form-control {
@@ -40,7 +52,7 @@ main > div > div > div> div > form > div > div > select {
 .form-vri-inner {
   height: 100%;
   width: 100%;
-  margin: 0% auto;
+  margin: 0 auto;
 
   .vri-submit {
     background-color: white;
@@ -63,7 +75,7 @@ main > div > div > div> div > form > div > div > select {
 
 #donutchart {
   height: 500px;
-  width: 500px;
+  width: 100%;
 }
 
 .battery {
@@ -91,4 +103,20 @@ path.color0 {
 
 path.color1 {
   fill: red;
+}
+
+@media screen and (min-width: $tablet) {
+  .container-flex {
+    flex-direction: row;
+    justify-content: space-between;
+
+    .vri-text-area {
+      width: 50%;
+      padding: 20px;
+    }
+
+    #donutchart {
+      width: 50%;
+    }
+  }
 }
