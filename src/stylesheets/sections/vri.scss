@@ -21,6 +21,13 @@
     line-height: 200%;
     font-weight: 300;
     color: #6a7583;
+    margin-bottom: 20px;
+
+    a {
+      margin-left: 10px;
+      text-decoration: none;
+      color: green;
+    }
   }
 }
 
@@ -41,7 +48,7 @@ main > div > div > div> div > form > div > div > select {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 50px 20px;
 }
 
 .form-control {

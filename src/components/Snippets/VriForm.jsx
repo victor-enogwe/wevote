@@ -34,6 +34,7 @@ class VriForm extends Component {
     super(props);
     this.onChange = this.onChange.bind(this);
     this.checkVRI = this.checkVRI.bind(this);
+    this.nextSteps = this.nextSteps.bind(this);
     this.alert = this.alert.bind(this);
     this.state = {
       card: "A",
@@ -59,17 +60,19 @@ class VriForm extends Component {
   }
 
   componentWillReceiveProps({ vri }){
-    this.setState({ vris: vri.vris, userVRI: vri.userVRI })
-    if (vri.score) {
-      const choices = vri.userVRI.data;
-      if (choices.length === 2) {
-        this.setState({ card: choices[0].code, proximity: choices[0].code, candidate: choices[1].code})
-      } else {
-        this.setState({ card: choices[0].code, proximity: choices[1].code, candidate: choices[2].code})
+    if (vri !== this.props.vri) {
+      this.setState({vris: vri.vris, userVRI: vri.userVRI});
+      if (vri.score) {
+        const choices = vri.userVRI.data;
+        if (choices.length === 2) {
+            this.setState({card: choices[0].code, proximity: choices[0].code, candidate: choices[1].code})
+        } else {
+            this.setState({card: choices[0].code, proximity: choices[1].code, candidate: choices[2].code})
+        }
+        const donutchart = document.getElementById('donutchart');
+        this.setState({vriStatus: true, score: vri.score});
+        drawDonutChart(donutchart, vri.score, 500, 500, '.56em')
       }
-      const donutchart = document.getElementById('donutchart');
-      this.setState({ vriStatus: true, score: vri.score })
-      drawDonutChart(donutchart, vri.score, 500, 500, '.56em')
     }
   }
 
@@ -101,17 +104,54 @@ class VriForm extends Component {
 
   }
 
+  nextSteps(){
+    const { card } = this.state;
+    if (['D', 'E'].includes(card)){
+      return (
+        <p>You will not be able to vote unless you get registered and issued a Permanent Voters Card (PVC).
+          <br/>Continuous Voter Registration is currently ongoing
+          <a href="https://govote.org.ng/#/search" target="_blank"> Find a Registration Center</a>
+        </p>
+      );
+    } else if (['B', 'C'].includes(card)){
+      return (
+        <p>You will not be able to vote if you are not in possession of your Permanent Voters Card (PVC).
+          <br/> Collect your PVC from a ward near you
+          <a href="https://govote.org.ng/#/search" target="_blank"> Find a PVC Collection Ward</a>
+          <br/>You can also visit the INEC office in your Local Government.
+          <a href="http://www.inecnigeria.org/?page_id=5217" target="_blank"> Find INEC office in your LGA</a>
+        </p>
+      );
+    } else if (card === 'A') {
+      return (
+        <p>
+          Congratulations! You have your Permanent Voters Card which allows you to vote.
+          Encourage your family and friends to do the same. <br/> Want to verify your voter status and
+          check for your Polling Unit?
+          <a href="http://voterreg.inecnigeria.org/" target="_blank">Verify your Voter Status</a>
+        </p>
+      );
+    }
+  }
+
 
   render(){
-    const {card, proximity, candidate, vriStatus} = this.state;
+    const {card, proximity, candidate, vriStatus, userVRI} = this.state;
+    console.log('State', this.state);
     return (
       <div className="container-flex">
         <div className="vri-text-area">
           <h1> Voter Readiness Index</h1>
+          {vriStatus ? <div className="next-steps"> {this.nextSteps()}
+              <p>Have questions about Voter Registration?
+                  <a href="http://www.inecnigeria.org/?page_id=5198" target="_blank">Get answers</a>
+              </p>
+              {!this.props.user.isAuthenticated && <p> Sign Up to save your VRI and update the battery bar above</p>}
+          </div> :
           <p>The Voter Readiness Index helps you know what is required of you to vote and if you've met
             those requirements. It consists of 3 questions, select the option that applies to you for
             each question
-          </p>
+          </p>}
         </div>
         <div id="donutchart">
           <form className="form-vri">

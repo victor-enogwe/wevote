@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import { Route, NavLink, Link } from 'react-router-dom';
 
 import { selectModal, getUser } from '../../actions/userActions';
+import { getUserVri } from '../../actions/vriActions';
+
 import actionTypes from '../../actions/constants';
 import setAccessToken from "../../utils/setAccessToken";
+import generateBatteryInfo from '../../utils/generateBatteryInfo';
 
 import ModalController from '../Modals/ModalController';
 
@@ -17,7 +20,7 @@ class NavigationBar extends Component {
             showModal: false,
             navOpen: false,
             notifications: 'You do not have any notification at the moment',
-            batteryType: 'battery-empty',
+            batteryType: 'empty',
             batteryColor: 'red',
             batteryNotification: 'You have not checked your voter readiness yet. ' +
             'Click on the link to check it now.'
@@ -33,6 +36,14 @@ class NavigationBar extends Component {
     componentWillMount(){
         if(this.props.user.isAuthenticated){
             this.props.getUser(this.props.user.uuid);
+            this.props.getUserVri();
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        if (nextProps.vriScore !== this.props.vriScore){
+            const {batteryType, batteryColor, batteryNotification} = generateBatteryInfo(nextProps.vriScore);
+            this.setState({ batteryType, batteryColor, batteryNotification });
         }
     }
 
@@ -85,7 +96,7 @@ class NavigationBar extends Component {
                     <li className="vri-nav" onClick={this.closeNav}>
                         <NavLink to="/voter-readiness">Voter Readiness</NavLink>
                         <span
-                            className={`tooltip fas fa-lg fa-${batteryType}`} style={{color: batteryColor}}
+                            className={`tooltip fas fa-lg fa-battery-${batteryType}`} style={{color: batteryColor}}
                             data-tooltip={batteryNotification}
                         >
                         </span>
@@ -135,8 +146,9 @@ class NavigationBar extends Component {
 
 function mapStateToProps(state){
     return {
-        user: state.user
+        user: state.user,
+        vriScore: state.vri.score
     };
 }
 
-export default connect(mapStateToProps, { selectModal, getUser })(NavigationBar);
+export default connect(mapStateToProps, { selectModal, getUser, getUserVri })(NavigationBar);
