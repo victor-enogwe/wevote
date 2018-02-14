@@ -10,7 +10,7 @@ const { DISPLAY_NEWS_AJAX, DISPLAY_IMAGE } = actionTypes;
 export function getNews(){
     return (dispatch) => {
         dispatch(beginAjaxCall());
-        return axios.get('http://inecnews.com/wp-json/wp/v2/posts')
+        return axios.get('//inecnews.com/wp-json/wp/v2/posts')
             .then((res) => {
                 dispatch(displayNews(res.data));
             })
