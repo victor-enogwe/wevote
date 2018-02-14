@@ -1,21 +1,39 @@
 .form-vri {
-  margin: 20px auto;
-  width: 50%;
   background: green;
-  padding: 50px;
-  padding-right: 20px;
+  padding: 50px 20px 50px 50px;
+
+  small, label {
+    color: white;
+  }
 }
 
 .vri-text-area {
-  width:50%;
+  h1 {
+    text-align: center;
+    font-size: 30px;
+  }
 
+  p {
+    font-size: 25px;
+    font-family: 'Nunito', sans-serif ;
+    line-height: 200%;
+    font-weight: 300;
+    color: #6a7583;
+    margin-bottom: 20px;
+
+    a {
+      margin-left: 10px;
+      text-decoration: none;
+      color: green;
+    }
+  }
 }
 
 .form-group {
   margin-bottom: 30px
 }
 
-main > div > div > div > form > div > div > select {
+main > div > div > div> div > form > div > div > select {
   font-size: 14px;
   width: 95%;
   color: black;
@@ -23,14 +41,12 @@ main > div > div > div > form > div > div > select {
   margin: 10px 0;
 }
 
-small, label {
-  color: white;
-}
-
 .container-flex {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 5%;
+  justify-content: center;
+  padding: 50px 20px;
 }
 
 .form-control {
@@ -41,7 +57,7 @@ small, label {
 .form-vri-inner {
   height: 100%;
   width: 100%;
-  margin: 0% auto;
+  margin: 0 auto;
 
   .vri-submit {
     background-color: white;
@@ -50,6 +66,11 @@ small, label {
     width: 175px;
     font-size: 1em;
     border: 1px;
+
+    &:hover {
+      background-color: #00FF00;
+      color: black;
+    }
   }
 }
 
@@ -59,5 +80,48 @@ small, label {
 
 #donutchart {
   height: 500px;
-  width: 500px;
+  width: 100%;
+}
+
+.battery {
+  height: 40px;
+  width: 40px;
+}
+
+text {
+  font-family: "RamaGothicM-Heavy",Impact,Haettenschweiler,"Franklin Gothic Bold",Charcoal,"Helvetica Inserat","Bitstream Vera Sans Bold","Arial Black",sans-serif;
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 16rem;
+  fill: green;
+}
+
+#donut {
+  width: 29rem;
+  height: 29rem;
+  margin: 0 auto;
+}
+
+path.color0 {
+  fill: green;
+}
+
+path.color1 {
+  fill: red;
+}
+
+@media screen and (min-width: $tablet) {
+  .container-flex {
+    flex-direction: row;
+    justify-content: space-between;
+
+    .vri-text-area {
+      width: 50%;
+      padding: 20px;
+    }
+
+    #donutchart {
+      width: 50%;
+    }
+  }
 }

@@ -1,12 +1,14 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
+import { beginAjaxCall } from "./ajaxStatusActions";
+
 import setAccessToken from '../utils/setAccessToken';
-import { handleError } from '../utils/errorHandler';
+import { handleError, throwError } from '../utils/errorHandler';
 
 import actionTypes from './constants';
 
-const { MODAL_CHOICE, SIGN_UP, SIGN_IN, USER_DATA } = actionTypes;
+const { MODAL_CHOICE, SIGN_UP_AJAX, SIGN_IN_AJAX, USER_DATA_AJAX } = actionTypes;
 
 const { API_URL } = process.env;
 
@@ -29,7 +31,8 @@ export function login(token, type) {
     const uuid = decoded.uuid;
     return {
         type,
-        payload: uuid
+        payload: uuid,
+        error: false
     };
 }
 
@@ -55,11 +58,12 @@ function saveToken(response, type, dispatch) {
  */
 export function signUp(user){
     return (dispatch) => {
+        dispatch(beginAjaxCall());
         return axios.post(`${API_URL}/user/create`, user)
             .then((res) => {
-                saveToken(res.data, SIGN_UP, dispatch);
+                saveToken(res.data, SIGN_UP_AJAX, dispatch);
             })
-            .catch(error => handleError(error));
+            .catch(error => throwError(error, dispatch));
     };
 }
 
@@ -70,11 +74,12 @@ export function signUp(user){
  */
 export function signIn(user){
     return (dispatch) => {
+        dispatch(beginAjaxCall());
         return axios.post(`${API_URL}/auth/basic`, user)
             .then((res) => {
-                saveToken(res.data, SIGN_IN, dispatch);
+                saveToken(res.data, SIGN_IN_AJAX, dispatch);
             })
-            .catch(error => handleError(error));
+            .catch(error => throwError(error, dispatch));
     };
 }
 
@@ -86,7 +91,8 @@ export function signIn(user){
 function provideUserData(type, user){
     return {
         type,
-        payload: user
+        payload: user,
+        error: false
     };
 }
 
@@ -97,9 +103,42 @@ function provideUserData(type, user){
  */
 export function getUser(uuid){
     return (dispatch) => {
+        dispatch(beginAjaxCall());
         return axios.get(`${API_URL}/user/fetch/${uuid}`)
             .then((res) => {
-                dispatch(provideUserData(USER_DATA, res.data.data))
+                dispatch(provideUserData(USER_DATA_AJAX, res.data.data))
+            })
+            .catch(error => handleError(error, dispatch));
+    };
+}
+
+
+/**
+ * Thunk that signs up a user on Facebook
+ * @param {object} user
+ * @returns {function} saveToken
+ */
+export function facebookAuth(){
+    return (dispatch) => {
+        return axios.get(`${API_URL}/auth/facebook`)
+            .then((res) => {
+                console.log('Res', res.data);
+            })
+            .catch(error => handleError(error));
+    };
+}
+
+
+/**
+ * Thunk that signs up a user on Twitter
+ * @param {object} user
+ * @returns {function} saveToken
+ */
+export function twitterAuth(){
+    return (dispatch) => {
+        return axios.get(`${API_URL}/auth/twitter`)
+            .then((res) => {
+                console.log('Res', res.data);
             })
             .catch(error => handleError(error));
     };

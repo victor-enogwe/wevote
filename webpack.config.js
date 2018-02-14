@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 require('dotenv').config();
 const envDefinePlugin = new webpack.DefinePlugin({
     'process.env.API_URL': JSON.stringify(process.env.API_URL),
+    'process.env.API_URL_LOCAL': JSON.stringify(process.env.API_URL_LOCAL),
 });
 
 module.exports = {

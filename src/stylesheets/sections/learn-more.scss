@@ -1,0 +1,110 @@
+.candidates {
+  width: 90%;
+  margin: 0 auto;
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+
+    p {
+      font-size: 25px;
+      font-family: 'Nunito', sans-serif ;
+      line-height: 200%;
+      font-weight: 300;
+      color: #6a7583;
+    }
+  }
+
+  .questions {
+    .select-input {
+      border: 1px solid silver;
+      border-radius: 2px;
+      height: 50px;
+      max-width: 500px;
+      margin: 0 auto;
+
+      select {
+        width: 100%;
+        height: 100%;
+        font-size: 1.5em;
+        font-family: 'Nunito', sans-serif;
+        outline: none;
+        border: none;
+        padding-left: 20px;
+        color: #333333;
+
+      }
+    }
+  }
+
+  .response {
+    max-width: 700px;
+    margin: 40px auto 0;
+
+    h2 {
+      text-align: center;
+      font-size: 25px;
+    }
+
+    p {
+      font-size: 25px;
+      font-family: 'Nunito', sans-serif ;
+      line-height: 200%;
+      font-weight: 300;
+      color: #6a7583;
+
+      a {
+        margin-left: 10px;
+        text-decoration: none;
+        color: green;
+      }
+    }
+
+  }
+
+}
+
+.structure {
+  width: 90%;
+  margin: 0 auto;
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+  }
+
+  section {
+    max-width: 700px;
+    margin: 0 auto;
+
+    p {
+      font-size: 25px;
+      font-family: 'Nunito', sans-serif ;
+      line-height: 200%;
+      font-weight: 300;
+      color: #6a7583;
+
+      a {
+        margin-left: 10px;
+        text-decoration: none;
+        color: green;
+      }
+    }
+  }
+
+}
+
+
+@media screen and (min-width: $tablet) {
+
+}

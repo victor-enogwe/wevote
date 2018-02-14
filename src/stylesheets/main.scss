@@ -1,10 +1,11 @@
+@import "sections/variables";
 @import "sections/modals";
 @import "sections/toastr";
 @import "sections/layouts";
 @import "sections/homepage";
-@import "sections/variables";
 @import "sections/news";
 @import "sections/vri";
+@import "sections/learn-more.scss";
 
 body {
   margin: 0;
@@ -13,7 +14,7 @@ body {
   font-family: 'Roboto', sans-serif;
 
   main {
-    min-height: calc(100vh - 200px);
+    min-height: 100vh;
   }
 }
 
@@ -23,6 +24,14 @@ body {
   background: url('../assets/nigeria-bgrd.jpg');
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.loader {
+  position: absolute;
+  height: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 
