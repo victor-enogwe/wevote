@@ -20,7 +20,7 @@ export function getNews(){
 
 export function getImage(media_id){
     return (dispatch) => {
-        return axios.get(`http://inecnews.com/wp-json/wp/v2/media/${media_id}`)
+        return axios.get(`//inecnews.com/wp-json/wp/v2/media/${media_id}`)
             .then((res) => {
                 dispatch(displayImage(res.data.post, res.data.source_url));
             })
