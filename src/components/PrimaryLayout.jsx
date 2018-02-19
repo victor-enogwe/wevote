@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import { login } from '../actions/userActions';
+import { login, selectModal } from '../actions/userActions';
 import actionTypes from '../actions/constants';
 const { SIGN_IN_AJAX } = actionTypes;
 
@@ -13,10 +13,19 @@ import NavigationBar from './Layouts/NavigationBar';
 import VoterReadiness from './Pages/VoterReadiness';
 import Candidates from './Pages/Candidates';
 import ElectionStructure from './Pages/ElectionStructure';
+import ModalController from './Modals/ModalController';
 
 import loader from '../assets/loader.gif';
 
 class PrimaryLayout extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showModal: false,
+        };
+        this.handleShow = this.handleShow.bind(this);
+        this.handleHide = this.handleHide.bind(this);
+    }
 
     componentWillMount(){
         if (localStorage.getItem('wevote')) {
@@ -28,15 +37,27 @@ class PrimaryLayout extends Component {
         }
     }
 
+    handleShow(modal) {
+        this.setState({showModal: true});
+        this.props.selectModal(modal);
+    }
+
+    handleHide() {
+        this.setState({showModal: false});
+    }
+
     render() {
         return (
             <div className="primary-layout">
                 <header>
-                    <NavigationBar />
+                    <NavigationBar
+                        handleHide={this.handleHide}
+                        handleShow={this.handleShow}
+                    />
                 </header>
                 <main className="container">
                     <Route path="/" exact component={HomePage} />
-                    <Route path="/voter-readiness" component={VoterReadiness} />
+                    <Route path="/voter-readiness" render={() => <VoterReadiness handleShow={this.handleShow} />}/>
                     <Route path="/news" component={News} />
                     <Route path="/know-your-candidates" component={Candidates} />
                     <Route path="/election-structure" component={ElectionStructure} />
@@ -46,6 +67,11 @@ class PrimaryLayout extends Component {
                     <p>WeVote</p>
                     <p>&copy; All Rights Reserved</p>
                 </footer>
+                {this.state.showModal &&
+                <ModalController
+                    handleShow={this.handleShow}
+                    handleHide={this.handleHide}
+                />}
             </div>
         );
     }
@@ -57,4 +83,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default withRouter(connect(mapStateToProps, { login })(PrimaryLayout));
+export default withRouter(connect(mapStateToProps, { login, selectModal })(PrimaryLayout));

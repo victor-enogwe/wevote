@@ -33,14 +33,6 @@
   margin-bottom: 30px
 }
 
-main > div > div > div> div > form > div > div > select {
-  font-size: 14px;
-  width: 95%;
-  color: black;
-  background: white;
-  margin: 10px 0;
-}
-
 .container-flex {
   display: flex;
   flex-direction: column;
@@ -71,6 +63,14 @@ main > div > div > div> div > form > div > div > select {
       background-color: #00FF00;
       color: black;
     }
+  }
+
+  select {
+    font-size: 14px;
+    width: 95%;
+    color: black;
+    background: white;
+    margin: 10px 0;
   }
 }
 

@@ -7,17 +7,17 @@ function generateBatteryInfo(score){
             'Click on the link to check it now.';
     } else if (score > 0 && score < 25){
         batteryInfo.batteryType = 'quarter';
-        batteryInfo.batteryColor = 'orange';
+        batteryInfo.batteryColor = 'red';
         batteryInfo.batteryNotification = 'You have not registered as a voter. ' +
             'Hence you cannot vote. If you now have your Voters card, click the link to check your VRI again.';
-    } else if (score >= 25 && score < 50){
+    } else if (score >= 25 && score < 51){
         batteryInfo.batteryType = 'half';
-        batteryInfo.batteryColor = 'yellow';
+        batteryInfo.batteryColor = 'orange';
         batteryInfo.batteryNotification = 'You have not been issued a voters card. ' +
             'Hence you cannot vote. If you now have your Voters card, click the link to check your VRI again.';
-    } else if (score >= 50 && score < 75){
+    } else if (score >= 51 && score < 75){
         batteryInfo.batteryType = 'three-quarters';
-        batteryInfo.batteryColor = 'orange';
+        batteryInfo.batteryColor = 'yellow';
         batteryInfo.batteryNotification = 'You did not register in your city of residence. ' +
             'You should consider transferring your registration. If you have done that, ' +
             'click the link to check your VRI again.';
