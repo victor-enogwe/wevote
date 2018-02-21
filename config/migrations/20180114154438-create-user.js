@@ -19,7 +19,7 @@ export default {
         },
         firstname: {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: true
         },
         surname: {
           type: Sequelize.STRING,
@@ -27,13 +27,13 @@ export default {
         },
         email: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: true,
           isEmail: true,
           unique: true
         },
         phone: {
           type: Sequelize.STRING,
-          allowNull: true,
+          allowNull: false,
           unique: true
         },
         sex: {
@@ -43,7 +43,7 @@ export default {
         },
         age: {
           type: Sequelize.INTEGER,
-          allowNull: false
+          allowNull: true
         },
         verified: {
           type: Sequelize.BOOLEAN,
