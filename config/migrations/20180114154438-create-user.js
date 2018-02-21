@@ -19,9 +19,18 @@ export default {
         },
         firstname: {
           type: Sequelize.STRING,
-          allowNull: true
+          allowNull: false
         },
         surname: {
+          type: Sequelize.STRING,
+          allowNull: false
+        },
+        phone: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true
+        },
+        state: {
           type: Sequelize.STRING,
           allowNull: false
         },
@@ -31,28 +40,19 @@ export default {
           isEmail: true,
           unique: true
         },
-        phone: {
-          type: Sequelize.STRING,
-          allowNull: false,
-          unique: true
-        },
         sex: {
           type: Sequelize.ENUM,
           values: ['male', 'female'],
           allowNull: true,
         },
-        age: {
-          type: Sequelize.INTEGER,
+        dob: {
+          type: Sequelize.DATE,
           allowNull: true
         },
         verified: {
           type: Sequelize.BOOLEAN,
           allowNull: false,
           defaultValue: false
-        },
-        password: {
-          type: Sequelize.STRING,
-          allowNull: false
         },
         createdAt: {
           allowNull: false,

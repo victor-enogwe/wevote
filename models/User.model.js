@@ -44,8 +44,15 @@ export default class User extends Model {
         this.setDataValue('surname', value.trim());
       }
     },
-    email: {
+    state: {
+      type: Sequelize.STRING,
       allowNull: false,
+      set(value) {
+        this.setDataValue('state', value.trim());
+      }
+    },
+    email: {
+      allowNull: true,
       type: Sequelize.STRING,
       unique: {
         args: true,
@@ -69,7 +76,7 @@ than 254 characters.');
     },
     phone: {
       type: Sequelize.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: {
         args: true,
         msg: 'Oops. There is an existing account with this phone number.',
@@ -80,26 +87,23 @@ than 254 characters.');
           msg: 'Please enter a valid phone number.'
         }
       },
-      set(value) {
-        this.setDataValue('phone', value.trim());
-      }
     },
     sex: {
       type: Sequelize.ENUM,
       values: ['male', 'female'],
       allowNull: true,
     },
-    age: {
-      type: Sequelize.INTEGER,
+    dob: {
+      type: Sequelize.DATE,
       allowNull: true,
       validate: {
         is: {
           args: /\d+/,
-          msg: 'please enter a valid age'
+          msg: 'please enter a valid date'
         }
       },
       set(value) {
-        this.setDataValue('age', value.trim());
+        this.setDataValue('dob', value.trim());
       }
     },
     verified: {
@@ -107,20 +111,6 @@ than 254 characters.');
       allowNull: false,
       defaultValue: false
     },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        isLongEnough(value) {
-          if (value.length < 8) {
-            throw new Error('Please choose a longer password');
-          }
-          const salt = bcrypt.genSaltSync(10);
-          const hash = bcrypt.hashSync(value, salt);
-          this.setDataValue('password', hash);
-        }
-      }
-    }
   };
 
   /**

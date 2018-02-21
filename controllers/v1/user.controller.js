@@ -11,9 +11,9 @@ const allowedFields = [
   'surname',
   'email',
   'phone',
-  'age',
+  'dob',
   'sex',
-  'password'
+  'state'
 ];
 /**
  * Create User
@@ -122,7 +122,7 @@ export async function getUser(req, res) {
     const data = isOwner ? user : await User
       .findOne({
         where: { uuid: req.params.uuid },
-        attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt'] }
+        attributes: { exclude: ['id', 'createdAt', 'updatedAt'] }
       });
 
     if (data) {

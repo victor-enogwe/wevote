@@ -1,8 +1,5 @@
 import logger from 'winston';
-import bcrypt from 'bcrypt';
 
-const encryptPassword = password => bcrypt
-  .hashSync(password, bcrypt.genSaltSync(10));
 
 export default {
   up(queryInterface) {
@@ -12,8 +9,9 @@ export default {
         surname: process.env.ADMIN_SURNAME,
         email: process.env.ADMIN_EMAIL,
         phone: process.env.ADMIN_PHONE_NUMBER,
-        age: 26,
-        password: encryptPassword(process.env.ADMIN_PASSWORD),
+        dob: new Date(),
+        state: 'Lagos',
+        sex: 'male',
         createdAt: new Date(),
         updatedAt: new Date()
       }

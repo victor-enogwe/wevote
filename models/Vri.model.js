@@ -8,6 +8,32 @@ import { Sequelize, Model } from 'sequelize';
  */
 export default class Vri extends Model {
   static modelFields = {
+    code: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      validate: {
+        is: {
+          args: /\w+/ig,
+          msg: 'please enter a valid choice code.'
+        }
+      },
+      set(value) {
+        this.setDataValue('code', value.trim());
+      }
+    },
+    question: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      validate: {
+        is: {
+          args: /\w+/ig,
+          msg: 'please enter a valid question.'
+        }
+      },
+      set(value) {
+        this.setDataValue('question', value.trim());
+      }
+    },
     choice: {
       type: Sequelize.TEXT,
       allowNull: false,
@@ -21,17 +47,17 @@ export default class Vri extends Model {
         this.setDataValue('choice', value.trim());
       }
     },
-    code: {
+    response: {
       type: Sequelize.TEXT,
       allowNull: false,
       validate: {
         is: {
           args: /\w+/ig,
-          msg: 'please enter a valid choice code.'
+          msg: 'please enter a valid response.'
         }
       },
       set(value) {
-        this.setDataValue('code', value.trim());
+        this.setDataValue('response', value.trim());
       }
     },
     weight: {

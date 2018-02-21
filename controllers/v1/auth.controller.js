@@ -29,12 +29,8 @@ export function generateJwt(data) {
  * @returns {object} the response
  */
 export async function basicAuth(req, res) {
-  const { email, phone } = req.body;
+  const { phone } = req.body;
   const where = {};
-
-  if (email) {
-    where.email = email;
-  }
 
   if (phone) {
     where.phone = phone;
@@ -46,13 +42,8 @@ export async function basicAuth(req, res) {
       return res.status(404).json({ status: 'fail', message: 'user not found' });
     }
 
-    const { uuid, password } = user;
-    const canLogin = User.comparePassword(req.body.password, password);
-
-    if (!canLogin) {
-      return res.status(401).json({ status: 'fail', message: 'authentication failed' });
-    }
-    const token = generateJwt({ uuid });
+    const { uuid, surname } = user;
+    const token = generateJwt({ uuid, surname });
 
     return res.status(200).json({ status: 'success', data: { token } });
   } catch (error) {

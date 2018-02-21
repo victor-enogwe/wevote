@@ -12,9 +12,19 @@ export default {
       code: {
         allowNull: false,
         type: Sequelize.TEXT,
-        unique: true,
+        unique: false,
+      },
+      question: {
+        allowNull: false,
+        type: Sequelize.TEXT,
+        unique: false,
       },
       choice: {
+        allowNull: false,
+        type: Sequelize.TEXT,
+        unique: false,
+      },
+      response: {
         allowNull: false,
         type: Sequelize.TEXT,
         unique: true,

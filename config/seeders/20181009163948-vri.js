@@ -4,75 +4,131 @@ export default {
   up(queryInterface) {
     return queryInterface.bulkInsert('Vris', [
       {
-        code: 'A',
-        choice: "I have collected my Voter's Card",
+        code: 'Q1',
+        question: 'Start',
+        choice: 'A',
+        response: 'Continue',
+        weight: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        code: 'Q1',
+        question: 'Start',
+        choice: 'B',
+        response: 'I have taken the VRI test',
+        weight: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        code: 'Q2',
+        question: 'Which Voters Card do you have?',
+        choice: 'A',
+        response: 'PVC',
         weight: 75,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'B',
-        choice: 'I have registered and I know where to collect my card',
+        code: 'Q2',
+        question: 'Which Voters Card do you have?',
+        choice: 'B',
+        response: 'TVC',
         weight: 37.5,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'C',
-        choice: 'I have registered but I don\'t know where to collect my card',
+        code: 'Q2',
+        question: 'Which Voters Card do you have?',
+        choice: 'C',
+        response: 'None',
+        weight: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        code: 'Q2',
+        question: 'Which Voters Card do you have?',
+        choice: 'D',
+        response: 'PCV got lost',
+        weight: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        code: 'Q3',
+        question: 'How close is your registration center to your residence?',
+        choice: 'A',
+        response: 'Within my city',
         weight: 25,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'D',
-        choice: 'I have not registered but I know where to register',
+        code: 'Q3',
+        question: 'How close is your registration center to your residence?',
+        choice: 'B',
+        response: 'Outside my city',
         weight: 12.5,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'E',
-        choice: 'I don\'t know where to register for my card',
+        code: 'Q4',
+        question: 'When did you register?',
+        choice: 'A',
+        response: '2017-2018',
         weight: 0,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'F',
-        choice: 'I registered within my city of residence',
-        weight: 10,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        code: 'G',
-        choice: 'I registered within my state of residence but not in my city of residence',
-        weight: 5,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        code: 'H',
-        choice: 'I registered outside my state of residence',
+        code: 'Q4',
+        question: 'When did you register?',
+        choice: 'B',
+        response: '2013-2014',
         weight: 0,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'I',
-        choice: 'I have decided the candidates to vote for',
-        weight: 15,
+        code: 'Q4',
+        question: 'When did you register?',
+        choice: 'C',
+        response: '2009-2010',
+        weight: 0,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        code: 'J',
-        choice: 'I don\'t know any candidate I can vote for',
-        weight: 15,
+        code: 'Q4',
+        question: 'When did you register?',
+        choice: 'D',
+        response: 'Before 2007',
+        weight: 0,
         createdAt: new Date(),
         updatedAt: new Date()
-      }
+      },
+      {
+        code: 'Q5',
+        question: 'Have you registered as a voter?',
+        choice: 'A',
+        response: 'Yes',
+        weight: 35,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        code: 'Q5',
+        question: 'Have you registered as a voter?',
+        choice: 'B',
+        response: 'No',
+        weight: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
     ], {}).catch(error => logger.error(error));
   },
 
