@@ -61,7 +61,8 @@ export function signUp(user){
         dispatch(beginAjaxCall());
         return axios.post(`${API_URL}/user/create`, user)
             .then((res) => {
-                saveToken(res.data, SIGN_UP_AJAX, dispatch);
+                console.log('User Response', res);
+                // saveToken(res.data, SIGN_UP_AJAX, dispatch);
             })
             .catch(error => throwError(error, dispatch));
     };

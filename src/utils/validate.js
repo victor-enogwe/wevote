@@ -18,31 +18,32 @@ function validateFields(details) {
 }
 
 /**
- * Validates the signUp form
+ * Validates the bio form
  * @param {object} userDetails
  * @returns {object} validate
  */
-export function signUp(userDetails) {
-    const validity = validateFields(userDetails);
-    if (!validator.isEmail(userDetails.email)) {
-        validity.errors.email = 'Please enter a valid email';
-        validity.valid = false;
-    }
-    if (!validator.isInt(userDetails.age, { min: 10, max: 100 })) {
-        validity.errors.age = 'Please enter a valid age';
-        validity.valid = false;
-    }
-    if (!validator.isNumeric(userDetails.phone) || !validator.isLength(userDetails.phone, { min: 6 })) {
+export function bio({firstname, surname, state}) {
+    return validateFields({firstname, surname, state});
+}
+
+/**
+ * Validates the bio form
+ * @param {object} userDetails
+ * @returns {object} validate
+ */
+export function save({phone, email}) {
+    const validity = validateFields({phone});
+    if (!validator.isNumeric(phone) || !validator.isLength(phone, { min: 6 })) {
         validity.errors.phone = 'Please enter a valid phone number';
         validity.valid = false;
     }
-    if (!validity.errors.password && !validator.isLength(userDetails.password, { min: 8, max: 49 })) {
-        validity.errors.password = 'Your password should be a minimum of 8 letters';
+
+    if (email && !validator.isEmail(email)) {
+        validity.errors.email = 'Please enter a valid email';
         validity.valid = false;
     }
     return validity;
 }
-
 
 /**
  * Validates the signIn form

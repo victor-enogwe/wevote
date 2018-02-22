@@ -1,7 +1,10 @@
 import toastr from 'toastr';
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { getVri, saveVri, getUserVri } from '../../actions/vriActions';
+import { getVri, saveVri, saveTempVri, getUserVri } from '../../actions/vriActions';
+import actionTypes from '../../actions/constants';
+
+const { SIGN_UP_MODAL } = actionTypes;
 import drawDonutChart from '../../assets/progressbar.js';
 const resposes = {
   A: "I have collected my Voter's Card",
@@ -60,7 +63,7 @@ class VriForm extends Component {
   }
 
   componentWillReceiveProps({ vri }){
-    if (vri !== this.props.vri) {
+    if (this.props.user.isAuthenticated && vri.score !== this.props.vri.score) {
       this.setState({vris: vri.vris, userVRI: vri.userVRI});
       if (vri.score) {
         const choices = vri.userVRI.data;
@@ -73,11 +76,15 @@ class VriForm extends Component {
         this.setState({vriStatus: true, score: vri.score});
         drawDonutChart(donutchart, vri.score, 500, 500, '.56em')
       }
+    } else if (this.props.user.isAuthenticated && vri.score === this.props.vri.score) {
+        const donutchart = document.getElementById('donutchart');
+        this.setState({vriStatus: true, score: vri.score});
+        drawDonutChart(donutchart, vri.score, 500, 500, '.56em')
     }
   }
 
   alert() {
-    toastr.success('Feature Comming Soon!')
+    toastr.success('Feature Coming Soon!')
   }
 
   onChange(event) {
@@ -98,6 +105,8 @@ class VriForm extends Component {
     this.setState({vriStatus: true, score}, () => {
       if (this.props.user.isAuthenticated){
         this.props.saveVri([card, proximity, candidate])
+      } else {
+        this.props.saveTempVri([card, proximity, candidate], score);
       }
       drawDonutChart(donutchart, score, 500, 500, '.56em')
     });
@@ -137,7 +146,6 @@ class VriForm extends Component {
 
   render(){
     const {card, proximity, candidate, vriStatus, userVRI} = this.state;
-    console.log('State', this.state);
     return (
       <div className="container-flex">
         <div className="vri-text-area">
@@ -146,7 +154,10 @@ class VriForm extends Component {
               <p>Have questions about Voter Registration?
                   <a href="http://www.inecnigeria.org/?page_id=5198" target="_blank">Get answers</a>
               </p>
-              {!this.props.user.isAuthenticated && <p> Sign Up to save your VRI and update the battery bar above</p>}
+                  {!this.props.user.isAuthenticated && <p>
+                      <a href="#" onClick={() => this.props.handleShow(SIGN_UP_MODAL)}>
+                          Sign Up
+                      </a> to save your Voter Readiness Index</p>}
           </div> :
           <p>The Voter Readiness Index helps you know what is required of you to vote and if you've met
             those requirements. It consists of 3 questions, select the option that applies to you for
@@ -169,7 +180,7 @@ class VriForm extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="proximity"> <b>Proximity:</b> </label>
-                {card == "D" || card == "E" ?
+                {['D', 'E'].includes(card) ?
                   <select className="form-control" value={card} name="proximity">
                     <option value={card}>{resposes[card]}</option>
                   </select>
@@ -206,4 +217,4 @@ function mapStateToProps(state){
   };
 }
 
-export default connect(mapStateToProps, { getVri, saveVri, getUserVri })(VriForm);
+export default connect(mapStateToProps, { getVri, saveVri, saveTempVri, getUserVri })(VriForm);
