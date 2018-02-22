@@ -29,6 +29,39 @@ export function generateJwt(data) {
  * @returns {object} the response
  */
 export async function basicAuth(req, res) {
+  const { phone, surname } = req.body;
+  const where = {};
+
+  if (phone && surname) {
+    where.phone = phone;
+    where.surname = surname;
+  }
+
+  try {
+    const user = await User.findOne({ where });
+    if (!user) {
+      return res.status(404).json({ status: 'fail', message: 'user not found' });
+    }
+
+    const { uuid } = user;
+    const token = generateJwt({ uuid });
+
+    return res.status(200).json({ status: 'success', data: { token } });
+  } catch (error) {
+    return res.status(500).json({ status: 'fail', error });
+  }
+}
+
+/**
+ * Confirm user phone number
+ *
+ * @export
+ * @param {object} req the request object
+ * @param {object} res the response obbject
+ *
+ * @returns {object} the response
+ */
+export async function confirm(req, res) {
   const { phone } = req.body;
   const where = {};
 
@@ -41,11 +74,8 @@ export async function basicAuth(req, res) {
     if (!user) {
       return res.status(404).json({ status: 'fail', message: 'user not found' });
     }
-
-    const { uuid, surname } = user;
-    const token = generateJwt({ uuid, surname });
-
-    return res.status(200).json({ status: 'success', data: { token } });
+    const { surname } = user;
+    return res.status(200).json({ status: 'success', data: { surname } });
   } catch (error) {
     return res.status(500).json({ status: 'fail', error });
   }
