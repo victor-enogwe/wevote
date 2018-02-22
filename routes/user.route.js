@@ -24,7 +24,7 @@ userRoutes
     body('dob', 'enter a valid integer').optional(),
     body('email').isEmail().optional(),
     body('state').matches(/[A-Za-z]{3,50}/, 'g'),
-    body('phone').matches(/0\d{10}/),
+    body('phone').matches(/\d{6}/),
     body('sex').isIn(['male', 'female']).optional(),
     checkRequestValidity,
     registerUser
@@ -67,7 +67,7 @@ userRoutes
   )
   .patch(
     '/update/phone',
-    body('phone').matches(/0\d{10}/),
+    body('phone').matches(/\d{6}/),
     checkRequestValidity,
     updateUserPhone
   )

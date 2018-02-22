@@ -9,14 +9,14 @@ const authRoutes = Router();
 authRoutes
   .post(
     '/basic',
-    body('phone').matches(/0\d{10}/),
+    body('phone').matches(/\d{6}/),
     body('surname').matches(/^[A-Za-z][A-Za-z]{2,39}$/),
     checkRequestValidity,
     basicAuth
   )
   .post(
     '/confirm',
-    body('phone').matches(/0\d{10}/),
+    body('phone').matches(/\d{6}/),
     checkRequestValidity,
     confirm
   )

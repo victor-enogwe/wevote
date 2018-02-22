@@ -83,7 +83,7 @@ than 254 characters.');
       },
       validate: {
         is: {
-          args: /0\d{10}/,
+          args: /\d{6}/,
           msg: 'Please enter a valid phone number.'
         }
       },
