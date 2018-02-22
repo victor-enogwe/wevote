@@ -9,13 +9,13 @@ const SelectInput = ({id, name, value, handleChange, placeholder, fields, error 
             name={name}
             onChange={handleChange}
             value={value}
-            className={error && "select-error"}
         >
             <OptionFragments
                 fields={fields}
-                placeholder={error || placeholder}
+                placeholder={placeholder}
             />
         </select>
+        {error && <span className="input-error">{error}</span>}
     </div>
 );
 
@@ -25,7 +25,7 @@ SelectInput.propTypes = {
     value: PropTypes.string,
     handleChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
-    fields: PropTypes.object
+    fields: PropTypes.array
 };
 
 export default SelectInput;

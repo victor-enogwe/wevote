@@ -40,7 +40,6 @@ export function saveVri(choice){
                 );
             })
             .catch(error => {
-                console.log('Gets here 1-2');
                 handleError(error, dispatch)
             });
     };

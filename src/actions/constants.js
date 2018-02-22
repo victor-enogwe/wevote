@@ -23,7 +23,16 @@ const actionTypes = {
 
     // AJAX CALLS
     BEGIN_AJAX_CALL: 'BEGIN_AJAX_CALL',
-    AJAX_CALL_ERROR: 'AJAX_CALL_ERROR'
+    AJAX_CALL_ERROR: 'AJAX_CALL_ERROR',
+
+    // VRI SECTIONS
+    START: 'START',
+    CARD: 'CARD',
+    PROXIMITY: 'PROXIMITY',
+    YEAR: 'YEAR',
+    STATUS: 'STATUS',
+    BIO: 'BIO',
+    SAVE: 'SAVE'
 
 };
 

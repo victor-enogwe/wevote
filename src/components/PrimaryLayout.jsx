@@ -9,6 +9,7 @@ const { SIGN_IN_AJAX } = actionTypes;
 
 import News from './Pages/News';
 import HomePage from './Pages/HomePage';
+import LoginPage from './Pages/LoginPage';
 import NavigationBar from './Layouts/NavigationBar';
 import VoterReadiness from './Pages/VoterReadiness';
 import Candidates from './Pages/Candidates';
@@ -57,7 +58,8 @@ class PrimaryLayout extends Component {
                 </header>
                 <main className="container">
                     <Route path="/" exact component={HomePage} />
-                    <Route path="/voter-readiness" render={() => <VoterReadiness handleShow={this.handleShow} />}/>
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/voter-readiness"  component={VoterReadiness} />
                     <Route path="/news" component={News} />
                     <Route path="/know-your-candidates" component={Candidates} />
                     <Route path="/election-structure" component={ElectionStructure} />

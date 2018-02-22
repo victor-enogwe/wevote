@@ -10,7 +10,7 @@ import * as validate from '../../utils/validate';
 import Modal from './Modal';
 import SignUp from './SignUp';
 import SignInForm from '../Forms/SignInForm';
-import SignUpForm from '../Forms/SignUpForm';
+import SignUpForm from '../Forms/BioForm';
 
 import loader from '../../assets/loader.gif';
 
