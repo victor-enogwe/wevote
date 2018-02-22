@@ -188,7 +188,15 @@ export async function addUserVri(req, res) {
     const {
       role, user, decoded: { uuid: userUuid },
     } = req;
-    const { choice } = req.body;
+    const choices = req.body;
+    const code = [];
+    const answer = [];
+    // eslint-disable-next-line
+    for (const i in choices) {
+      code.push(i);
+      answer.push(choices[i]);
+    }
+
     const isOwner = checkOwnership(user.uuid, userUuid);
     const isSuperUser = checkRole(['ADMIN', 'SUPER_USER'], role);
     const canAddVri = isOwner || isSuperUser;
@@ -198,7 +206,13 @@ export async function addUserVri(req, res) {
     }
 
     if (isOwner) {
-      const UserVris = await Vri.findAll({ where: { code: { [Op.in]: choice } } });
+      const UserVris = await Vri.findAll({
+        where:
+        {
+          code: { [Op.in]: code },
+          choice: { [Op.in]: answer }
+        }
+      });
       await user.setVris(UserVris);
     }
     return res.status(200).json({ status: 'success', message: 'Vri Added!' });
