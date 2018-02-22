@@ -9,11 +9,11 @@ import Bio from '../Snippets/Bio';
 import Save from '../Snippets/Save';
 
 import drawDonutChart from '../../assets/progressbar.js';
-import actionTypes from '../../actions/constants';
 import toastr from "toastr";
 import {handleError} from "../../utils/errorHandler";
 import * as validate from "../../utils/validate";
 
+import actionTypes from '../../actions/constants';
 const { START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE } = actionTypes;
 
 class VoterReadiness extends Component {
@@ -53,7 +53,6 @@ class VoterReadiness extends Component {
     onSave(event) {
         event.preventDefault();
         const { valid, errors } = validate.save(this.state.userDetails);
-        console.log('Valid', valid, 'Errors', errors);
         if (valid) {
             console.log('Saved');
         } else {
@@ -79,7 +78,7 @@ class VoterReadiness extends Component {
     }
 
     render(){
-        const { section, responses, userDetails, errors } = this.state;
+        const { section, userDetails, errors } = this.state;
         console.log('State', this.state);
         return (
             <div className="vri">

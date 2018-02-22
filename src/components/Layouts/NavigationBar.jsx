@@ -103,21 +103,12 @@ class NavigationBar extends Component {
                             Logout
                         </button>
                     </li>}
-                    {!user.isAuthenticated && <li
-                        onClick={() => {
-                            this.props.handleShow(SIGN_IN_MODAL);
-                            this.closeNav()
-                        }}
-                    >
-                        Login
-                    </li>}
                     {!user.isAuthenticated && <li onClick={this.closeNav}>
-                        <button
-                            onClick={() => this.props.handleShow(SIGN_UP_MODAL)}
-                            className="auth-button"
-                        >
-                            Sign Up
-                        </button>
+                        <NavLink to="/login">
+                            <button className="auth-button">
+                                Login
+                            </button>
+                        </NavLink>
                     </li>}
                 </ul>
             </nav>

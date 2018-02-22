@@ -32,7 +32,9 @@ const actionTypes = {
     YEAR: 'YEAR',
     STATUS: 'STATUS',
     BIO: 'BIO',
-    SAVE: 'SAVE'
+    SAVE: 'SAVE',
+    PHONE: 'PHONE',
+    SURNAME: 'SURNAME'
 
 };
 
