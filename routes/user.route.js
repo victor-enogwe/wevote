@@ -19,13 +19,14 @@ const userRoutes = Router();
 userRoutes
   .post(
     '/create',
-    body('firstname', '3-50 letters').isLength({ min: 3 }),
-    body('surname', '3-50 letters').isLength({ min: 3 }),
+    body('firstname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
+    body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
     body('dob', 'enter a valid integer').optional(),
     body('email').isEmail().optional(),
-    body('state').isLength({ min: 2 }),
-    body('phone').isLength({ min: 6 }),
+    body('state', '2-50 letters').matches(/[A-Za-z]{2,50}/, 'g'),
+    body('phone').matches(/\d{6}/),
     body('sex').isIn(['male', 'female']).optional(),
+    checkRequestValidity,
     registerUser
   )
   .use(verifyToken, setUser, setRole)

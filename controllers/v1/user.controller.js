@@ -23,7 +23,13 @@ const allowedFields = [
  *
  * @returns {object} the created User
  */
-export async function createUser(data) {
+export async function createUser(userData) {
+  const data = {};
+  for (const d in userData) {
+    if (userData[d] !== '') {
+      data[d] = userData[d];
+    }
+  }
   try {
     const role = await Role.findOne({ where: { name: 'USER' } });
     const permissions = await role.getPermissions();
@@ -52,12 +58,9 @@ export async function createUser(data) {
  */
 export async function registerUser(req, res) {
   try {
-    console.log('Problem Spot 1');
     const token = await createUser(req.body);
-    console.log('Problem Spot 2');
     return res.status(201).json({ status: 'success', data: { token } });
   } catch (error) {
-    console.log('Problem Spot 3');
     return handleSequelizeError(error, res);
   }
 }
