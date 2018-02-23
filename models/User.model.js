@@ -58,18 +58,6 @@ export default class User extends Model {
         args: true,
         msg: 'Oops. There is an existing account with this email address.',
       },
-      validate: {
-        isEmail: {
-          args: true,
-          msg: 'The email you entered is invalid.'
-        },
-        isTooLong(value) {
-          if (value.length > 254) {
-            throw new Error('The email you entered is invalid  and longer \
-than 254 characters.');
-          }
-        }
-      },
       set(value) {
         this.setDataValue('email', value);
       }
@@ -87,14 +75,20 @@ than 254 characters.');
           msg: 'Please enter a valid phone number.'
         }
       },
+      set(value) {
+        this.setDataValue('phone', value);
+      },
     },
     sex: {
       type: Sequelize.ENUM,
       values: ['male', 'female'],
       allowNull: true,
+      set(value) {
+        this.setDataValue('sex', value);
+      }
     },
     dob: {
-      type: Sequelize.DATE,
+      type: Sequelize.STRING,
       allowNull: true,
       validate: {
         is: {
@@ -103,7 +97,7 @@ than 254 characters.');
         }
       },
       set(value) {
-        this.setDataValue('dob', value.trim());
+        this.setDataValue('dob', value);
       }
     },
     verified: {

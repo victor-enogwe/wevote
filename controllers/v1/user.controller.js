@@ -37,7 +37,7 @@ export async function createUser(data) {
 
     return token;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -52,10 +52,12 @@ export async function createUser(data) {
  */
 export async function registerUser(req, res) {
   try {
+    console.log('Problem Spot 1');
     const token = await createUser(req.body);
-
+    console.log('Problem Spot 2');
     return res.status(201).json({ status: 'success', data: { token } });
   } catch (error) {
+    console.log('Problem Spot 3');
     return handleSequelizeError(error, res);
   }
 }
