@@ -22,10 +22,10 @@ userRoutes
     body('firstname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
     body('surname', '3-50 letters').matches(/[A-Za-z]{3,50}/, 'g'),
     body('dob', 'enter a valid integer').optional(),
-    body('email').isEmail().optional(),
+    body('email').optional(),
     body('state', '2-50 letters').matches(/[A-Za-z]{2,50}/, 'g'),
     body('phone').matches(/\d{6}/),
-    body('sex').isIn(['male', 'female']).optional(),
+    body('sex').optional(),
     checkRequestValidity,
     registerUser
   )

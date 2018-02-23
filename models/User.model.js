@@ -90,12 +90,6 @@ export default class User extends Model {
     dob: {
       type: Sequelize.STRING,
       allowNull: true,
-      validate: {
-        is: {
-          args: /\d+/,
-          msg: 'please enter a valid date'
-        }
-      },
       set(value) {
         this.setDataValue('dob', value);
       }

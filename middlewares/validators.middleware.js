@@ -20,6 +20,14 @@ const parseError = errors => errors
  * @returns {Object} the response containing current btc price
  */
 export function checkRequestValidity(req, res, next) {
+  const userData = req.body;
+  const data = {};
+  for (const d in userData) {
+    if (userData[d] !== '') {
+      data[d] = userData[d];
+    }
+  }
+  req.body = data
   const validity = validationResult(req);
   return validity.isEmpty() ? next() : res.status(400).json({
     status: 'fail',

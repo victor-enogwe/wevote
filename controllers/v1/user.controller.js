@@ -23,13 +23,7 @@ const allowedFields = [
  *
  * @returns {object} the created User
  */
-export async function createUser(userData) {
-  const data = {};
-  for (const d in userData) {
-    if (userData[d] !== '') {
-      data[d] = userData[d];
-    }
-  }
+export async function createUser(data) {
   try {
     const role = await Role.findOne({ where: { name: 'USER' } });
     const permissions = await role.getPermissions();
