@@ -206,16 +206,18 @@ export async function addUserVri(req, res) {
     }
 
     if (isOwner) {
-      const UserVris = await Vri.findAll({
+      const query = await Vri.findAll({
         where:
         {
-          code: { [Op.in]: code },
-          choice: { [Op.in]: answer }
+          code,
+          choice: answer
         }
       });
+      const UserVris = query.filter(vri => vri.choice === choices[vri.code]);
+      const score = vriCalculator(UserVris);
       await user.setVris(UserVris);
+      return res.status(200).json({ status: 'success', data: { data: UserVris, score } });
     }
-    return res.status(200).json({ status: 'success', message: 'Vri Added!' });
   } catch (error) {
     return res.status(500).json({ status: 'error', message: error.message });
   }
