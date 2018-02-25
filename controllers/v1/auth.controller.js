@@ -34,7 +34,7 @@ export async function basicAuth(req, res) {
 
   if (phone && surname) {
     where.phone = phone;
-    where.surname = surname;
+    where.surname = surname.toLowerCase();
   }
 
   try {
