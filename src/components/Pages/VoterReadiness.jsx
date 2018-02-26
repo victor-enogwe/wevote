@@ -7,6 +7,7 @@ import RegistrationYear from '../Snippets/RegistrationYear';
 import RegistrationStatus from '../Snippets/RegistrationStatus';
 import Bio from '../Snippets/Bio';
 import Save from '../Snippets/Save';
+import Stepper from 'react-stepper-horizontal';
 
 import drawDonutChart from '../../assets/progressbar.js';
 import toastr from "toastr";
@@ -17,10 +18,11 @@ import actionTypes from '../../actions/constants';
 const { START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE } = actionTypes;
 
 class VoterReadiness extends Component {
+	sections = [START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE];
     constructor(props){
         super(props);
         this.state = {
-            section: START,
+			section: START,
             responses: {},
             userDetails: {
                 firstname: '',
@@ -30,7 +32,16 @@ class VoterReadiness extends Component {
                 sex: '',
                 phone: '',
                 email: ''
-            },
+			},
+			steps: this.sections.map(section => ({
+				title: section,
+				href: '#',
+				onClick: (e) => {
+					e.preventDefault()
+					this.setState({ section })
+				}
+			})),
+			currentStep: 0,
             errors: {},
         };
         this.handleSignUpChange = this.handleSignUpChange.bind(this);
@@ -47,7 +58,11 @@ class VoterReadiness extends Component {
     }
 
     goToNext(section) {
-        this.setState({ section });
+		console.log(section)
+		const { steps, currentStep } = this.state;
+		// note that for questions that make you skip steps, the questions still remain unanswered ???
+		// the steps rendomly jumps ??
+        this.setState({ section, currentStep: this.sections.indexOf(section) });
     }
 
     onSave(event) {
@@ -78,49 +93,49 @@ class VoterReadiness extends Component {
     }
 
     render(){
-        const { section, userDetails, errors } = this.state;
-        console.log('State', this.state);
+        const { section, userDetails, steps, currentStep, errors } = this.state;
         return (
             <div className="vri">
-                {section === START &&
-                <Start
-                    handleChange={this.handleChange}
-                    goTo={this.goToNext}
-                />}
-                {section === CARD &&
-                <VotersCard
-                    handleChange={this.handleChange}
-                    goTo={this.goToNext}
-                />}
-                {section === PROXIMITY &&
-                <Proximity
-                    handleChange={this.handleChange}
-                    goTo={this.goToNext}
-                />}
-                {section === YEAR &&
-                <RegistrationYear
-                    handleChange={this.handleChange}
-                    goTo={this.goToNext}
-                />}
-                {section === STATUS &&
-                <RegistrationStatus
-                    handleChange={this.handleChange}
-                    goTo={this.goToNext}
-                />}
-                {section === BIO &&
-                <Bio
-                    handleChange={this.handleSignUpChange}
-                    onBioSubmit={this.onBioSubmit}
-                    userDetails={userDetails}
-                    errors={errors}
-                />}
-                {section === SAVE &&
-                <Save
-                    handleChange={this.handleSignUpChange}
-                    onSave={this.onSave}
-                    userDetails={userDetails}
-                    errors={errors}
-                />}
+			    <Stepper steps={ steps } activeStep={ currentStep } disabledSteps={ [] } />
+					{section === START &&
+					<Start
+						handleChange={this.handleChange}
+						goTo={this.goToNext}
+					/>}
+					{section === CARD &&
+					<VotersCard
+						handleChange={this.handleChange}
+						goTo={this.goToNext}
+					/>}
+					{section === PROXIMITY &&
+					<Proximity
+						handleChange={this.handleChange}
+						goTo={this.goToNext}
+					/>}
+					{section === YEAR &&
+					<RegistrationYear
+						handleChange={this.handleChange}
+						goTo={this.goToNext}
+					/>}
+					{section === STATUS &&
+					<RegistrationStatus
+						handleChange={this.handleChange}
+						goTo={this.goToNext}
+					/>}
+					{section === BIO &&
+					<Bio
+						handleChange={this.handleSignUpChange}
+						onBioSubmit={this.onBioSubmit}
+						userDetails={userDetails}
+						errors={errors}
+					/>}
+					{section === SAVE &&
+					<Save
+						handleChange={this.handleSignUpChange}
+						onSave={this.onSave}
+						userDetails={userDetails}
+						errors={errors}
+					/>}
             </div>
         );
     }
