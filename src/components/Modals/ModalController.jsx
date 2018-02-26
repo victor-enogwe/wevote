@@ -49,18 +49,15 @@ class ModalController extends Component{
         event.preventDefault();
         const { valid, errors } = validate.signUp(this.state.signUpDetails);
         const vri = this.props.vri;
-        console.log('VRI', vri);
         if (valid) {
             this.props.signUp(this.state.signUpDetails)
                 .then(() => {
                     if (this.props.user.isAuthenticated) {
                         this.props.handleHide();
                         if (vri.choices){
-                            console.log('Gets here');
                             this.props.saveVri(vri.choices);
                         }
                         setTimeout(() => {
-                            console.log('Gets here 3');
                             location.reload();
                             toastr.success('Registration successful');
                         }, 500);

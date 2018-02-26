@@ -140,35 +140,3 @@ export function getUser(uuid){
             .catch(error => handleError(error, dispatch));
     };
 }
-
-
-/**
- * Thunk that signs up a user on Facebook
- * @param {object} user
- * @returns {function} saveToken
- */
-export function facebookAuth(){
-    return (dispatch) => {
-        return axios.get(`${API_URL}/auth/facebook`)
-            .then((res) => {
-                console.log('Res', res.data);
-            })
-            .catch(error => handleError(error));
-    };
-}
-
-
-/**
- * Thunk that signs up a user on Twitter
- * @param {object} user
- * @returns {function} saveToken
- */
-export function twitterAuth(){
-    return (dispatch) => {
-        return axios.get(`${API_URL}/auth/twitter`)
-            .then((res) => {
-                console.log('Res', res.data);
-            })
-            .catch(error => handleError(error));
-    };
-}

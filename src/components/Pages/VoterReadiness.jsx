@@ -43,10 +43,6 @@ class VoterReadiness extends Component {
 			steps: this.sections.map(section => ({
 				title: section,
 				href: '#',
-				onClick: (e) => {
-					e.preventDefault()
-					this.setState({ section })
-				}
 			})),
 			currentStep: 0,
             errors: {},
@@ -99,10 +95,6 @@ class VoterReadiness extends Component {
     }
 
     goToNext(section) {
-		console.log(section)
-		const { steps, currentStep } = this.state;
-		// note that for questions that make you skip steps, the questions still remain unanswered ???
-		// the steps rendomly jumps ??
         this.setState({ section, currentStep: this.sections.indexOf(section) });
     }
 
@@ -127,7 +119,6 @@ class VoterReadiness extends Component {
     onBioSubmit(event) {
         event.preventDefault();
         const { valid, errors } = validate.bio(this.state.userDetails);
-        console.log('Valid', valid, 'Errors', errors);
         if (valid) {
             this.goToNext(SAVE);
         } else {
@@ -145,50 +136,51 @@ class VoterReadiness extends Component {
         const { section, userDetails, steps, currentStep, errors } = this.state;
         return (
             <div className="vri">
-			        <Stepper steps={ steps } activeStep={ currentStep } disabledSteps={ [] } />
-              {section === START &&
-              <Start
+                {section !== RESULT &&
+                <Stepper steps={ steps } activeStep={ currentStep } disabledSteps={ [] } />}
+                {section === START &&
+                <Start
                   handleChange={this.handleChange}
                   goTo={this.goToNext}
-              />}
-              {section === CARD &&
-              <VotersCard
+                />}
+                {section === CARD &&
+                <VotersCard
                   handleChange={this.handleChange}
                   goTo={this.goToNext}
-              />}
-              {section === PROXIMITY &&
-              <Proximity
+                />}
+                {section === PROXIMITY &&
+                <Proximity
                   handleChange={this.handleChange}
                   goTo={this.goToNext}
-              />}
-              {section === YEAR &&
-              <RegistrationYear
+                />}
+                {section === YEAR &&
+                <RegistrationYear
                   handleChange={this.handleChange}
                   goTo={this.goToNext}
-              />}
-              {section === STATUS &&
-              <RegistrationStatus
+                />}
+                {section === STATUS &&
+                <RegistrationStatus
                   handleChange={this.handleChange}
                   goTo={this.goToNext}
-              />}
-              {section === BIO &&
-              <Bio
+                />}
+                {section === BIO &&
+                <Bio
                   handleChange={this.handleSignUpChange}
                   onBioSubmit={this.onBioSubmit}
                   userDetails={userDetails}
                   errors={errors}
-              />}
-              {section === SAVE &&
-              <Save
+                />}
+                {section === SAVE &&
+                <Save
                   handleChange={this.handleSignUpChange}
                   onSave={this.onSave}
                   userDetails={userDetails}
                   errors={errors}
-              />}
-              {section === RESULT &&
-              <Result
+                />}
+                {section === RESULT &&
+                <Result
                   recommendations={this.state.recommendations}
-              />}
+                />}
             </div>
         );
     }
