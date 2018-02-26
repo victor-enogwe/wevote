@@ -1,6 +1,6 @@
 import axios from 'axios';
 /**
- * fetch all VRIs
+ * get news
  *
  * @export
  * @param {object} req the request
@@ -20,7 +20,7 @@ export function getNews(req, res) {
 }
 
 /**
- * fetch all VRIs
+ * get images
  *
  * @export
  * @param {object} req the request
