@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, NavLink, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
-import { getUser } from '../../actions/userActions';
-import { getUserVri } from '../../actions/vriActions';
-
-import actionTypes from '../../actions/constants';
+import { getUser } from "../../actions/userActions";
 import setAccessToken from "../../utils/setAccessToken";
 import generateBatteryInfo from '../../utils/generateBatteryInfo';
-
-const { SIGN_UP_MODAL, SIGN_IN_MODAL } = actionTypes;
 
 class NavigationBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userFetch: false,
             navOpen: false,
             notifications: 'You do not have any notification at the moment',
             batteryType: 'empty',
@@ -28,10 +24,9 @@ class NavigationBar extends Component {
         this.batteryTitle = this.batteryTitle.bind(this);
     }
 
-    componentWillMount(){
-        if(this.props.user.isAuthenticated){
+    componentDidMount(){
+        if (this.props.user.isAuthenticated && !this.props.user.profile){
             this.props.getUser(this.props.user.uuid);
-            this.props.getUserVri();
         }
     }
 
@@ -123,4 +118,4 @@ function mapStateToProps(state){
     };
 }
 
-export default connect(mapStateToProps, { getUser, getUserVri })(NavigationBar);
+export default connect(mapStateToProps, { getUser })(NavigationBar);

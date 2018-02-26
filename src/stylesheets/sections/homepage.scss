@@ -34,11 +34,13 @@
   .about {
     padding: 20px;
     background-color: #EEEEEE;
-    display: flex;
-    flex-direction: column;
 
     & > a {
-      align-self: center;
+      text-decoration: none;
+      button {
+        display: block;
+        margin: 0 auto;
+      }
     }
 
     h1 {
@@ -76,10 +78,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 50%;
+        width: 100%;
         margin-bottom: 20px;
         img {
-          max-width: 100px;
+          max-width: 200px;
         }
         p {
           text-align: center;
@@ -108,7 +110,7 @@
     .how-it-works {
       section {
         div {
-          width: 25%;
+          width: 33.3%;
         }
       }
     }

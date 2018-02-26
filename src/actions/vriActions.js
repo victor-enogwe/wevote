@@ -13,35 +13,29 @@ export function getVri(){
         dispatch(beginAjaxCall());
         return axios.get(`${API_URL}/vri/fetch`)
             .then((res) => {
-                dispatch(
-                    {
+                dispatch({
                     type: GET_VRIS_AJAX,
                     payload: res.data,
                     error: false
-                    }
-                );
+                });
             })
             .catch(error => handleError(error, dispatch));
     };
 }
 
-export function saveVri(choice){
+export function saveVri(responses){
     return (dispatch) => {
-        console.log('Gets here 1');
         dispatch(beginAjaxCall());
-        return axios.post(`${API_URL}/user/vri/`, { choice })
-            .then(() => {
-                dispatch(
-                    {
+        return axios.post(`${API_URL}/user/vri`, responses)
+            .then((res) => {
+                console.log('VriRes', res.data)
+                dispatch({
                     type: SAVE_VRI_AJAX,
-                    payload: choice,
+                    payload: responses,
                     error: false
-                    }
-                );
+                });
             })
-            .catch(error => {
-                handleError(error, dispatch)
-            });
+            .catch(error => handleError(error, dispatch));
     };
 }
 
@@ -50,13 +44,11 @@ export function getUserVri(){
         dispatch(beginAjaxCall());
         return axios.get(`${API_URL}/user/vri/`)
             .then((res) => {
-                dispatch(
-                    {
+                dispatch({
                     type: GET_USER_VRI_AJAX,
                     payload: res.data,
                     error: false
-                    }
-                );
+                });
             })
             .catch(error => handleError(error, dispatch));
     };

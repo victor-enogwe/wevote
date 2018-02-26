@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Phone from '../Snippets/Phone';
 import Surname from '../Snippets/Surname';
 
+import { confirmPhone, signIn, getUser } from '../../actions/userActions';
 import * as validate from "../../utils/validate";
 import actionTypes from '../../actions/constants';
+import {handleError} from "../../utils/errorHandler";
 const { PHONE, SURNAME } = actionTypes;
 
 class LoginPage extends Component {
@@ -23,6 +26,12 @@ class LoginPage extends Component {
         this.onLoginSubmit = this.onLoginSubmit.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        if (this.props.user.surname !== nextProps.user.surname) {
+            this.goToNext(SURNAME);
+        }
+    }
+
     handleChange(event) {
         const signInDetails = this.state.signInDetails;
         signInDetails[event.target.name] = event.target.value;
@@ -36,9 +45,8 @@ class LoginPage extends Component {
     onPhoneSubmit() {
         event.preventDefault();
         const { valid, errors } = validate.phone(this.state.signInDetails);
-        console.log('Valid', valid, 'Errors', errors);
         if (valid) {
-            this.goToNext(SURNAME);
+            this.props.confirmPhone({phone: this.state.signInDetails.phone});
         } else {
             this.setState({ errors });
         }
@@ -47,9 +55,15 @@ class LoginPage extends Component {
     onLoginSubmit() {
         event.preventDefault();
         const { valid, errors } = validate.surname(this.state.signInDetails);
-        console.log('Valid', valid, 'Errors', errors);
         if (valid) {
-            console.log('Saved');
+            this.props.signIn(this.state.signInDetails)
+                .then(() => {
+                    if (this.props.user.isAuthenticated) {
+                        this.props.getUser(this.props.user.uuid);
+                        this.props.history.push('/voter-readiness');
+                    }
+                })
+                .catch(error => handleError(error));
         } else {
             this.setState({ errors });
         }
@@ -78,4 +92,10 @@ class LoginPage extends Component {
     }
 }
 
-export default LoginPage;
+function mapStateToProps(state){
+    return {
+        user: state.user,
+    };
+}
+
+export default connect(mapStateToProps, { confirmPhone, signIn, getUser })(LoginPage);

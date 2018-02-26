@@ -9,7 +9,7 @@ function validateFields(details) {
     const errors = {};
     let valid = true;
     for (let field in details) {
-        if (validator.isEmpty(details[field])) {
+        if (!(/[A-Za-z0-9]{3,50}/.test(details[field]))) {
             errors[field] = `Please enter your ${field}`;
             valid = false;
         }

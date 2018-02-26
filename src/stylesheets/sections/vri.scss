@@ -5,6 +5,38 @@
     width: 90%;
     margin: 0 auto;
 
+    &.result {
+      #donut-chart {
+        height: 500px;
+        text-align: center;
+
+        text {
+          font-family: Impact, "Franklin Gothic Bold", "Helvetica Inserat", "Arial Black", sans-serif;
+          font-size: 5rem;
+          font-weight: 400;
+          line-height: 16rem;
+          fill: green;
+        }
+
+        path.color0 {
+          fill: green;
+        }
+
+        path.color1 {
+          fill: red;
+        }
+      }
+
+      ul {
+        list-style: none;
+        font-size: 20px;
+        font-family: 'Nunito', sans-serif;
+        line-height: 200%;
+        font-weight: 300;
+        color: #6a7583;
+      }
+    }
+
     .options {
       display: flex;
       flex-direction: column;
@@ -30,7 +62,7 @@
       }
     }
 
-     > div {
+    div {
       margin-top: 20px;
 
       p {
@@ -147,131 +179,3 @@
     }
   }
 }
-
-//.form-vri {
-//  background: green;
-//  padding: 50px 20px 50px 50px;
-//
-//  small, label {
-//    color: white;
-//  }
-//}
-//
-//.vri-text-area {
-//  h1 {
-//    text-align: center;
-//    font-size: 30px;
-//  }
-//
-//  p {
-//    font-size: 25px;
-//    font-family: 'Nunito', sans-serif ;
-//    line-height: 200%;
-//    font-weight: 300;
-//    color: #6a7583;
-//    margin-bottom: 20px;
-//
-//    a {
-//      margin-left: 10px;
-//      text-decoration: none;
-//      color: green;
-//    }
-//  }
-//}
-//
-//.form-group {
-//  margin-bottom: 30px
-//}
-//
-//.container-flex {
-//  display: flex;
-//  flex-direction: column;
-//  align-items: center;
-//  justify-content: center;
-//  padding: 50px 20px;
-//}
-//
-//.form-control {
-//  height: 50px;
-//  display: block;
-//}
-//
-//.form-vri-inner {
-//  height: 100%;
-//  width: 100%;
-//  margin: 0 auto;
-//
-//  .vri-submit {
-//    background-color: white;
-//    color: green;
-//    height: 50px;
-//    width: 175px;
-//    font-size: 1em;
-//    border: 1px;
-//
-//    &:hover {
-//      background-color: #00FF00;
-//      color: black;
-//    }
-//  }
-//
-//  select {
-//    font-size: 14px;
-//    width: 95%;
-//    color: black;
-//    background: white;
-//    margin: 10px 0;
-//  }
-//}
-//
-//.align-center {
-//  vertical-align: middle;
-//}
-//
-//#donutchart {
-//  height: 500px;
-//  width: 100%;
-//}
-//
-//.battery {
-//  height: 40px;
-//  width: 40px;
-//}
-//
-//text {
-//  font-family: "RamaGothicM-Heavy",Impact,Haettenschweiler,"Franklin Gothic Bold",Charcoal,"Helvetica Inserat","Bitstream Vera Sans Bold","Arial Black",sans-serif;
-//  font-size: 5rem;
-//  font-weight: 400;
-//  line-height: 16rem;
-//  fill: green;
-//}
-//
-//#donut {
-//  width: 29rem;
-//  height: 29rem;
-//  margin: 0 auto;
-//}
-//
-//path.color0 {
-//  fill: green;
-//}
-//
-//path.color1 {
-//  fill: red;
-//}
-//
-//@media screen and (min-width: $tablet) {
-//  .container-flex {
-//    flex-direction: row;
-//    justify-content: space-between;
-//
-//    .vri-text-area {
-//      width: 50%;
-//      padding: 20px 40px 0 20px
-//    }
-//
-//    #donutchart {
-//      width: 50%;
-//    }
-//  }
-//}
