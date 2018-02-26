@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, NavLink, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
-import { selectModal, getUser } from '../../actions/userActions';
-import { getUserVri } from '../../actions/vriActions';
-
-import actionTypes from '../../actions/constants';
+import { getUser } from "../../actions/userActions";
 import setAccessToken from "../../utils/setAccessToken";
 import generateBatteryInfo from '../../utils/generateBatteryInfo';
-
-import ModalController from '../Modals/ModalController';
-
-const { SIGN_UP_MODAL, SIGN_IN_MODAL } = actionTypes;
 
 class NavigationBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showModal: false,
+            userFetch: false,
             navOpen: false,
             notifications: 'You do not have any notification at the moment',
             batteryType: 'empty',
@@ -25,18 +18,15 @@ class NavigationBar extends Component {
             batteryNotification: 'You have not checked your voter readiness yet. ' +
             'Click on the link to check it now.'
         };
-        this.handleShow = this.handleShow.bind(this);
-        this.handleHide = this.handleHide.bind(this);
         this.toggleNav = this.toggleNav.bind(this);
         this.closeNav = this.closeNav.bind(this);
         this.logout = this.logout.bind(this);
         this.batteryTitle = this.batteryTitle.bind(this);
     }
 
-    componentWillMount(){
-        if(this.props.user.isAuthenticated){
+    componentDidMount(){
+        if (this.props.user.isAuthenticated && !this.props.user.profile){
             this.props.getUser(this.props.user.uuid);
-            this.props.getUserVri();
         }
     }
 
@@ -45,15 +35,6 @@ class NavigationBar extends Component {
             const {batteryType, batteryColor, batteryNotification} = generateBatteryInfo(nextProps.vriScore);
             this.setState({ batteryType, batteryColor, batteryNotification });
         }
-    }
-
-    handleShow(modal) {
-        this.setState({showModal: true});
-        this.props.selectModal(modal);
-    }
-
-    handleHide() {
-        this.setState({showModal: false});
     }
 
     toggleNav(){
@@ -112,33 +93,19 @@ class NavigationBar extends Component {
                     {user.isAuthenticated && <li onClick={this.closeNav}>
                         <button
                             onClick={this.logout}
-                            className="log-out-button"
+                            className="auth-button"
                         >
                             Logout
                         </button>
                     </li>}
-                    {!user.isAuthenticated && <li
-                        onClick={() => {
-                            this.handleShow(SIGN_IN_MODAL);
-                            this.closeNav()
-                        }}
-                    >
-                        Login
-                    </li>}
                     {!user.isAuthenticated && <li onClick={this.closeNav}>
-                        <button
-                            onClick={() => this.handleShow(SIGN_UP_MODAL)}
-                            className="sign-up-button"
-                        >
-                            Sign Up
-                        </button>
+                        <NavLink to="/login">
+                            <button className="auth-button">
+                                Login
+                            </button>
+                        </NavLink>
                     </li>}
                 </ul>
-                {this.state.showModal &&
-                <ModalController
-                    handleShow={this.handleShow}
-                    handleHide={this.handleHide}
-                />}
             </nav>
         );
     }
@@ -151,4 +118,4 @@ function mapStateToProps(state){
     };
 }
 
-export default connect(mapStateToProps, { selectModal, getUser, getUserVri })(NavigationBar);
+export default connect(mapStateToProps, { getUser })(NavigationBar);

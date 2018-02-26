@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import toastr from 'toastr';
 
 import { signUp, signIn, facebookAuth, twitterAuth } from "../../actions/userActions";
+import { saveVri } from '../../actions/vriActions';
 import { handleError } from "../../utils/errorHandler";
 import * as validate from '../../utils/validate';
 
 import Modal from './Modal';
 import SignUp from './SignUp';
 import SignInForm from '../Forms/SignInForm';
-import SignUpForm from '../Forms/SignUpForm';
+import SignUpForm from '../Forms/BioForm';
 
 import loader from '../../assets/loader.gif';
 
@@ -47,13 +48,22 @@ class ModalController extends Component{
     onSignUpSubmit(event) {
         event.preventDefault();
         const { valid, errors } = validate.signUp(this.state.signUpDetails);
+        const vri = this.props.vri;
+        console.log('VRI', vri);
         if (valid) {
             this.props.signUp(this.state.signUpDetails)
                 .then(() => {
                     if (this.props.user.isAuthenticated) {
                         this.props.handleHide();
-                        location.reload();
-                        toastr.success('Registration successful');
+                        if (vri.choices){
+                            console.log('Gets here');
+                            this.props.saveVri(vri.choices);
+                        }
+                        setTimeout(() => {
+                            console.log('Gets here 3');
+                            location.reload();
+                            toastr.success('Registration successful');
+                        }, 500);
                     }
                 })
                 .catch(error => handleError(error));
@@ -166,8 +176,9 @@ function mapStateToProps(state){
     return {
         currentModal: state.currentModal,
         loading: state.ajaxCallsInProgress > 0,
-        user: state.user
+        user: state.user,
+        vri: state.vri
     }
 }
 
-export default connect(mapStateToProps, { signUp, signIn, facebookAuth, twitterAuth })(ModalController);
+export default connect(mapStateToProps, { signUp, signIn, saveVri, facebookAuth, twitterAuth })(ModalController);

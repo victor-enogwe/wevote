@@ -1,0 +1,40 @@
+.login {
+  section {
+    width: 90%;
+    margin: 0 auto;
+
+    button {
+      @extend %styled-button;
+      display: block;
+      margin: 0 auto;
+    }
+
+    p {
+      @extend %paragraph;
+    }
+
+    .text-input {
+      @extend %text-input;
+    }
+
+    .input-error {
+      @extend %input-error;
+    }
+  }
+}
+
+@media screen and (min-width: $tablet) {
+  .login {
+    section {
+      width: 50%;
+    }
+  }
+}
+
+@media screen and (min-width: $large-desktop) {
+  .login {
+    section {
+      width: 40%;
+    }
+  }
+}

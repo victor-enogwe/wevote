@@ -8,7 +8,7 @@ import { handleError, throwError } from '../utils/errorHandler';
 
 import actionTypes from './constants';
 
-const { MODAL_CHOICE, SIGN_UP_AJAX, SIGN_IN_AJAX, USER_DATA_AJAX } = actionTypes;
+const { MODAL_CHOICE, SIGN_UP_AJAX, SIGN_IN_AJAX, USER_DATA_AJAX, CONFIRM_PHONE_AJAX } = actionTypes;
 
 const { API_URL } = process.env;
 
@@ -37,7 +37,7 @@ export function login(token, type) {
 }
 
 /**
- * This function saves token to localStorage and dispatches login
+ * Saves token to localStorage and dispatches login
  * @param {object} response
  * @param {string} type
  * @param {function} dispatch
@@ -52,7 +52,7 @@ function saveToken(response, type, dispatch) {
 }
 
 /**
- * Thunk that creates a new user
+ * Creates a new user
  * @param {object} user
  * @returns {function} saveToken
  */
@@ -80,6 +80,35 @@ export function signIn(user){
                 saveToken(res.data, SIGN_IN_AJAX, dispatch);
             })
             .catch(error => throwError(error, dispatch));
+    };
+}
+
+/**
+ * Thunk that confirms phone number
+ * @param {number} number
+ * @returns {function} provideSurname
+ */
+export function confirmPhone(number){
+    return (dispatch) => {
+        dispatch(beginAjaxCall());
+        return axios.post(`${API_URL}/auth/confirm`, number)
+            .then((res) => {
+                dispatch(provideSurname(CONFIRM_PHONE_AJAX, res.data.data.surname));
+            })
+            .catch(error => handleError(error, dispatch));
+    };
+}
+
+/**
+ * Provides surname for user authentication
+ * @param {string} type
+ * @param {object} surname
+ */
+function provideSurname(type, surname){
+    return {
+        type,
+        payload: surname,
+        error: false
     };
 }
 

@@ -34,7 +34,6 @@ class News extends Component {
     }
 
     render(){
-        console.log('Images', this.state.imagesRequested);
         const { news } = this.props;
         return (
             <div className="news-page">

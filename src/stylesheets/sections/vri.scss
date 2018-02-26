@@ -1,127 +1,181 @@
-.form-vri {
-  background: green;
-  padding: 50px 20px 50px 50px;
+.vri {
+  padding: 10px;
 
-  small, label {
-    color: white;
-  }
-}
+  section {
+    width: 90%;
+    margin: 0 auto;
 
-.vri-text-area {
-  h1 {
-    text-align: center;
-    font-size: 30px;
-  }
+    &.result {
+      #donut-chart {
+        height: 500px;
+        text-align: center;
 
-  p {
-    font-size: 25px;
-    font-family: 'Nunito', sans-serif ;
-    line-height: 200%;
-    font-weight: 300;
-    color: #6a7583;
-    margin-bottom: 20px;
+        text {
+          font-family: Impact, "Franklin Gothic Bold", "Helvetica Inserat", "Arial Black", sans-serif;
+          font-size: 5rem;
+          font-weight: 400;
+          line-height: 16rem;
+          fill: green;
+        }
 
-    a {
-      margin-left: 10px;
-      text-decoration: none;
-      color: green;
+        path.color0 {
+          fill: green;
+        }
+
+        path.color1 {
+          fill: red;
+        }
+      }
+
+      ul {
+        list-style: none;
+        font-size: 20px;
+        font-family: 'Nunito', sans-serif;
+        line-height: 200%;
+        font-weight: 300;
+        color: #6a7583;
+      }
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      margin-top: 50px;
+
+      button {
+        @extend %styled-button;
+      }
+
+      a > input {
+        width: 100%;
+        background-color: #00FF00;
+      }
+    }
+
+    .done {
+      text-align: center;
+      margin-top: 35px;
+
+      a {
+        text-decoration: none;
+        color: #6169f4;
+      }
+    }
+
+    div {
+      margin-top: 20px;
+
+      p {
+        @extend %paragraph;
+      }
+
+      img {
+        display: block;
+        margin: 0 auto;
+        height: 150px;
+      }
+
+      input[type="submit"] {
+        color: green;
+        height: 50px;
+        font-size: 1em;
+        margin-bottom: 15px;
+        padding: 0 20px;
+        border-radius: 1px;
+        outline: none;
+        box-shadow: 0 7px 9px -9px #777,
+        7px 0 9px -9px #777,
+        0 -7px 9px -9px #777,
+        -7px 0 9px -9px #777;
+
+        &:hover {
+          background-color: #6169f4;
+          color: white;
+        }
+      }
+    }
+
+    &.bio, &.save {
+
+      .sign-up-select-fields {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 35px;
+
+        .select-input {
+          border: 1px solid silver;
+          border-radius: 2px;
+          height: 40px;
+          width: 43%;
+
+          select {
+            width: 100%;
+            height: 100%;
+            font-size: 1em;
+            outline: none;
+            border: none;
+            padding-left: 20px;
+            color: grey;
+          }
+        }
+      }
+
+      .text-input {
+        @extend %text-input;
+      }
+
+      .date-input {
+
+        label {
+          margin-right: 20px;
+        }
+
+        input {
+          height: 40px;
+          padding-left: 20px;
+          font-size: 1em;
+          font-family: 'Roboto', sans-serif;
+        }
+      }
+
+      .input-error {
+        @extend %input-error;
+      }
     }
   }
-}
-
-.form-group {
-  margin-bottom: 30px
-}
-
-main > div > div > div> div > form > div > div > select {
-  font-size: 14px;
-  width: 95%;
-  color: black;
-  background: white;
-  margin: 10px 0;
-}
-
-.container-flex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 20px;
-}
-
-.form-control {
-  height: 50px;
-  display: block;
-}
-
-.form-vri-inner {
-  height: 100%;
-  width: 100%;
-  margin: 0 auto;
-
-  .vri-submit {
-    background-color: white;
-    color: green;
-    height: 50px;
-    width: 175px;
-    font-size: 1em;
-    border: 1px;
-
-    &:hover {
-      background-color: #00FF00;
-      color: black;
-    }
-  }
-}
-
-.align-center {
-  vertical-align: middle;
-}
-
-#donutchart {
-  height: 500px;
-  width: 100%;
-}
-
-.battery {
-  height: 40px;
-  width: 40px;
-}
-
-text {
-  font-family: "RamaGothicM-Heavy",Impact,Haettenschweiler,"Franklin Gothic Bold",Charcoal,"Helvetica Inserat","Bitstream Vera Sans Bold","Arial Black",sans-serif;
-  font-size: 5rem;
-  font-weight: 400;
-  line-height: 16rem;
-  fill: green;
-}
-
-#donut {
-  width: 29rem;
-  height: 29rem;
-  margin: 0 auto;
-}
-
-path.color0 {
-  fill: green;
-}
-
-path.color1 {
-  fill: red;
 }
 
 @media screen and (min-width: $tablet) {
-  .container-flex {
-    flex-direction: row;
-    justify-content: space-between;
+  .vri {
+    section {
+      width: 70%;
 
-    .vri-text-area {
-      width: 50%;
-      padding: 20px;
+      .options {
+        flex-direction: row;
+        justify-content: center;
+
+        input {
+          margin-right: 50px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+
+      &.bio, &.save {
+        width: 50%;
+      }
     }
+  }
+}
 
-    #donutchart {
-      width: 50%;
+@media screen and (min-width: $large-desktop) {
+  .vri {
+    section {
+      &.bio, &.save {
+        width: 40%;
+      }
     }
   }
 }

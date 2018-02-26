@@ -1,0 +1,61 @@
+%styled-button {
+  background: #6169f4;
+  height: 50px;
+  font-size: 1em;
+  color: white;
+  min-width: 150px;
+  border-radius: 5px;
+  outline: none;
+
+  &:hover {
+    color: #6169f4;
+    background-color: white;
+    border: 1px solid #6169f4;
+  }
+}
+
+%paragraph {
+  font-size: 25px;
+  font-family: 'Nunito', sans-serif ;
+  line-height: 200%;
+  font-weight: 300;
+  color: #6a7583;
+  text-align: center;
+}
+
+%text-input {
+  position: relative;
+  border: 1px solid silver;
+  border-radius: 2px;
+  height: 40px;
+  padding-left: 20px;
+  margin-bottom: 35px;
+
+  i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  label {
+    display: none;
+  }
+
+  input {
+    width: 84%;
+    height: 90%;
+    padding-left: 10px;
+    margin-left: 30px;
+    font-size: 1em;
+    outline: none;
+    border: none;
+  }
+}
+
+%input-error {
+  color: red;
+  display: block;
+  margin-top: 5px;
+  font-size: 0.8em;
+}
+
