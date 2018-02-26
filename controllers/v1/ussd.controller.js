@@ -44,7 +44,7 @@ export async function ussd(req, res) {
   // This is a terminal request. Note how we start the response with END
     const user = await User.findOne({
       where: {
-        phone: phoneNumber
+        phone: `0${phoneNumber.substring(4)}`
       }
     });
     console.log('USER', user)
