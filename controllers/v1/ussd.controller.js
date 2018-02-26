@@ -47,6 +47,7 @@ export async function ussd(req, res) {
         phone: phoneNumber
       }
     });
+    console.log('USER', user)
     if (!user) {
       response = 'END You have not registered with this phone number!';
     } else {
