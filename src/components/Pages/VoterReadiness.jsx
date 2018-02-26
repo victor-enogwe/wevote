@@ -137,57 +137,58 @@ class VoterReadiness extends Component {
         const { section, userDetails, steps, currentStep, errors } = this.state;
         return (
             <div className="vri">
-			    <Stepper
+                {section !== RESULT &&
+                <Stepper
 					className="steps"
 					steps={ steps }
 					activeStep={ currentStep }
 					titleFontSize= { isMobile ? 0: 16 }
 					activeBorderStyle="solid"
 					activeBorderColor="#3004E0"
-				/>
-					{section === START &&
-					<Start
-						handleChange={this.handleChange}
-						goTo={this.goToNext}
-					/>}
-					{section === CARD &&
-					<VotersCard
-						handleChange={this.handleChange}
-						goTo={this.goToNext}
-					/>}
-					{section === PROXIMITY &&
-					<Proximity
-						handleChange={this.handleChange}
-						goTo={this.goToNext}
-					/>}
-					{section === YEAR &&
-					<RegistrationYear
-						handleChange={this.handleChange}
-						goTo={this.goToNext}
-					/>}
-					{section === STATUS &&
-					<RegistrationStatus
-						handleChange={this.handleChange}
-						goTo={this.goToNext}
-					/>}
-					{section === BIO &&
-					<Bio
-						handleChange={this.handleSignUpChange}
-						onBioSubmit={this.onBioSubmit}
-						userDetails={userDetails}
-						errors={errors}
-					/>}
-					{section === SAVE &&
-					<Save
-						handleChange={this.handleSignUpChange}
-						onSave={this.onSave}
-						userDetails={userDetails}
-						errors={errors}
-					/>}
-					{section === RESULT &&
-					<Result
-						recommendations={this.state.recommendations}
-					/>}
+				/>}
+                {section === START &&
+                <Start
+                    handleChange={this.handleChange}
+                    goTo={this.goToNext}
+                />}
+                {section === CARD &&
+                <VotersCard
+                    handleChange={this.handleChange}
+                    goTo={this.goToNext}
+                />}
+                {section === PROXIMITY &&
+                <Proximity
+                    handleChange={this.handleChange}
+                    goTo={this.goToNext}
+                />}
+                {section === YEAR &&
+                <RegistrationYear
+                    handleChange={this.handleChange}
+                    goTo={this.goToNext}
+                />}
+                {section === STATUS &&
+                <RegistrationStatus
+                    handleChange={this.handleChange}
+                    goTo={this.goToNext}
+                />}
+                {section === BIO &&
+                <Bio
+                    handleChange={this.handleSignUpChange}
+                    onBioSubmit={this.onBioSubmit}
+                    userDetails={userDetails}
+                    errors={errors}
+                />}
+                {section === SAVE &&
+                <Save
+                    handleChange={this.handleSignUpChange}
+                    onSave={this.onSave}
+                    userDetails={userDetails}
+                    errors={errors}
+                />}
+                {section === RESULT &&
+                <Result
+                    recommendations={this.state.recommendations}
+                />}
             </div>
         );
     }
