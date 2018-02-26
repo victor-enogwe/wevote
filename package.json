@@ -46,6 +46,7 @@
     "nodemon": "^1.14.10",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
+    "react-device-detect": "^0.1.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
