@@ -16,7 +16,6 @@ export default {
       VriId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true
       },
       createdAt: {
         allowNull: false,
