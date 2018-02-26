@@ -60,9 +60,8 @@ export async function ussd(req, res) {
     response = 'END Keep it up! Next steps will soon be sent to you!';
   } else if (text === '1*2') {
     // This is a second level response where the user selected 1 in the first instance
-    balance = 'NGN 10,000';
     // This is a terminal request. Note how we start the response with END
-    response = `END Your balance is ${balance}`;
+    response = 'END Please go and register!';
   }
 
 
