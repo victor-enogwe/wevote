@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 
 import { getUser } from "../../actions/userActions";
+import { getUserVri } from "../../actions/vriActions";
 import setAccessToken from "../../utils/setAccessToken";
 import generateBatteryInfo from '../../utils/generateBatteryInfo';
 
@@ -28,15 +29,20 @@ class NavigationBar extends Component {
         if (this.props.user.isAuthenticated && !this.props.user.profile){
             this.props.getUser(this.props.user.uuid);
         }
-        if (this.props.user.isAuthenticated && this.props.vriScore){
-            const {batteryType, batteryColor, batteryNotification} = generateBatteryInfo(this.props.vriScore);
+        if (this.props.user.isAuthenticated && !this.props.vri.responses){
+            this.props.getUserVri();
+        }
+        if (this.props.user.isAuthenticated && this.props.vri.score){
+            const {batteryType, batteryColor,
+                batteryNotification} = generateBatteryInfo(this.props.vri.score, this.props.vri.responses);
             this.setState({ batteryType, batteryColor, batteryNotification });
         }
     }
 
     componentWillReceiveProps(nextProps){
-        if (nextProps.vriScore !== this.props.vriScore){
-            const {batteryType, batteryColor, batteryNotification} = generateBatteryInfo(nextProps.vriScore);
+        if (nextProps.vri.score !== this.props.vri.score){
+            const {batteryType, batteryColor,
+                batteryNotification} = generateBatteryInfo(nextProps.vri.score, nextProps.vri.responses);
             this.setState({ batteryType, batteryColor, batteryNotification });
         }
     }
@@ -118,8 +124,8 @@ class NavigationBar extends Component {
 function mapStateToProps(state){
     return {
         user: state.user,
-        vriScore: state.vri.score
+        vri: state.vri
     };
 }
 
-export default connect(mapStateToProps, { getUser })(NavigationBar);
+export default connect(mapStateToProps, { getUser, getUserVri })(NavigationBar);

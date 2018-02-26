@@ -51,7 +51,7 @@ const VotersCard = ({ handleChange, goTo }) => (
                     handleChange(event);
                     goTo(BIO)
                 }}
-                value="I lost my PVC"
+                value="I lost my Card"
                 type="submit"
                 name="Q2"
                 id="D"

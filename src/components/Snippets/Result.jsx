@@ -11,6 +11,18 @@ const Result = ({recommendations}) => (
                 </li>
             )}
         </ul>
+        <div className="options">
+            <a href="https://govote.org.ng/search" target="_blank">
+                <button>
+                    Find a Registration/Collection Center
+                </button>
+            </a>
+            <a href="http://www.inecnigeria.org/?page_id=5217" target="_blank">
+                <button>
+                    Find INEC Office near you
+                </button>
+            </a>
+        </div>
     </section>
 );
 

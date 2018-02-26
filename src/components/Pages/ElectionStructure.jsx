@@ -26,7 +26,7 @@ class ElectionStructure extends Component {
                       <a href="http://www.inecnigeria.org/?page_id=5202">Find out</a>
                   </p>
                   <p>What happens after voting?
-                      <a href="http://www.inecnigeria.org/?page_id=5194">Find out</a>
+                      <a href="http://www.inecnigeria.org/?page_id=5194">Read more</a>
                   </p>
               </section>
           </article>
