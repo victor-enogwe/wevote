@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 
 import SelectInput from '../Forms/SelectInput';
 
-const electionYears = {
-    2016: '2016',
-    2019: '2019',
-    2015: '2015'
-};
+const electionYears = ['2019', '2016', '2015'];
 
 const candidatesIn2015 = [
     ['Presidential', '2015/01/2015-PRESIDENTIAL-LIST-FINAL-13.05.151.xlsx'],
