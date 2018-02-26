@@ -1,7 +1,8 @@
 import jsonwebtoken from 'jsonwebtoken';
+import sequelize from 'sequelize';
 import database from '../../models';
 
-const { User, SocialAccount } = database;
+const { User } = database;
 const { JWT_SECRET } = process.env;
 
 /**
@@ -34,19 +35,29 @@ export async function ussd(req, res) {
   let balance = '';
   if (text === '') {
     // This is the first request. Note how we start the response with CON
-    response = 'CON What would you want to check \n 1. My Account \n 2. My phone number';
+    response = 'CON What would you want to do? \n 1. Check VRI \n 2. Login';
   } else if (text === '1') {
   // Business logic for first level response
-    response = 'CON Choose account information you want to view \n 1. Account number \n 2. Account balance';
+    response = 'CON Do have a PVC? \n 1. Yes \n 2. No';
   } else if (text === '2') {
   // Business logic for first level response
   // This is a terminal request. Note how we start the response with END
-    response = 'END Your phone number is $phoneNumber';
+    const user = await User.findOne({
+      where: {
+        phone: phoneNumber
+      }
+    });
+    if (!user) {
+      response = 'END You have not registered with this phone number!';
+    } else {
+      const { surname } = user;
+      response = `END Your surname is ${surname}!`;
+    }
   } else if (text === '1*1') {
     // This is a second level response where the user selected 1 in the first instance
-    accountNumber = 'ACC1001';
+    // accountNumber = 'ACC1001';
     // This is a terminal request. Note how we start the response with END
-    response = `END Your account number is ${accountNumber}`;
+    response = 'END Keep it up! Next steps will soon be sent to you!';
   } else if (text === '1*2') {
     // This is a second level response where the user selected 1 in the first instance
     balance = 'NGN 10,000';
