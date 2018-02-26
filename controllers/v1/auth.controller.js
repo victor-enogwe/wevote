@@ -1,4 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken';
+import sequelize from 'sequelize';
 import database from '../../models';
 import passport from '../../config/passport';
 import { createUser } from './user.controller';
@@ -30,15 +31,14 @@ export function generateJwt(data) {
  */
 export async function basicAuth(req, res) {
   const { phone, surname } = req.body;
-  const where = {};
-
-  if (phone && surname) {
-    where.phone = phone;
-    where.surname = surname.toLowerCase();
-  }
 
   try {
-    const user = await User.findOne({ where });
+    const user = await User.findOne({
+      where: {
+        phone,
+        surname: sequelize.where(sequelize.fn('LOWER', sequelize.col('surname')), 'ILIKE', surname)
+      }
+    });
     if (!user) {
       return res.status(404).json({ status: 'fail', message: 'user not found' });
     }
