@@ -44,10 +44,6 @@ class VoterReadiness extends Component {
 			steps: this.sections.map(section => ({
 				title: section,
 				href: '#',
-				onClick: (e) => {
-					e.preventDefault()
-					this.setState({ section })
-				}
 			})),
 			currentStep: 0,
             errors: {},
@@ -100,9 +96,6 @@ class VoterReadiness extends Component {
     }
 
     goToNext(section) {
-		const { steps, currentStep } = this.state;
-		// note that for questions that make you skip steps, the questions still remain unanswered???
-		// the steps rendomly jumps??
         this.setState({ section, currentStep: this.sections.indexOf(section) });
     }
 
@@ -127,7 +120,6 @@ class VoterReadiness extends Component {
     onBioSubmit(event) {
         event.preventDefault();
         const { valid, errors } = validate.bio(this.state.userDetails);
-        console.log('Valid', valid, 'Errors', errors);
         if (valid) {
             this.goToNext(SAVE);
         } else {
