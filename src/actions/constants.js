@@ -20,6 +20,7 @@ const actionTypes = {
     SIGN_IN_AJAX: 'SIGN_IN_AJAX',
     SIGN_UP_AJAX: 'SIGN_UP_AJAX',
     USER_DATA_AJAX: 'USER_DATA_AJAX',
+    CONFIRM_PHONE_AJAX: 'CONFIRM_PHONE_AJAX',
 
     // AJAX CALLS
     BEGIN_AJAX_CALL: 'BEGIN_AJAX_CALL',
@@ -33,6 +34,7 @@ const actionTypes = {
     STATUS: 'STATUS',
     BIO: 'BIO',
     SAVE: 'SAVE',
+    RESULT: 'RESULT',
     PHONE: 'PHONE',
     SURNAME: 'SURNAME'
 

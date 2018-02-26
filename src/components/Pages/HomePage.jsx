@@ -54,11 +54,6 @@ class HomePage extends Component {
                     <h1>How WeVote Works</h1>
                     <section>
                         <div>
-                            <img src={account} alt="Create Account" />
-                            <h3>Create Account</h3>
-                            <p>Sign up to fully access all features of this app</p>
-                        </div>
-                        <div>
                             <img src={checkVri} alt="Check Voter Readiness" />
                             <h3>Check Readiness</h3>
                             <p>Check if you have all the requirements to vote</p>

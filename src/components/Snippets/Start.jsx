@@ -33,7 +33,7 @@ const Start = ({ handleChange, goTo }) => (
         </div>
         <div className="done">
             Already taken the VRI test?
-            <Link to="/login"> Click here to Login </Link>
+            <Link to="/login"> Click here to login </Link>
         </div>
     </section>
 );
