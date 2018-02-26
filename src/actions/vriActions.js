@@ -28,7 +28,6 @@ export function saveVri(responses){
         dispatch(beginAjaxCall());
         return axios.post(`${API_URL}/user/vri`, responses)
             .then((res) => {
-                console.log('VriRes', res.data)
                 dispatch({
                     type: SAVE_VRI_AJAX,
                     payload: responses,

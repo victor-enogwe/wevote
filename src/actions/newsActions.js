@@ -1,4 +1,5 @@
 import axios from 'axios';
+const { API_URL } = process.env;
 
 import { beginAjaxCall } from "./ajaxStatusActions";
 
@@ -10,9 +11,9 @@ const { DISPLAY_NEWS_AJAX, DISPLAY_IMAGE } = actionTypes;
 export function getNews(){
     return (dispatch) => {
         dispatch(beginAjaxCall());
-        return axios.get('//inecnews.com/wp-json/wp/v2/posts')
+        return axios.get(`${API_URL}/news/news`)
             .then((res) => {
-                dispatch(displayNews(res.data));
+                dispatch(displayNews(res.data.data));
             })
             .catch(error => handleError(error, dispatch));
     };
@@ -20,9 +21,9 @@ export function getNews(){
 
 export function getImage(media_id){
     return (dispatch) => {
-        return axios.get(`//inecnews.com/wp-json/wp/v2/media/${media_id}`)
+        return axios.get(`${API_URL}/news/images?media_id=${media_id}`)
             .then((res) => {
-                dispatch(displayImage(res.data.post, res.data.source_url));
+                dispatch(displayImage(res.data.data.post, res.data.data.source_url));
             })
             .catch(error => handleError(error, dispatch));
     };

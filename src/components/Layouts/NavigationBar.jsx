@@ -28,6 +28,10 @@ class NavigationBar extends Component {
         if (this.props.user.isAuthenticated && !this.props.user.profile){
             this.props.getUser(this.props.user.uuid);
         }
+        if (this.props.user.isAuthenticated && this.props.vriScore){
+            const {batteryType, batteryColor, batteryNotification} = generateBatteryInfo(this.props.vriScore);
+            this.setState({ batteryType, batteryColor, batteryNotification });
+        }
     }
 
     componentWillReceiveProps(nextProps){
