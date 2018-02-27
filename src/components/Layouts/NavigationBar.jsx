@@ -22,7 +22,6 @@ class NavigationBar extends Component {
         this.toggleNav = this.toggleNav.bind(this);
         this.closeNav = this.closeNav.bind(this);
         this.logout = this.logout.bind(this);
-        this.batteryTitle = this.batteryTitle.bind(this);
     }
 
     componentDidMount(){
@@ -59,12 +58,7 @@ class NavigationBar extends Component {
         localStorage.removeItem('wevote');
         setAccessToken(null);
         location.reload();
-    }
-
-    batteryTitle(){
-        const { batteryType } = this.state;
-        if (batteryType === 'battery-empty') return 'You have not checked your Voter Readiness yet';
-        if (batteryType === 'battery-quarter') return 'Register and get your PVC to improve your VRI';
+        this.props.history.push('/');
     }
 
     render(){

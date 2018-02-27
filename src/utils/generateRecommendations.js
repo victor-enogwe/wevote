@@ -9,7 +9,7 @@ function generateRecommendations(responses) {
         responses.Q2 === 'C' &&
         recommendations.push("You need to have your Permanent Voters card at hand in order to vote.");
         responses.Q2 === 'D' &&
-        recommendations.push("It is possible to get another voters card. Visit a registration center near you" +
+        recommendations.push("It is possible to get another voters card. Visit a registration center near you " +
             "or the INEC office in your Local Government.");
     }
     if(responses.Q3){
@@ -17,11 +17,12 @@ function generateRecommendations(responses) {
         recommendations.push("It's a good thing you registered within your city so you can easily come out to vote.");
         responses.Q3 === 'B' &&
         recommendations.push("Since you didn't register within your city, it would be very difficult for you to vote " +
-            "because there will be restriction of movement on the election days.");
+            "because there will be restriction of movement on the election days. However, you can transfer your " +
+            "registration to a center near you. Visit a registration center or an INEC office.");
     }
     if (responses.Q4){
         (['A', 'B', 'C'].includes(responses.Q4) && responses.Q2 === 'B') &&
-        recommendations.push("Visit the same center where you registered to collect your Permanent Voters Card.");
+        recommendations.push("Visit the center where you registered to collect your Permanent Voters Card.");
         (responses.Q4 === 'D' && responses.Q2 === 'B') &&
         recommendations.push("Visit a registration center to begin a new registration.");
     }

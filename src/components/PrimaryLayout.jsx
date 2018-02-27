@@ -51,10 +51,7 @@ class PrimaryLayout extends Component {
         return (
             <div className="primary-layout">
                 <header>
-                    <NavigationBar
-                        handleHide={this.handleHide}
-                        handleShow={this.handleShow}
-                    />
+                    <Route path="*" component={NavigationBar} />
                 </header>
                 <main className="container">
                     <Route path="/" exact component={HomePage} />

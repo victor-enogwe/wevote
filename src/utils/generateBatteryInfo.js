@@ -23,7 +23,7 @@ function generateBatteryInfo(score, responses){
         batteryInfo.batteryNotification = 'It is good that you have a temporary voters card. ' +
             'However, you need to get your Permanent Voters Card in order to vote.';
     } else if (responses.Q2 === 'C'){
-        batteryInfo.batteryNotification = "You cannot vote if you don't have your Permanent Voters Card" +
+        batteryInfo.batteryNotification = "You cannot vote if you don't have your Permanent Voters Card. " +
             "Ensure to get it as soon as possible.";
     } else if (responses.Q2 === 'D'){
         batteryInfo.batteryNotification = 'You can get another voters card if yours gets lost. ' +
