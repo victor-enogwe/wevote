@@ -39,7 +39,7 @@ class News extends Component {
             <div className="news-page">
                 <header>
                     <h1>Latest News from INEC</h1>
-                    <small>Visit <a href="http://www.inecnews.com" target="_blank">www.inecnews.com</a>
+                    <small>Visit <a href="http://www.inecnews.com" target="_blank">www.inecnews.com </a>
                         for more election news
                     </small>
                 </header>

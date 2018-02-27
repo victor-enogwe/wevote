@@ -188,6 +188,7 @@ class VoterReadiness extends Component {
                 {section === RESULT &&
                 <Result
                     recommendations={this.state.recommendations}
+                    username={this.props.user.profile ? this.props.user.profile.firstname : ''}
                 />}
             </div>
         );

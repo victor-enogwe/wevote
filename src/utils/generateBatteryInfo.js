@@ -1,31 +1,33 @@
-function generateBatteryInfo(score){
+function generateBatteryInfo(score, responses){
     let batteryInfo = {};
     if (score === 0){
         batteryInfo.batteryType = 'empty';
         batteryInfo.batteryColor = 'red';
-        batteryInfo.batteryNotification = 'You have not checked your voter readiness yet. ' +
-            'Click on the link to check it now.';
     } else if (score > 0 && score < 25){
         batteryInfo.batteryType = 'quarter';
         batteryInfo.batteryColor = 'red';
-        batteryInfo.batteryNotification = 'You have not registered as a voter. ' +
-            'Hence you cannot vote. If you now have your Voters card, click the link to check your VRI again.';
     } else if (score >= 25 && score < 51){
         batteryInfo.batteryType = 'half';
         batteryInfo.batteryColor = 'orange';
-        batteryInfo.batteryNotification = 'You have not been issued a voters card. ' +
-            'Hence you cannot vote. If you now have your Voters card, click the link to check your VRI again.';
     } else if (score >= 51 && score < 75){
         batteryInfo.batteryType = 'three-quarters';
         batteryInfo.batteryColor = 'yellow';
-        batteryInfo.batteryNotification = 'You did not register in your city of residence. ' +
-            'You should consider transferring your registration. If you have done that, ' +
-            'click the link to check your VRI again.';
     } else if (score >= 75) {
         batteryInfo.batteryType = 'full';
         batteryInfo.batteryColor = 'greenyellow';
-        batteryInfo.batteryNotification = 'You have a voters card and you are ready to vote. ' +
+    }
+    if (responses.Q2 === 'A'){
+        batteryInfo.batteryNotification = 'Congrats on having your Permanent Voters Card. ' +
             'Encourage your family and friends to do the same.';
+    } else if (responses.Q2 === 'B'){
+        batteryInfo.batteryNotification = 'It is good that you have a temporary voters card. ' +
+            'However, you need to get your Permanent Voters Card in order to vote.';
+    } else if (responses.Q2 === 'C'){
+        batteryInfo.batteryNotification = "You cannot vote if you don't have your Permanent Voters Card. " +
+            "Ensure to get it as soon as possible.";
+    } else if (responses.Q2 === 'D'){
+        batteryInfo.batteryNotification = 'You can get another voters card if yours gets lost. ' +
+            'Visit the registration center closest to you or INEC office in your LGA .';
     }
     return batteryInfo;
 }
