@@ -44,8 +44,11 @@ export function login(token, type) {
  */
 function saveToken(response, type, dispatch) {
     const token = response.data.token;
+    const decodedToken = jwt.decode(token);
+    const tokenExpiry = decodedToken.exp;
     const tokenStorage = JSON.stringify({
-        jwt: token
+        jwt: token,
+        exp: tokenExpiry
     });
     localStorage.setItem('wevote', tokenStorage);
     dispatch(login(token, type));

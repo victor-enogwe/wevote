@@ -1,18 +1,31 @@
 import React from 'react';
 
-const Result = ({recommendations, username}) => (
+const Result = ({recommendations, username, rank, score}) => (
     <section className="result">
         <div id="donut-chart">
         </div>
+        {rank &&
+        <div>
+            <img src={rank.image} />
+            <p><strong>You are {rank.title}</strong></p>
+        </div>}
         <article id="recommendations">
             <h3>Hello {username},</h3>
+            <p>
+                Thank you for taking your time to check your voter readiness.
+                Right now you are
+                {score < 50 && ' far from being '}
+                {score > 50 && score < 100 && ' close to being '}
+                {score === 100 && ' '}
+                vote ready.
+            </p>
             {recommendations && recommendations.map(recommendation =>
                 <p key={recommendation}>
                     {recommendation}
                 </p>
             )}
         </article>
-        <div className="options">
+        <div className="result-options">
             <a href="https://govote.org.ng/search" target="_blank">
                 <button>
                     Find a Registration Center

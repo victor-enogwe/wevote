@@ -24,6 +24,7 @@ const Bio = ({ handleChange, onBioSubmit, userDetails, errors }) => (
                 handleChange={handleChange}
                 value={userDetails.firstname}
                 error={errors.firstname}
+                require={true}
             />
             <TextInput
                 id="bio-surname"
@@ -34,6 +35,7 @@ const Bio = ({ handleChange, onBioSubmit, userDetails, errors }) => (
                 handleChange={handleChange}
                 value={userDetails.surname}
                 error={errors.surname}
+                require={true}
             />
             <div className="sign-up-select-fields">
                 <SelectInput
@@ -44,6 +46,7 @@ const Bio = ({ handleChange, onBioSubmit, userDetails, errors }) => (
                     handleChange={handleChange}
                     value={userDetails.state}
                     error={errors.state}
+                    require={true}
                 />
                 <SelectInput
                     id="bio-sex"
@@ -67,6 +70,7 @@ const Bio = ({ handleChange, onBioSubmit, userDetails, errors }) => (
                    placeholder="Date of Birth"
                 />
             </div>
+            <p>Fields marked with <span>*</span> are required</p>
             <div className="options">
                 <button
                     onClick={onBioSubmit}

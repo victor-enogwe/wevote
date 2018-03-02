@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextInput = ({id, name, type, placeholder, icon, value, required, error, handleChange}) => (
+const TextInput = ({id, name, type, placeholder, icon, value, required, error, handleChange, require}) => (
     <div className="text-input">
+        {require && <span>*</span>}
         <i className={icon}>
         </i>
         <label htmlFor={id}>{placeholder}</label>
@@ -25,6 +26,7 @@ TextInput.propTypes = {
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     value: PropTypes.string,
+    required: PropTypes.bool,
     placeholder: PropTypes.string,
     handleChange: PropTypes.func.isRequired
 };

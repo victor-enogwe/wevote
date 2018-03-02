@@ -16,6 +16,7 @@ import { isMobile } from 'react-device-detect';
 import { signUp, getUser } from '../../actions/userActions';
 import { saveVri, getUserVri } from '../../actions/vriActions';
 import { handleError } from "../../utils/errorHandler";
+import generateRank from "../../utils/generateRank";
 import generateRecommendations from '../../utils/generateRecommendations';
 import * as validate from "../../utils/validate";
 import drawDonutChart from '../../assets/progressbar.js';
@@ -30,6 +31,7 @@ class VoterReadiness extends Component {
         this.state = {
 			section: START,
             responses: {},
+            rank: {},
             recommendations: [],
             score: 0,
             userDetails: {
@@ -49,6 +51,7 @@ class VoterReadiness extends Component {
             errors: {},
         };
         this.handleSignUpChange = this.handleSignUpChange.bind(this);
+        this.generateResult = this.generateResult.bind(this);
         this.displayResult = this.displayResult.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.onBioSubmit = this.onBioSubmit.bind(this);
@@ -63,11 +66,7 @@ class VoterReadiness extends Component {
             this.props.getUserVri();
         }
         if (this.props.user.isAuthenticated && this.props.vri.score){
-            this.setState({
-                section: RESULT,
-                score: this.props.vri.score,
-                recommendations: generateRecommendations(this.props.vri.responses)
-            }, () => this.displayResult());
+            this.generateResult(this.props.vri, this.displayResult);
         }
     }
 
@@ -76,12 +75,17 @@ class VoterReadiness extends Component {
             this.props.getUserVri();
         }
         if (nextProps.vri.score !== this.props.vri.score){
-            this.setState({
-                section: RESULT,
-                score: nextProps.vri.score,
-                recommendations: generateRecommendations(nextProps.vri.responses)
-            }, () => this.displayResult());
+            this.generateResult(nextProps.vri, this.displayResult);
         }
+    }
+
+    generateResult(props, callback){
+        this.setState({
+            section: RESULT,
+            score: props.score,
+            rank: generateRank(props.score),
+            recommendations: generateRecommendations(props.responses)
+        }, () => callback());
     }
 
     displayResult(){
@@ -134,7 +138,7 @@ class VoterReadiness extends Component {
     }
 
     render(){
-        const { section, userDetails, steps, currentStep, errors } = this.state;
+        const { section, score, userDetails, steps, currentStep, errors, rank, recommendations } = this.state;
         return (
             <div className="vri">
                 {section !== RESULT &&
@@ -187,7 +191,9 @@ class VoterReadiness extends Component {
                 />}
                 {section === RESULT &&
                 <Result
-                    recommendations={this.state.recommendations}
+                    rank={rank}
+                    score={score}
+                    recommendations={recommendations}
                     username={this.props.user.profile ? this.props.user.profile.firstname : ''}
                 />}
             </div>
