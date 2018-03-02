@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import toastr from "toastr";
 
 import Start from '../Snippets/Start';
 import VotersCard from '../Snippets/VotersCard';
@@ -25,10 +24,11 @@ import actionTypes from '../../actions/constants';
 const { START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE, RESULT } = actionTypes;
 
 class VoterReadiness extends Component {
-	sections = [START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE];
+	sections = [START, CARD, STATUS, YEAR, PROXIMITY, BIO, SAVE];
     constructor(props){
         super(props);
         this.state = {
+            showFrame: false,
 			section: START,
             responses: {},
             rank: {},
@@ -55,6 +55,8 @@ class VoterReadiness extends Component {
         this.displayResult = this.displayResult.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.onBioSubmit = this.onBioSubmit.bind(this);
+        this.closeFrame = this.closeFrame.bind(this);
+        this.openFrame = this.openFrame.bind(this);
         this.goToNext = this.goToNext.bind(this);
         this.onSave = this.onSave.bind(this);
     }
@@ -137,8 +139,17 @@ class VoterReadiness extends Component {
         this.setState({ userDetails });
     }
 
+    openFrame(){
+        this.setState({ showFrame: true})
+    }
+
+    closeFrame(){
+        this.setState({ showFrame: false})
+    }
+
     render(){
-        const { section, score, userDetails, steps, currentStep, errors, rank, recommendations } = this.state;
+        const { section, score, userDetails, steps, showFrame,
+            currentStep, errors, rank, recommendations } = this.state;
         return (
             <div className="vri">
                 {section !== RESULT &&
@@ -195,7 +206,15 @@ class VoterReadiness extends Component {
                     score={score}
                     recommendations={recommendations}
                     username={this.props.user.profile ? this.props.user.profile.firstname : ''}
+                    openFrame={this.openFrame}
                 />}
+                {showFrame &&
+                <div className="frame">
+                    <p onClick={this.closeFrame}>Close</p>
+                    <iframe src="" name="frame">
+                        <p>This is an iframe</p>
+                    </iframe>
+                </div>}
             </div>
         );
     }

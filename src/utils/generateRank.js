@@ -7,16 +7,16 @@ function generateRank(score) {
     let rank = {};
     if (score < 25) {
         rank.image = slow;
-        rank.title = 'Slow';
+        rank.title = 'Slow Mover';
     } else if (score >= 25 && score < 51) {
         rank.image = citizen;
-        rank.title = 'a Citizen';
+        rank.title = 'Citizen';
     } else if (score >= 51 && score < 75) {
         rank.image = patroit;
-        rank.title = 'a Patroit';
+        rank.title = 'Patroit';
     } else if (score >= 75) {
         rank.image = knight;
-        rank.title = 'a Knight';
+        rank.title = 'Knight';
     }
     return rank;
 }

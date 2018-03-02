@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Result = ({recommendations, username, rank, score}) => (
+const Result = ({recommendations, username, rank, score, openFrame}) => (
     <section className="result">
         <div id="donut-chart">
         </div>
         {rank &&
-        <div>
+        <div className="rank">
             <img src={rank.image} />
-            <p><strong>You are {rank.title}</strong></p>
+            <p>Rank: <span>{rank.title}</span></p>
         </div>}
         <article id="recommendations">
             <h3>Hello {username},</h3>
@@ -26,12 +26,12 @@ const Result = ({recommendations, username, rank, score}) => (
             )}
         </article>
         <div className="result-options">
-            <a href="https://govote.org.ng/search" target="_blank">
+            <a href="https://govote.org.ng/search" target="frame" onClick={openFrame}>
                 <button>
                     Find a Registration Center
                 </button>
             </a>
-            <a href="http://www.inecnigeria.org/?page_id=5217" target="_blank">
+            <a href="http://www.inecnigeria.org/?page_id=5217" target="frame" onClick={openFrame}>
                 <button>
                     Find INEC Office near you
                 </button>
