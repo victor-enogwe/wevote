@@ -37,10 +37,15 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
                 </button>
             </a>
         </div>
-        <div className="result-options">
+        <article id="recommendations">
+            <p>
+                Since you've checked your Voter Readiness, why not tell your friends to do so too.
+            </p>
+        </article>
+        <div className="social-share">
             <a
-                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwevoteng.herokuapp.com%2F&amp;src=sdkpreparse"
-                data-href="https://wevoteng.herokuapp.com"
+                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwevote-ng.herokuapp.com%2F&amp;src=sdkpreparse"
+                data-href="https://wevote-ng.herokuapp.com"
                 className="fb-share-button"
                 target="_blank"
             >
@@ -49,8 +54,9 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
                 </button>
             </a>
             <a
-                href="https://twitter.com/intent/tweet?text=Hello%20world&url=https%3A%2F%2Fwevotengn.herokuapp.com%2F"
+                href="https://twitter.com/intent/tweet?text=I%20just%20checked%20my%20voter%20readiness%20on%20WeVote.%20Check%20yours&url=https%3A%2F%2Fwevote-ng.herokuapp.com%2F&via=saucecodexyz&related=ignatiusukwuoma%2Ckingobi1&hashtags=nigeria%2Celection"
                 target="_blank"
+                className="tw-share-button"
             >
                 <button>
                     Share on Twitter
