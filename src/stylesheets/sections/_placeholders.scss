@@ -37,6 +37,12 @@
     transform: translateY(-50%);
   }
 
+  span:first-child {
+    position: absolute;
+    color: red;
+    left: -2%;
+  }
+
   label {
     display: none;
   }

@@ -90,8 +90,12 @@ class NavigationBar extends Component {
                     <li className="learn">
                         <a>Learn</a>
                         <ul>
-                            <li onClick={this.closeNav}><NavLink to="/know-your-candidates">Know Your Candidates</NavLink></li>
-                            <li onClick={this.closeNav}><NavLink to="/election-structure">Election Structure</NavLink></li>
+                            <li onClick={this.closeNav}>
+                                <NavLink to="/know-your-candidates">Know Your Candidates</NavLink>
+                            </li>
+                            <li onClick={this.closeNav}>
+                                <NavLink to="/election-structure">Election Structure</NavLink>
+                            </li>
                         </ul>
                     </li>
                     {user.isAuthenticated && <li onClick={this.closeNav}>

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import toastr from "toastr";
 
 import Start from '../Snippets/Start';
 import VotersCard from '../Snippets/VotersCard';
@@ -16,6 +15,7 @@ import { isMobile } from 'react-device-detect';
 import { signUp, getUser } from '../../actions/userActions';
 import { saveVri, getUserVri } from '../../actions/vriActions';
 import { handleError } from "../../utils/errorHandler";
+import generateRank from "../../utils/generateRank";
 import generateRecommendations from '../../utils/generateRecommendations';
 import * as validate from "../../utils/validate";
 import drawDonutChart from '../../assets/progressbar.js';
@@ -24,12 +24,14 @@ import actionTypes from '../../actions/constants';
 const { START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE, RESULT } = actionTypes;
 
 class VoterReadiness extends Component {
-	sections = [START, CARD, PROXIMITY, YEAR, STATUS, BIO, SAVE];
+	sections = [START, CARD, STATUS, YEAR, PROXIMITY, BIO, SAVE];
     constructor(props){
         super(props);
         this.state = {
+            showFrame: false,
 			section: START,
             responses: {},
+            rank: {},
             recommendations: [],
             score: 0,
             userDetails: {
@@ -49,25 +51,53 @@ class VoterReadiness extends Component {
             errors: {},
         };
         this.handleSignUpChange = this.handleSignUpChange.bind(this);
+        this.generateResult = this.generateResult.bind(this);
         this.displayResult = this.displayResult.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.onBioSubmit = this.onBioSubmit.bind(this);
+        this.closeFrame = this.closeFrame.bind(this);
+        this.openFrame = this.openFrame.bind(this);
         this.goToNext = this.goToNext.bind(this);
         this.onSave = this.onSave.bind(this);
     }
 
     componentDidMount(){
+        // Load Facebook SDK for JavaScript
+        (function(d, s, id) {
+            let js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=151030348949397&autoLogAppEvents=1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // Load Twitter SDK
+        window.twttr = (function(d, s, id) {
+            let js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+
+            t._e = [];
+            t.ready = function(f) {
+                t._e.push(f);
+            };
+
+            return t;
+        }(document, "script", "twitter-wjs"));
+
+        // Load Google charts for D3 chart
         google.charts.load("current", {packages:["corechart"]});
         google.charts.setOnLoadCallback(this.drawChart);
+
         if (this.props.user.isAuthenticated && !this.props.vri.responses){
             this.props.getUserVri();
         }
         if (this.props.user.isAuthenticated && this.props.vri.score){
-            this.setState({
-                section: RESULT,
-                score: this.props.vri.score,
-                recommendations: generateRecommendations(this.props.vri.responses)
-            }, () => this.displayResult());
+            this.generateResult(this.props.vri, this.displayResult);
         }
     }
 
@@ -76,12 +106,17 @@ class VoterReadiness extends Component {
             this.props.getUserVri();
         }
         if (nextProps.vri.score !== this.props.vri.score){
-            this.setState({
-                section: RESULT,
-                score: nextProps.vri.score,
-                recommendations: generateRecommendations(nextProps.vri.responses)
-            }, () => this.displayResult());
+            this.generateResult(nextProps.vri, this.displayResult);
         }
+    }
+
+    generateResult(props, callback){
+        this.setState({
+            section: RESULT,
+            score: props.score,
+            rank: generateRank(props.score),
+            recommendations: generateRecommendations(props.responses)
+        }, () => callback());
     }
 
     displayResult(){
@@ -133,10 +168,23 @@ class VoterReadiness extends Component {
         this.setState({ userDetails });
     }
 
+    openFrame(){
+        this.setState({ showFrame: true})
+    }
+
+    closeFrame(){
+        this.setState({ showFrame: false})
+    }
+
     render(){
-        const { section, userDetails, steps, currentStep, errors } = this.state;
+        const { section, score, userDetails, steps, showFrame,
+            currentStep, errors, rank, recommendations } = this.state;
         return (
             <div className="vri">
+                <div id="fb-root">
+                </div>
+                <div id="twitter-wjs">
+                </div>
                 {section !== RESULT &&
                 <Stepper
 					className="steps"
@@ -187,9 +235,19 @@ class VoterReadiness extends Component {
                 />}
                 {section === RESULT &&
                 <Result
-                    recommendations={this.state.recommendations}
+                    rank={rank}
+                    score={score}
+                    recommendations={recommendations}
                     username={this.props.user.profile ? this.props.user.profile.firstname : ''}
+                    openFrame={this.openFrame}
                 />}
+                {showFrame &&
+                <div className="frame">
+                    <p onClick={this.closeFrame}>Close</p>
+                    <iframe src="" name="frame">
+                        <p>This is an iframe</p>
+                    </iframe>
+                </div>}
             </div>
         );
     }

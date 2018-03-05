@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import OptionFragments from './OptionFragments';
 
-const SelectInput = ({id, name, value, handleChange, placeholder, fields, error }) => (
+const SelectInput = ({id, name, value, handleChange, placeholder, fields, error, require }) => (
     <div className="select-input">
+        {require && <span>*</span>}
         <select
             id={id}
             name={name}

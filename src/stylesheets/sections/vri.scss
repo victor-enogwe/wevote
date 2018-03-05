@@ -1,7 +1,31 @@
 .vri {
-  padding: 10px;
+  position: relative;
 
-  & > div {
+  & > div.frame {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    & > p {
+      text-decoration: underline;
+      position: absolute;
+      color: red;
+      right: 3%;
+      top: 0;
+      z-index: 9;
+      cursor: pointer;
+    }
+  }
+
+
+  & > div.steps {
     cursor: not-allowed;
 
     a {
@@ -13,12 +37,25 @@
   section {
     width: 90%;
     margin: 0 auto;
+    padding: 10px 0 20px;
 
     &.result {
+      .rank {
+        p{
+          margin-top: 0;
+
+          span {
+            font-weight: bold;
+            color: green;
+          }
+        }
+      }
+
       #donut-chart {
         height: 500px;
         text-align: center;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
+        display: none;
 
         text {
           font-family: Impact, "Franklin Gothic Bold", "Helvetica Inserat", "Arial Black", sans-serif;
@@ -45,13 +82,19 @@
         color: #6a7583;
       }
 
-      .options {
+      .result-options {
+        display: flex;
+        justify-content: center;
+
         a {
           text-decoration: none;
 
           button {
-            display: block;
-            margin: 10px auto;
+            @extend %styled-button;
+
+            &:first-child {
+              margin-right: 10px;
+            }
           }
         }
       }
@@ -116,6 +159,13 @@
     }
 
     &.bio, &.save {
+      form > p {
+        font-size: 0.8em;
+        font-style: italic;
+        span {
+          color: red;
+        }
+      }
 
       .sign-up-select-fields {
         display: flex;
@@ -123,10 +173,18 @@
         margin-bottom: 35px;
 
         .select-input {
+          position: relative;
           border: 1px solid silver;
           border-radius: 2px;
           height: 40px;
           width: 43%;
+
+          span:first-child {
+            position: absolute;
+            color: red;
+            top: 5%;
+            left: -5%;
+          }
 
           select {
             width: 100%;
@@ -145,7 +203,6 @@
       }
 
       .date-input {
-
         label {
           margin-right: 20px;
         }
@@ -174,16 +231,18 @@
         flex-direction: row;
         justify-content: center;
 
-        a > button:first-child {
-          margin-right: 20px;
-        }
-
         input {
           margin-right: 50px;
 
           &:last-child {
             margin-right: 0;
           }
+        }
+      }
+
+      &.result {
+        #donut-chart {
+          display: block;
         }
       }
 

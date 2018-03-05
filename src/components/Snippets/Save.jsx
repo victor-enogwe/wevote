@@ -19,6 +19,7 @@ const Save = ({ handleChange, onSave, userDetails, errors }) => (
                 handleChange={handleChange}
                 value={userDetails.phone}
                 error={errors.phone}
+                require={true}
             />
             <TextInput
                 id="save-email"
@@ -30,6 +31,7 @@ const Save = ({ handleChange, onSave, userDetails, errors }) => (
                 value={userDetails.email}
                 error={errors.email}
             />
+            <p>Fields marked with <span>*</span> are required</p>
             <div className="options">
                 <button
                     onClick={onSave}

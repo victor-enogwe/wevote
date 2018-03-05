@@ -17,6 +17,7 @@ import ElectionStructure from './Pages/ElectionStructure';
 import ModalController from './Modals/ModalController';
 
 import loader from '../assets/loader.gif';
+import setAccessToken from "../utils/setAccessToken";
 
 class PrimaryLayout extends Component {
     constructor(props) {
@@ -31,8 +32,14 @@ class PrimaryLayout extends Component {
     componentWillMount(){
         if (localStorage.getItem('wevote')) {
             const tokenStorage = JSON.parse(localStorage.getItem('wevote'));
+            const tokenExpiry = tokenStorage.exp;
             const token = tokenStorage.jwt;
-            if (token) {
+            if (tokenExpiry <= Number(Date.now().toString().substr(0, 10))){
+                localStorage.removeItem('wevote');
+                setAccessToken(null);
+                location.reload();
+                this.props.history.push('/');
+            } else if (token) {
                 this.props.login(token, SIGN_IN_AJAX);
             }
         }

@@ -49,7 +49,7 @@ const VotersCard = ({ handleChange, goTo }) => (
             <input
                 onClick={(event) => {
                     handleChange(event);
-                    goTo(BIO)
+                    goTo(YEAR)
                 }}
                 value="I lost my Card"
                 type="submit"

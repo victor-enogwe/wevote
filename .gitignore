@@ -5,3 +5,4 @@ bower_components
 *.css
 *.css.map
 dist
+.DS_Store
