@@ -8,6 +8,12 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
         <div className="rank">
             <img src={rank.image} />
             <p>Rank: <span>{rank.title}</span></p>
+            <aside>
+                <span className={rank.title === 'Slow Mover' ? 'active' : 'inactive'}>Slow Mover</span> &#8594;
+                <span className={rank.title === 'Citizen' ? 'active' : 'inactive'}> Citizen</span> &#8594;
+                <span className={rank.title === 'Patroit' ? 'active' : 'inactive'}> Patroit</span> &#8594;
+                <span className={rank.title === 'Knight' ? 'active' : 'inactive'}> Knight</span>
+            </aside>
         </div>}
         <article id="recommendations">
             <h3>Hello {username},</h3>
@@ -31,7 +37,7 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
                     Find a Registration Center
                 </button>
             </a>
-            <a href="http://www.inecnigeria.org/?page_id=5217" target="frame" onClick={openFrame}>
+            <a href="http://www.inecnigeria.org/?page_id=5217" target="_blank">
                 <button>
                     Find INEC Office near you
                 </button>
