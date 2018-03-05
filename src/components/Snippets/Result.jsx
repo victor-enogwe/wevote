@@ -37,6 +37,26 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
                 </button>
             </a>
         </div>
+        <div className="result-options">
+            <a
+                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwevoteng.herokuapp.com%2F&amp;src=sdkpreparse"
+                data-href="https://wevoteng.herokuapp.com"
+                className="fb-share-button"
+                target="_blank"
+            >
+                <button>
+                    Share on Facebook
+                </button>
+            </a>
+            <a
+                href="https://twitter.com/intent/tweet?text=Hello%20world&url=https%3A%2F%2Fwevotengn.herokuapp.com%2F"
+                target="_blank"
+            >
+                <button>
+                    Share on Twitter
+                </button>
+            </a>
+        </div>
     </section>
 );
 

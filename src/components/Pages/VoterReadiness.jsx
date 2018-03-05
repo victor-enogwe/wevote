@@ -62,8 +62,37 @@ class VoterReadiness extends Component {
     }
 
     componentDidMount(){
+        // Load Facebook SDK for JavaScript
+        (function(d, s, id) {
+            let js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=151030348949397&autoLogAppEvents=1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // Load Twitter SDK
+        window.twttr = (function(d, s, id) {
+            let js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+
+            t._e = [];
+            t.ready = function(f) {
+                t._e.push(f);
+            };
+
+            return t;
+        }(document, "script", "twitter-wjs"));
+
+        // Load Google charts for D3 chart
         google.charts.load("current", {packages:["corechart"]});
         google.charts.setOnLoadCallback(this.drawChart);
+
         if (this.props.user.isAuthenticated && !this.props.vri.responses){
             this.props.getUserVri();
         }
@@ -152,6 +181,10 @@ class VoterReadiness extends Component {
             currentStep, errors, rank, recommendations } = this.state;
         return (
             <div className="vri">
+                <div id="fb-root">
+                </div>
+                <div id="twitter-wjs">
+                </div>
                 {section !== RESULT &&
                 <Stepper
 					className="steps"
