@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Result = ({recommendations, username, rank, score, openFrame}) => (
+const Result = ({recommendations, username, rank, score, openFrame, retakeTest}) => (
     <section className="result">
         <div id="donut-chart">
         </div>
         {rank &&
         <div className="rank">
             <img src={rank.image} />
-            <p>Rank: <span>{rank.title}</span></p>
+            <p>Your rank: <span>{rank.title}</span></p>
             <aside>
                 <span className={rank.title === 'Slow Mover' ? 'active' : 'inactive'}>Slow Mover</span> &#8594;
                 <span className={rank.title === 'Citizen' ? 'active' : 'inactive'}> Citizen</span> &#8594;
@@ -45,7 +45,7 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
         </div>
         <article id="recommendations">
             <p>
-                Since you've checked your Voter Readiness, why not tell your friends to do so too.
+                Having checked your Voter Readiness, why not tell your friends to do so too.
             </p>
         </article>
         <div className="social-share">
@@ -68,6 +68,10 @@ const Result = ({recommendations, username, rank, score, openFrame}) => (
                     Share on Twitter
                 </button>
             </a>
+        </div>
+        <div className="done">
+            Already completed some of these recommendations?
+            <a onClick={retakeTest}> Check voter readiness again </a>
         </div>
     </section>
 );

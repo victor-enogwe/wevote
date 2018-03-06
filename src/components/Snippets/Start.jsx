@@ -12,7 +12,7 @@ const Start = ({ handleChange, goTo }) => (
             <p>
                 The Voter Readiness Index helps you know what is required of you to vote and if you've met
                 those requirements. The following questions will give you an overview of your level of
-                readiness for the upcoming elections.
+                readiness for the upcoming election. This will take less than a minute.
             </p>
         </div>
         <div className="q-image">

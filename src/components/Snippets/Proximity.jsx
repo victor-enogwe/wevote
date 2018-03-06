@@ -5,7 +5,7 @@ import actionTypes from '../../actions/constants';
 
 const { BIO } = actionTypes;
 
-const Proximity = ({ handleChange, goTo }) => (
+const Proximity = ({ handleChange, goTo, user, saveNewVri }) => (
     <section className="proximity">
         <div className="question">
             <p>
@@ -19,7 +19,11 @@ const Proximity = ({ handleChange, goTo }) => (
             <input
                 onClick={(event) => {
                     handleChange(event);
-                    goTo(BIO)
+                    if (user.isAuthenticated){
+                        saveNewVri();
+                    } else {
+                        goTo(BIO);
+                    }
                 }}
                 value="Within my City"
                 type="submit"
@@ -29,7 +33,11 @@ const Proximity = ({ handleChange, goTo }) => (
             <input
                 onClick={(event) => {
                     handleChange(event);
-                    goTo(BIO)
+                    if (user.isAuthenticated){
+                        saveNewVri();
+                    } else {
+                        goTo(BIO);
+                    }
                 }}
                 value="Outside my City"
                 type="submit"
