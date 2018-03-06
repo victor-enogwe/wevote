@@ -41,12 +41,29 @@
 
     &.result {
       .rank {
+
         p{
           margin-top: 0;
+          margin-bottom: 15px;
 
           span {
             font-weight: bold;
             color: green;
+          }
+        }
+
+        aside {
+          text-align: center;
+          font-style: italic;
+          font-size: 0.9em;
+
+          .inactive {
+            opacity: 0.3;
+          }
+
+          .active {
+            color: green;
+            font-weight: bold;
           }
         }
       }
