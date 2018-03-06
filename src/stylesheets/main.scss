@@ -15,6 +15,10 @@ body {
   font-size: 0.9em;
   font-family: 'Roboto', sans-serif;
 
+  .primary-layout {
+    overflow-x: hidden;
+  }
+
   main {
     min-height: 100vh;
   }
