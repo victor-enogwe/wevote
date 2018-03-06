@@ -55,7 +55,9 @@ class VoterReadiness extends Component {
         this.displayResult = this.displayResult.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.onBioSubmit = this.onBioSubmit.bind(this);
+        this.saveNewVri = this.saveNewVri.bind(this);
         this.closeFrame = this.closeFrame.bind(this);
+        this.retakeTest = this.retakeTest.bind(this);
         this.openFrame = this.openFrame.bind(this);
         this.goToNext = this.goToNext.bind(this);
         this.onSave = this.onSave.bind(this);
@@ -108,6 +110,9 @@ class VoterReadiness extends Component {
         if (nextProps.vri.score !== this.props.vri.score){
             this.generateResult(nextProps.vri, this.displayResult);
         }
+        if (nextProps.vri.score === 0) {
+            this.generateResult(nextProps.vri, this.displayResult);
+        }
     }
 
     generateResult(props, callback){
@@ -128,10 +133,6 @@ class VoterReadiness extends Component {
         const responses = this.state.responses;
         responses[event.target.name] = event.target.id;
         this.setState({ responses });
-    }
-
-    goToNext(section) {
-        this.setState({ section, currentStep: this.sections.indexOf(section) });
     }
 
     onSave(event) {
@@ -168,12 +169,28 @@ class VoterReadiness extends Component {
         this.setState({ userDetails });
     }
 
+    goToNext(section) {
+        this.setState({ section, currentStep: this.sections.indexOf(section) });
+    }
+
     openFrame(){
         this.setState({ showFrame: true})
     }
 
     closeFrame(){
         this.setState({ showFrame: false})
+    }
+
+    retakeTest(){
+        this.setState({ section: START, responses: {} })
+    }
+
+    saveNewVri(){
+        this.props.saveVri(this.state.responses)
+            .then(() => {
+                this.props.getUserVri();
+            })
+            .catch((error) => handleError(error));
     }
 
     render(){
@@ -208,6 +225,8 @@ class VoterReadiness extends Component {
                 <Proximity
                     handleChange={this.handleChange}
                     goTo={this.goToNext}
+                    user={this.props.user}
+                    saveNewVri={this.saveNewVri}
                 />}
                 {section === YEAR &&
                 <RegistrationYear
@@ -240,6 +259,7 @@ class VoterReadiness extends Component {
                     recommendations={recommendations}
                     username={this.props.user.profile ? this.props.user.profile.firstname : ''}
                     openFrame={this.openFrame}
+                    retakeTest={this.retakeTest}
                 />}
                 {showFrame &&
                 <div className="frame">
