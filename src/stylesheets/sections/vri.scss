@@ -161,6 +161,7 @@
       a {
         text-decoration: none;
         color: #6169f4;
+        cursor: pointer;
       }
     }
 
@@ -183,8 +184,9 @@
         font-size: 1em;
         margin-bottom: 15px;
         padding: 0 20px;
-        border-radius: 1px;
+        border-radius: 25px;
         outline: none;
+        border: none;
         box-shadow: 0 7px 9px -9px #777,
         7px 0 9px -9px #777,
         0 -7px 9px -9px #777,
