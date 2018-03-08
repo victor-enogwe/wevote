@@ -31,6 +31,30 @@
     }
   }
 
+  .quote {
+    padding: 20px;
+    text-align: center;
+
+    background-color: #33691e;
+    color: white;
+
+    h2 {
+      font-size: 25px;
+      font-family: 'Dancing Script', cursive;
+    }
+    div {
+      max-width: 500px;
+      margin: 0 auto;
+
+      q {
+        @extend %paragraph;
+        font-family: 'Itim', cursive;
+        color: white;
+
+      }
+    }
+  }
+
   .about {
     padding: 20px;
     background-color: #EEEEEE;

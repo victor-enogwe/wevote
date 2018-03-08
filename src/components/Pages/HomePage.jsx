@@ -2,15 +2,22 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import account from '../../assets/signup_icon.png';
 import checkVri from '../../assets/readiness.png';
 import getNotifications from '../../assets/notification.png'
 import receiveNews from '../../assets/news.png';
 import { inecFiles } from "./Candidates";
+import getQuote from '../../utils/quotes';
 
 class HomePage extends Component {
     constructor(props){
         super(props);
+        this.state = {
+          quote: ''
+        };
+    }
+
+    componentWillMount(){
+        this.setState({quote: getQuote()})
     }
 
     render(){
@@ -27,6 +34,12 @@ class HomePage extends Component {
                         </Link>
                     </div>
                 </section>
+                <section className="quote">
+                    <h2>Quote of the day</h2>
+                    <div>
+                        <q>{this.state.quote}</q>
+                    </div>
+                </section>
                 <section className="about">
                     <h1>About WeVote</h1>
                     <p>It is in our hands to vote and elect a leader who will lead us,
@@ -38,8 +51,7 @@ class HomePage extends Component {
                     <p>In the 2015 elections, only 33.7% (67,422,005) of the general
                         population registered to vote. Worse still, less than 50% of the
                         67,422,005 eventually turned out to vote.
-                        <a href={`${inecFiles}2015/04/summary-of-results.pdf`}>Source
-                        </a>
+                        <a href={`${inecFiles}2015/04/summary-of-results.pdf`} target="_blank">Source</a>
                     </p>
                     <p>If <strong>WE</strong> want competent leaders, <strong>WE</strong> have to vote them in.
                         <br/> Are you ready to vote?
