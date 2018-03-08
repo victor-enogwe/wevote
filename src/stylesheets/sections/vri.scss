@@ -25,7 +25,7 @@
   }
 
 
-  & > div.steps {
+  & > div[style="width: 100%; min-height: 0px; padding: 0px;"] {
     cursor: not-allowed;
 
     a {

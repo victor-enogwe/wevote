@@ -198,10 +198,6 @@ class VoterReadiness extends Component {
             currentStep, errors, rank, recommendations } = this.state;
         return (
             <div className="vri">
-                <div id="fb-root">
-                </div>
-                <div id="twitter-wjs">
-                </div>
                 {section !== RESULT &&
                 <Stepper
 					className="steps"
@@ -237,6 +233,8 @@ class VoterReadiness extends Component {
                 <RegistrationStatus
                     handleChange={this.handleChange}
                     goTo={this.goToNext}
+                    user={this.props.user}
+                    saveNewVri={this.saveNewVri}
                 />}
                 {section === BIO &&
                 <Bio

@@ -5,7 +5,7 @@ import actionTypes from '../../actions/constants';
 
 const { YEAR, BIO } = actionTypes;
 
-const RegistrationStatus = ({ handleChange, goTo }) => (
+const RegistrationStatus = ({ handleChange, goTo, user, saveNewVri }) => (
     <section className="status">
         <div className="question">
             <p>
@@ -29,7 +29,11 @@ const RegistrationStatus = ({ handleChange, goTo }) => (
             <input
                 onClick={(event) => {
                     handleChange(event);
-                    goTo(BIO)
+                    if (user.isAuthenticated){
+                        saveNewVri();
+                    } else {
+                        goTo(BIO);
+                    }
                 }}
                 value="No"
                 type="submit"
