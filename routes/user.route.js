@@ -11,7 +11,10 @@ import {
   updateUserEmail,
   updateUserPhone,
   addUserVri,
-  getUserVri
+  getUserVri,
+  addUserNotifications,
+  getUserNotifications,
+  updateUserNotifications
 } from '../controllers/v1/user.controller';
 
 const userRoutes = Router();
@@ -80,6 +83,22 @@ userRoutes
     '/vri',
     checkRequestValidity,
     getUserVri
+  )
+  .patch(
+    '/notification/status/:code',
+    param('code'),
+    checkRequestValidity,
+    updateUserNotifications
+  )
+  .get(
+    '/notification',
+    checkRequestValidity,
+    getUserNotifications
+  )
+  .get(
+    '/notification/send',
+    checkRequestValidity,
+    addUserNotifications
   );
 
 export default userRoutes;

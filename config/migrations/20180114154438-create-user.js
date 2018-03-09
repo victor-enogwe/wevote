@@ -54,6 +54,12 @@ export default {
           allowNull: false,
           defaultValue: false
         },
+        type: {
+          type: Sequelize.ENUM,
+          values: ['ussd', 'web'],
+          allowNull: false,
+          defaultValue: 'web'
+        },
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE

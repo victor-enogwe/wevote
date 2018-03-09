@@ -99,6 +99,12 @@ export default class User extends Model {
       allowNull: false,
       defaultValue: false
     },
+    type: {
+      type: Sequelize.ENUM,
+      values: ['ussd', 'web'],
+      allowNull: false,
+      defaultValue: 'web'
+    },
   };
 
   /**
@@ -130,13 +136,15 @@ export default class User extends Model {
       Permission,
       Role,
       SocialAccount,
-      Vri
+      Vri,
+      Notification
     } = models;
 
     User.belongsToMany(Permission, { through: 'UserPermissions' });
     User.belongsToMany(Role, { through: 'UserRoles' });
     User.hasMany(SocialAccount, { foreignKey: 'userUuid', sourceKey: 'uuid' });
     User.belongsToMany(Vri, { through: 'UserVris' });
+    User.belongsToMany(Notification, { through: 'UserNotifications' });
   }
 
   /**

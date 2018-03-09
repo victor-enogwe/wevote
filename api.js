@@ -12,6 +12,8 @@ import helmet          from 'helmet';
 import database        from './models/';
 import Routes          from './routes/';
 import Logger          from './config/logger';
+import { addUserNotifications } from './controllers/v1/user.controller';
+import { setInterval } from 'timers';
 
 dotenv.config();
 
@@ -74,6 +76,7 @@ function onError(error) {
  * @returns {null} server process is continous here, so no returns
  */
 function onListening() {
+  setInterval(addUserNotifications, 1000 * 30);
   const serverDetails = server.address();
   const protocol = `http${(server instanceof https.Server ? 's' : '')}`;
   const bind = typeof addr === 'string'

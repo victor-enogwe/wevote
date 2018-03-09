@@ -45,8 +45,8 @@
     "should": "^13.2.0"
   },
   "dependencies": {
-    "axios": "^0.17.1",
     "@sendgrid/mail": "^6.2.1",
+    "axios": "^0.17.1",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-latest-node": "^0.4.0",
@@ -75,6 +75,7 @@
     "sequelize": "^4.28.6",
     "sequelize-cli": "^3.2.0",
     "swagger-ui-express": "^2.0.14",
+    "underscore": "^1.8.3",
     "winston": "^2.4.0"
   },
   "engines": {

@@ -5,7 +5,7 @@ import {
 } from '../controllers/v1/auth.controller';
 import { checkRequestValidity } from '../middlewares/validators.middleware';
 import {
-  createVri, updateVri, getVris, updateVris, deleteVris, deleteVri
+  createVri, updateVri, getVris, deleteVris, deleteVri
 } from '../controllers/v1/vri.controller';
 
 const vriRoutes = Router();
@@ -17,12 +17,6 @@ vriRoutes
     query('offset', 'integer >1<50').isInt({ min: 1, max: 50 }).optional(),
     checkRequestValidity,
     getVris
-  )
-  .get(
-    '/fetch/:id',
-    param('id').isInt(),
-    checkRequestValidity,
-    updateVris
   )
   .use(verifyToken, setUser, setRole, isAdminOrSuperUser)
   .post(
