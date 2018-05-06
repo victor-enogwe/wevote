@@ -1,63 +1,68 @@
-const path =  require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const env = require('dotenv')
+const webpack = require('webpack')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-require('dotenv').config();
-const envDefinePlugin = new webpack.DefinePlugin({
-    'process.env.API_URL': JSON.stringify(process.env.API_URL),
-    'process.env.API_URL_LOCAL': JSON.stringify(process.env.API_URL_LOCAL),
-});
+env.config()
+const { NODE_ENV, HOST_NAME } = process.env
+const isDevMode = NODE_ENV === 'development'
 
-module.exports = {
-    devtool: 'inline-source-map',
-    entry: path.join(__dirname, '/src/index'),
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                include: path.join(__dirname, 'src'),
-                use: [
-                    'babel-loader'
-                ]
-            },
-            {
-                test: /\.s*css$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
-
-            },
-            {
-                test: /\.(jpg|png|svg|gif)$/,
-                use: 'url-loader'
-            }
+const config = {
+  mode: NODE_ENV,
+  devtool: 'source-map',
+  entry: './client/index.jsx',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist/public/assets'),
+    publicPath: '/public/assets/'
+  },
+  module: {
+    rules: [
+      {
+        exclude: [/node_modules/, /dist/, /server/],
+        include: path.join(__dirname, 'client'),
+        test: /\.(js|jsx)$/,
+        use: [
+          'babel-loader'
         ]
-    },
-    devServer: {
-        contentBase: path.join(__dirname, "dist"),
-        host: '127.0.0.1',
-        compress: true,
-        port: 9000,
-        historyApiFallback: true,
-    },
-    plugins: [
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.optimize.OccurrenceOrderPlugin(),
-        envDefinePlugin,
-        new HtmlWebpackPlugin({
-            template: 'src/index.html',
-        })
-    ],
-    resolve: {
-        extensions: ['.js', '.jsx']
-    },
-    node: {
-        fs: 'empty',
-        net: 'empty',
-        dns: 'empty'
-    }
-};
+      },
+      {
+        test: /\.s*css$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(jpg|png|svg|gif|ico)$/,
+        use: 'url-loader'
+      }
+    ]
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      API_URL: JSON.stringify(`${HOST_NAME}/api/v1/`),
+      HOST_NAME: JSON.stringify(`${HOST_NAME}`),
+      NODE_ENV: JSON.stringify(`${NODE_ENV}`)
+    }),
+    new HtmlWebpackPlugin({
+      title: 'FCC PINTEREST',
+      template: './server/public/index.html',
+      filename: path.resolve(__dirname, 'dist/public/index.html')
+    })
+  ],
+
+  resolve: { extensions: ['.js', '.jsx'] }
+}
+
+if (isDevMode) {
+  config.entry = [
+    config.entry,
+    'webpack-hot-middleware/client?reload=true&quiet=true'
+  ]
+  config.plugins = [
+    ...config.plugins,
+    new webpack.HotModuleReplacementPlugin()
+    // new BundleAnalyzerPlugin()
+  ]
+}
+
+module.exports = config
