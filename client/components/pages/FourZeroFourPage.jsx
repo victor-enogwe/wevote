@@ -5,9 +5,8 @@ import withStyles from 'material-ui/styles/withStyles'
 const styles = theme => ({
   page: {
     backgroundColor: theme.palette.primary.main,
-    background: `url('https://www.osustech.edu.ng/staff/images/error.jpg') center center no-repeat`,
     backgroundSize: 'contain',
-    height: 'calc(100vh - 80px)',
+    height: 'calc(80vh -16px)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

@@ -16,11 +16,25 @@ const optionsSchema = new Schema({
       validator: value => /\w{0,255}/.test(value),
       message: 'option title must be string between 0 and 255 characters'
     }],
-    index: true
+    index: false
+  },
+  nextQuestionId: {
+    type: Number,
+    required: true
   }
 }, { _id: false })
 const questionSchema = new Schema({
+  questionId: {
+    type: Number,
+    required: true,
+    unique: true
+  },
   question: { type: String, index: true, match: /\w{0,255}/, required: true },
+  inputType: {
+    type: String,
+    enum: ['text', 'option', 'select', 'date', 'none'],
+    required: true
+  },
   options: {
     type: [optionsSchema],
     validate: [{
@@ -32,17 +46,7 @@ const questionSchema = new Schema({
       },
       message: 'options for this question must be unique'
     }],
-    required: true
-  },
-  answer: {
-    type: String,
-    validate: [{
-      validator (value) {
-        return this.options.map(option => option.title).includes(value)
-      },
-      message: 'answer must be an option of this question'
-    }],
-    required: true
+    index: false
   },
   score: {
     type: Number,
@@ -50,20 +54,50 @@ const questionSchema = new Schema({
       validator: value => value >= 0,
       message: 'please enter a positive score'
     }],
-    required: true,
     default: 0
+  },
+  nextQuestionId: {
+    type: Number,
+    required: true
+  },
+  externalData: {
+    type: String
   }
 })
 
 const subQuestionsSchema = questionSchema.clone()
+const subOptionsSchema = optionsSchema.clone()
 subQuestionsSchema.remove('_id')
+subQuestionsSchema.remove('questionId')
+subQuestionsSchema.remove('nextQuestionId')
+subOptionsSchema.remove('nextQuestionId')
+subQuestionsSchema.add({
+  inputType: {
+    type: String,
+    enum: ['text', 'option', 'select', 'date'],
+    required: true
+  },
+  options: {
+    type: [subOptionsSchema],
+    validate: [{
+      validator (value) {
+        const options = value.map(option => option.title)
+        const optionSet = new Set(options)
+
+        return optionSet.size === options.length
+      },
+      message: 'options for this question must be unique'
+    }],
+    index: false
+  }
+})
 questionSchema.add({
   subQuestions: {
     type: [subQuestionsSchema],
     validate: [
       {
-        validator: value => value.length <= 4,
-        message: 'no more than 4 sub-questions can be added'
+        validator: value => value.length <= 10,
+        message: 'no more than 10 sub-questions can be added'
       },
       {
         validator (value) {
@@ -74,7 +108,8 @@ questionSchema.add({
         },
         message: 'sub-questions must be unique'
       }
-    ]
+    ],
+    index: false
   }
 })
 

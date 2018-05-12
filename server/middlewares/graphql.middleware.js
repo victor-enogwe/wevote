@@ -1,10 +1,21 @@
 import { GraphQLError } from 'graphql'
+import { User } from '../models'
 
 export function modifyResolver (resolver, callback) {
   return {
     ...resolver,
     async resolve (...resolveParams) {
       const [ source, args, context, info ] = resolveParams
+
+      if (context.user._id) {
+        const { roleId: { title } } = await User.findById(context.user._id)
+          .populate('roleId')
+        context.user.roleDetails = { title }
+
+        if (info.fieldName === 'UserFindById' && args._id === 'current') {
+          args._id = context.user._id
+        }
+      }
       if (callback && typeof callback === 'function') {
         return callback(args, info.fieldName, resolver.resolve
           .bind(null, { source, args, context, info }), context)
@@ -69,9 +80,9 @@ export function grantAccessAdmin (...args) {
   const { user } = context
   const [field, operation] = name.match(/[A-Z][a-z]+/g)
 
-  if (user.roleDetails.title !== 'ADMIN') {
+  if (!user.roleDetails || user.roleDetails.title !== 'ADMIN') {
     throw new GraphQLError(`you  dont have permission to ${operation
-      .toLowerCase()} this ${field.toLowerCase()}`)
+      .toLowerCase()} ${field.toLowerCase()}`)
   }
 
   return resolver()
@@ -80,12 +91,18 @@ export function grantAccessAdmin (...args) {
 export function grantAccessAdminOrOwner (...args) {
   const [arg, name, resolver, context] = args
   const { user } = context
-  const _id = arg.record ? arg.record._id : arg._id
   const [field, operation] = name.match(/[A-Z][a-z]+/g)
 
-  if (user.roleDetails.title !== 'ADMIN' && user._id !== _id) {
+  if (!user.roleDetails) {
     throw new GraphQLError(`you  dont have permission to ${operation
-      .toLowerCase()} this ${field.toLowerCase()}`)
+      .toLowerCase()} ${field.toLowerCase()}`)
+  }
+
+  const admin = user.roleDetails.title === 'ADMIN'
+  const owner = (arg._id || arg.record._id || arg.record.creatorId) === user._id
+  if (!(admin || owner)) {
+    throw new GraphQLError(`you  dont have permission to ${operation
+      .toLowerCase()} ${field.toLowerCase()}`)
   }
 
   return resolver()
@@ -96,9 +113,9 @@ export function grantAccessUser (...args) {
   const { user } = context
   const [field, operation] = name.match(/[A-Z][a-z]+/g)
 
-  if (!user._id) {
+  if (!user.roleDetails) {
     throw new GraphQLError(`you  dont have permission to ${operation
-      .toLowerCase()} this ${field.toLowerCase()}`)
+      .toLowerCase()} ${field.toLowerCase()}`)
   }
 
   return resolver()
@@ -107,12 +124,12 @@ export function grantAccessUser (...args) {
 export function grantAccessOwner (...args) {
   const [arg, name, resolver, context] = args
   const { user } = context
-  const _id = arg.record ? arg.record._id : arg._id
   const [field, operation] = name.match(/[A-Z][a-z]+/g)
+  const owner = (arg.id || arg.record._id || arg.record.creatorId) === user._id
 
-  if (user._id !== _id) {
+  if (!owner && user.roleDetails) {
     throw new GraphQLError(`you  dont have permission to ${operation
-      .toLowerCase()} this ${field.toLowerCase()}`)
+      .toLowerCase()} ${field.toLowerCase()}`)
   }
 
   return resolver()

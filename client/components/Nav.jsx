@@ -7,6 +7,7 @@ import Loader from 'react-loader-advanced'
 import compose from 'recompose/compose'
 import Hidden from 'material-ui/Hidden'
 import withWidth from 'material-ui/utils/withWidth'
+import { withApollo } from 'react-apollo'
 import {
   AppBar,
   Avatar,
@@ -24,6 +25,7 @@ import MenuIcon from 'material-ui-icons/Menu'
 import Facebook from 'material-ui-next-community-icons/icons/facebook-box'
 import AccountCircle from 'material-ui-icons/AccountCircle'
 import BookIcon from 'material-ui-icons/LibraryBooks'
+import { navStyles } from '../data/styles'
 
 export const UserAvatar = (props) => {
   const style = props.style || {
@@ -54,49 +56,10 @@ class Nav extends Component {
   state = {
     anchorEl: null
   }
-  static styles = {
-    flex: {
-      flex: 1
-    },
-    extra: {
-      display: 'flex',
-      position: 'relative',
-      'align-items': 'center'
-    },
-    rightIcon: {
-      color: '#ffffff',
-      marginLeft: 10
-    },
-    links: {
-      'text-decoration': 'none',
-      color: 'inherit'
-    },
-    navspan: {
-      color: '#ffffff'
-    },
-    displayname: {
-      color: '#ffffff',
-      'margin-right': '20px',
-      'font-family': '"Roboto", "Helvetica", "Arial", sans-serif',
-      'font-size': '0.875rem',
-      'font-weight': '400',
-      'line-height': '1.46429em'
-    },
-    menuItem: {
-      marginRight: 20
-    },
-    menuIcon: {
-      marginRight: 20
-    },
-    menuAppbar: {
-      top: 55
-    }
-  }
   static LoginLink = props => <a href={'/api/v1/auth/facebook'} {...props} />
   static propTypes = {
     title: PropTypes.string,
     classes: PropTypes.object.isRequired,
-    auth: PropTypes.bool.isRequired,
     logout: PropTypes.func.isRequired,
     user: PropTypes.shape(),
     history: PropTypes.shape().isRequired
@@ -119,7 +82,8 @@ class Nav extends Component {
   };
 
   render () {
-    const { user, classes, title, auth, logout, history } = this.props
+    const { user, classes, title, logout, history } = this.props
+    const auth = user && user.emails !== null
     const { anchorEl } = this.state
     const open = Boolean(anchorEl)
     const LogoutToggle = () => <FormGroup>
@@ -127,7 +91,7 @@ class Nav extends Component {
         control={
           <Switch
             checked={auth}
-            onChange={logout.bind(this)}
+            onChange={logout.bind(null, true, '/')}
             aria-label='LoginSwitch'
           />
         }
@@ -146,7 +110,7 @@ class Nav extends Component {
     )
 
     return (
-      <AppBar position='static'>
+      <AppBar position='static' className={classes.appBar}>
         <Toolbar>
           <Typography variant='title' color='inherit' className={classes.flex}>
             <Link className={classes.links} to='/'>{title} </Link>
@@ -191,14 +155,20 @@ class Nav extends Component {
             onClose={this.handleCloseMenu}
           >
             { auth && history.location.pathname !== '/profile'
-              ? <MenuItem onClick={this.handleCloseMenu.bind(null, '/profile')} className={classes.menuItem}>
+              ? <MenuItem
+                onClick={this.handleCloseMenu.bind(null, '/profile')}
+                className={classes.menuItem}
+              >
                 <AccountCircle className={classes.menuIcon} /> View Profile
               </MenuItem>
               : null
             }
 
-            <MenuItem onClick={this.handleCloseMenu.bind(null, '/books')} className={classes.menuItem}>
-              <BookIcon className={classes.menuIcon} /> Find Books
+            <MenuItem
+              onClick={this.handleCloseMenu.bind(null, '/news')}
+              className={classes.menuItem}
+            >
+              <BookIcon className={classes.menuIcon} /> Election News
             </MenuItem>
           </Menu>
         </Toolbar>
@@ -207,4 +177,6 @@ class Nav extends Component {
   }
 }
 
-export default compose(withStyles(Nav.styles), withWidth(), withRouter)(Nav)
+export default compose(
+  withApollo, withStyles(navStyles), withWidth(), withRouter
+)(Nav)

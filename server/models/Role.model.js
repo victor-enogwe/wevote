@@ -6,7 +6,7 @@ import { modifyResolver, grantAccessAdmin as admin } from '../middlewares'
 const Schema = mongoose.Schema
 const roleSchema = new Schema({
   title: { type: String, required: true, unique: true }
-})
+}, { autoIndex: false })
 
 const model = mongoose.model('Role', roleSchema)
 const modelTC = composeWithMongoose(model)

@@ -1,7 +1,19 @@
-export function updateAuthStatus (_, { token, _id }, { cache }) {
+import { GET_CURRENT_USER } from './queries'
+import { persistor } from '../index'
+
+function updateResponse (responseMap, record) {
+  const index = responseMap
+    .findIndex(value => value.questionId === record.questionId)
+
+  index !== -1 ? (responseMap[index] = record) : responseMap.push(record)
+
+  return responseMap
+}
+
+export function UpdateAuthStatus (_, { token, _id }, { cache }) {
   const data = {
-    user: {
-      __typename: 'User',
+    Auth: {
+      __typename: 'Auth',
       token,
       _id
     }
@@ -12,17 +24,28 @@ export function updateAuthStatus (_, { token, _id }, { cache }) {
   return data
 }
 
-export function updateAppErrorStatus (_, { error, message, statusCode }, { cache }) {
+export async function AddUpdateResponse (_, { record }, { cache }) {
+  record = {
+    ...record,
+    subResponses: record.subResponses ? record.subResponses.map(response => ({
+      ...response, __typename: 'ResponseSubResponses'
+    })) : [],
+    __typename: 'Response'
+  }
+  const query = cache.readQuery({
+    query: GET_CURRENT_USER, variables: { _id: record.creatorId }
+  })
+  const { UserFindById, UserFindById: { responseMap } } = query
   const data = {
-    error: {
-      __typename: 'AppError',
-      error,
-      message,
-      statusCode
+    ...query,
+    UserFindById: {
+      ...UserFindById, responseMap: updateResponse(responseMap, record)
     }
   }
 
-  cache.writeData({ data })
+  cache.writeQuery({
+    query: GET_CURRENT_USER, variables: { _id: record.creatorId }, data
+  })
 
   return data
 }

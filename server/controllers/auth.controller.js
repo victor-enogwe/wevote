@@ -6,16 +6,12 @@ const { JWT_SECRET } = process.env
 export async function assignRole (req, res, next) {
   try {
     if (!req.user.roleId) {
-      const { doc: { _id: roleId, title } } = await Role
+      const { doc: { _id: roleId } } = await Role
         .findOrCreate({ title: 'USER' })
       await req.user.update({ roleId })
-      req.user.roleDetails = { title }
-    } else {
-      const { title } = await Role.findById(req.user.roleId)
-      req.user.roleDetails = { title }
-
-      return next()
     }
+
+    return next()
   } catch (error) {
     return res.status(500).json({ status: 'error', message: error.message })
   }
@@ -32,9 +28,9 @@ export async function assignRole (req, res, next) {
  */
 export function generateJwt (req, res) {
   try {
-    const { _id, roleDetails } = req.user
+    const { _id } = req.user
     const token = jsonwebtoken
-      .sign({ _id, roleDetails }, JWT_SECRET, { expiresIn: '1h' })
+      .sign({ _id }, JWT_SECRET, { expiresIn: '1h' })
 
     return res.redirect(`/login?token=${token}`)
   } catch (error) {
@@ -65,7 +61,7 @@ export function getUser (req, res, next) {
       return res.status(statusCode).json({ status, message })
     }
 
-    req.user = { _id: null, roleDetails: { title: 'GUEST' } }
+    req.user = { _id: null }
 
     return next()
   }

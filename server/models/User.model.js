@@ -14,7 +14,7 @@ const addressSchema = new Schema({
   street: { type: String, index: true },
   city: { type: String, index: true },
   state: { type: String, index: true }
-})
+}, { autoIndex: false })
 const userSchema = new Schema({
   socialId: {
     type: String,
@@ -90,7 +90,7 @@ export default {
   modelTC,
   schema,
   addRelations (modelTCS) {
-    modelTC.addRelation('userResponseMap', {
+    modelTC.addRelation('responseMap', {
       description: 'the user response map',
       resolver: modelTCS.Response.getResolver('findMany'),
       args: {

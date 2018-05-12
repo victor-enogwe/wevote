@@ -1,20 +1,54 @@
 export const typeDefs = `
-  type user {
+  type Auth {
     token: String!
     _id: String!
   }
-  type error {
-    error: Boolean!
-    message String!
-    statusCode: Number!
+
+  type UserEmails {
+    _id: String!
+    value: String!
   }
+
+  type UserPhotos {
+    _id: String!
+    value: String!
+  }
+
+  type UserAddress {
+    street: String!
+    city: String!,
+    state: String!
+  }
+
+  type ResponseSubResponses {
+    question: String!
+    answer: String!
+  }
+
+  type Response {
+    questionId: Number!
+    creatorId: String!
+    answer: String!
+    subResponses: [ResponseSubResponses]
+  }
+
+  type User {
+    _id: String
+    displayName: String
+    phone: String
+    emails: [UserEmails]
+    photos: [UserPhotos]
+    address:
+    responseMap: [Response]
+  }
+
   type Mutation {
-    updateAuthStatus(token: String!, _id: String!): user
-    updateAppErrorStatus(error: Boolean!, message: String!, statusCode: Number!): error
+    UpdateAuthStatus(token: String!, _id: String!): Auth
+    AddUpdateResponse(record: Response)
   }
+
   type Query {
-    title: String!
-    user: user!
-    error: error!
+    Auth: Auth
+    UserFindById(_id: String!): User
   }
 `

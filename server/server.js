@@ -111,7 +111,10 @@ app.use('/graphql', getUser, (req, res) => graphqlHTTP({
     user: req.user,
     loaders: {
       questionLoader: new DataLoader(keys => Question.find({
-        _id: { $in: keys }
+        $or: [
+          { questionId: { $in: keys.filter(key => typeof key === 'number') } },
+          { _id: { $in: keys.filter(key => typeof key !== 'number') } }
+        ]
       }).exec())
     }
   },
@@ -144,7 +147,7 @@ com" />
         <meta property="og:image" content="https://raw.githubusercontent.com/ig\
 natiusukwuoma/wevote-client/master/src/assets/nigeria-bgrd.jpg" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=\
-Roboto:300,400,500">
+Roboto:300,400,500|Material+Icons">
       </head>
       <body>
         <div id="vote"></div>

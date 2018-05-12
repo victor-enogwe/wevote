@@ -1,14 +1,17 @@
 export const defaultState = {
-  title: 'FCC LIB',
-  user: {
+  Auth: {
     token: null,
-    _id: null,
-    __typename: 'User'
+    _id: 'guest',
+    __typename: 'Auth'
   },
-  error: {
-    error: false,
-    message: '',
-    statusCode: 200,
-    __typename: 'AppError'
+  [`UserFindById({"_id":"guest"})`]: {
+    _id: 'guest',
+    displayName: null,
+    phone: null,
+    emails: null,
+    photos: null,
+    address: null,
+    responseMap: [],
+    __typename: 'User'
   }
 }

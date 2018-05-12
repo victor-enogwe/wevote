@@ -1,0 +1,102 @@
+{
+  "Questions": [
+    {
+      "questionId": "1",
+      "inputType": "option",
+      "question": "Which Voters Card do you have?",
+      "options": [
+        {
+           "title": "Permanent Voters Card",
+           "nextQuestionId": "2"
+        },
+        {
+          "title": "Temporary Voters Card",
+          "nextQuestionId": "4"
+        },
+        {
+          "title": "I lost my Card",
+          "nextQuestionId": "4"
+        },
+        {
+          "title": "None",
+          "nextQuestionId": "5"
+        }
+      ]
+    },
+    {
+      "questionId": "2",
+      "inputType": "option",
+      "question": "How close is your registration center to your residence?",
+      "options": [
+        {
+          "title": "Within my City",
+          "nextQuestionId": "3"
+        },
+        {
+          "title": "Outside my City",
+          "nextQuestionId": "3"
+        }
+      ]
+    },
+    {
+      "questionId": "3",
+      "inputType": "none",
+      "question": "Please tell us a little bit about yourself",
+      "subQuestions": [
+        {
+          "inputType": "text",
+          "question": "what is your firstname?"
+        },
+        {
+          "inputType": "text",
+          "question": "what is your surname"
+        },
+        {
+          "inputType": "select",
+          "externalData": "lga",
+          "question": "what is your state of residence"
+        },
+        {
+          "inputType": "select",
+          "question": "Tell us your sex",
+          "options": [
+            {
+              "title": "Male"
+            },
+            {
+              "title": "Female"
+            },
+            {
+              "title": "Other"
+            }
+          ]
+        },
+        {
+          "inputType": "date",
+          "question": "when where you born"
+        }
+      ]
+    },
+    {
+      "questionId": "4",
+      "inputType": "date",
+      "question": "When did you register?",
+      "nextQuestionId": "2"
+    },
+    {
+      "questionId": "5",
+      "question": "Have you registered as a voter before?",
+      "inputType": "option",
+      "options": [
+        {
+          "title": "Yes",
+          "nextQuestionId": "4"
+        },
+        {
+          "title": "No",
+          "nextQuestionId": "3"
+        }
+      ]
+    }
+  ]
+}

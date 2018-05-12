@@ -1,15 +1,13 @@
 import mongoose from 'mongoose'
-import { GraphQLError } from 'graphql'
 import { composeWithMongoose } from 'graphql-compose-mongoose/node8'
 import { schemaComposer } from 'graphql-compose'
 import {
   modifyResolver,
   setGlobalResolvers,
-  grantAccessAdminOrUser as userAdmin,
+  grantAccessAdminOrOwner as userAdmin,
   grantAccessAdmin as admin,
   grantAccessOwner as owner
 } from '../middlewares'
-import { modelTC as questionModelTC } from './Question.model'
 
 function extractOptions (questions) {
   return questions.reduce((a, b) => a.options.concat(...b.options))
@@ -20,9 +18,7 @@ const Schema = mongoose.Schema
 const userSubResponseSchema = new Schema({
   question: {
     type: String,
-    required: [
-      true, 'sub-question question required'
-    ],
+    required: [true, 'sub-question question required'],
     validate: [{
       validator (value) {
         const doc = this.parent().questionDetails
@@ -38,52 +34,46 @@ const userSubResponseSchema = new Schema({
   },
   answer: {
     type: String,
-    required: [
-      true, 'sub-question answer required'
-    ],
     validate: [{
       async validator (value) {
         const doc = this.parent().questionDetails
-        if (!doc || !doc.subQuestions) {
+        if (!doc || !doc.subQuestions || !doc.subQuestions.options) {
           return false
         }
         return extractOptions(doc.subQuestions)
           .includes(value)
       },
       message: 'answer is not part of this questions options'
-    }]
+    }],
+    required: [true, 'sub-question answer required']
   }
-}, { _id: false })
+}, { _id: false, autoIndex: false })
 const userResponseSchema = new Schema({
   creatorId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: [
-      true, 'creator id required'
-    ]
+    required: [true, 'creator id required']
   },
   questionId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Question',
+    type: Number,
     unique: true,
-    required: [
-      true, 'question id required'
-    ],
+    required: [true, 'question id required'],
     validate: [{
       validator (value) {
         return this.questionDetails
-          ? String(this.questionDetails._id) === String(value) : false
+          ? this.questionDetails.questionId === value : false
       },
       message: 'question does not exist'
     }]
   },
   answer: {
     type: String,
-    required: [
-      true, 'answer required'
-    ],
+    required: [true, 'answer required'],
     validate: [{
       validator (value) {
+        if (!this.options) {
+          return false
+        }
         return this.questionDetails
           ? this.questionDetails.options.map(option => option.title)
             .includes(value) : false
@@ -97,8 +87,8 @@ userResponseSchema.add({
   subResponses: {
     type: [userSubResponseSchema],
     validate: [{
-      validator: value => value.length <= 4,
-      message: 'user sub-response cannot be more than 4'
+      validator: value => value.length === this.questionDetails.options.length,
+      message: `all and only sub-questions must and can be answered`
     }]
   }
 })
@@ -116,7 +106,7 @@ const modelTC = composeWithMongoose(model)
 setGlobalResolvers(model, modelTC, 'Response')
 
 schemaComposer.rootQuery().addFields({
-  ResponseFindOne: modifyResolver(modelTC.getResolver('findOne'), admin),
+  ResponseFindOne: modifyResolver(modelTC.getResolver('findOne'), userAdmin),
   ResponseFindById: modifyResolver(modelTC.getResolver('findById'), userAdmin),
   ResponseFindByIds: modifyResolver(modelTC.getResolver('findByIds'), admin),
   ResponseFindMany: modifyResolver(modelTC.getResolver('findMany'), admin),
@@ -150,47 +140,7 @@ export default {
       question: {
         type: 'String',
         description: 'the question title',
-        resolve: (source, args, context) => {
-          if (!source.questionId) {
-            return new GraphQLError(
-              'this question field requires the questionId field in query'
-            )
-          }
-
-          return context.loaders.questionLoader
-            .load(source.questionId)
-            .then(question => question.question)
-        }
-      },
-      score: {
-        type: 'String',
-        description: 'the question overall score',
-        resolve: (source, args, context) => {
-          if (!source.questionId) {
-            return new GraphQLError(
-              'the score field requires the questionId field in query'
-            )
-          }
-
-          return context.loaders.questionLoader
-            .load(source.questionId)
-            .then(question => question.score)
-        }
-      },
-      questionDetails: {
-        type: questionModelTC.getType(),
-        description: 'the question details',
-        resolve: (source, args, context) => {
-          if (!source.questionId) {
-            return new GraphQLError(
-              'this questionDetails field requires questionId field in query'
-            )
-          }
-
-          return context.loaders.questionLoader
-            .load(source.questionId)
-            .then(question => question)
-        }
+        resolve: source => source._doc.question
       }
     })
   }
