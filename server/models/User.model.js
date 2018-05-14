@@ -49,6 +49,10 @@ const userSchema = new Schema({
   roleId: {
     type: Schema.Types.ObjectId,
     ref: 'Role'
+  },
+  vriTaken: {
+    type: Boolean,
+    default: false
   }
 })
 

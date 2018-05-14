@@ -26,7 +26,9 @@ export const GET_CURRENT_USER = gql`
         city
         state
       }
+      vriTaken
       responseMap {
+        question
         creatorId
         questionId
         answer

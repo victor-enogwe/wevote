@@ -28,7 +28,7 @@ export const typeDefs = `
   type Response {
     questionId: Number!
     creatorId: String!
-    answer: String!
+    answer: String
     subResponses: [ResponseSubResponses]
   }
 
@@ -38,7 +38,8 @@ export const typeDefs = `
     phone: String
     emails: [UserEmails]
     photos: [UserPhotos]
-    address:
+    address: [UserAddress],
+    vriTaken: Boolean!
     responseMap: [Response]
   }
 

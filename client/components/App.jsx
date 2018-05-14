@@ -25,11 +25,14 @@ class App extends Component {
     if (redirect) this.props.history.replace(path)
     await this.props.client.cache.reset()
     await stateLink.writeDefaults()
-    this.props.setAuthState({ _id: 'guest', skipUserQuery: true })
+    this.props.setAuthState({ creatorId: 'guest', skipUserQuery: true })
   }
 
   render () {
     let { loading, user, error, setAuthState, fetchUser, classes } = this.props
+    const { _id: creatorId, responseMap } = this.props.user || {
+      _id: 'guest', responseMap: []
+    }
 
     return <Loader show={loading} message='please wait'>
       <Nav
@@ -53,7 +56,10 @@ class App extends Component {
           <Route
             exact path='/vri'
             render={routerProps => <QuestionsPage
-              {...routerProps} {...this.props}
+              {...routerProps}
+              creatorId={creatorId}
+              vriTaken={user.vriTaken}
+              responseMap={responseMap}
             />}
           />
           <Route component={FourZeroFourPage} />

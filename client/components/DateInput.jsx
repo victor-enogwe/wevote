@@ -12,38 +12,34 @@ import { ADD_UPDATE_RESPONSE } from '../store/mutations'
 import { dateStyles } from '../data/styles'
 
 class DateInput extends PureComponent {
-  state = { date: this.props.selected ? this.props.selected.answer : moment() }
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    question: PropTypes.object.isRequired,
-    selected: PropTypes.object,
-    _id: PropTypes.string.isRequired,
-    updateStepValidity: PropTypes.func.isRequired,
-    subField: PropTypes.bool
+    questionId: PropTypes.number.isRequired,
+    question: PropTypes.string.isRequired,
+    creatorId: PropTypes.string.isRequired,
+    currentAnswer: PropTypes.string,
+    subQuestionField: PropTypes.bool,
+    updateSubQuestion: PropTypes.func
   }
 
   static defaultProps = {
-    subField: false
+    subQuestionField: false
   }
 
   handleChange = (date, updateResponse) => {
-    const answer = date.format('DD/MM/YYYY')
-    const { question: { questionId, question } } = this.props
-    const record = { questionId, answer, creatorId: this.props._id }
+    const defaultAnswer = this.props.currentAnswer || moment()
+    const answer = date ? date.format('DD/MM/YYYY') : defaultAnswer
+    const {
+      question, questionId, subQuestionField, updateSubQuestion, creatorId
+    } = this.props
+    const dateValid = date ? date.isValid() : null
+    const record = { questionId, question, answer, creatorId }
 
-    if (date.isValid()) {
-      this.setState({ date: moment(answer, 'DD/MM/YYYY') })
-
-      if (!this.props.subField) {
-        updateResponse({ variables: { record } })
-      }
+    if (dateValid && !subQuestionField) {
+      updateResponse({ variables: { record } })
+    } else if (dateValid && subQuestionField) {
+      updateSubQuestion(record)
     }
-
-    let selected = date.isValid() ? {
-      ...this.props.selected, ...record, answer, question
-    } : null
-
-    return this.props.updateStepValidity(selected)
   }
 
   render () {
@@ -63,14 +59,15 @@ class DateInput extends PureComponent {
                   clearable
                   autoOk
                   disableFuture
-                  name={question.question.replace(' ', '-')}
+                  name={question.replace(' ', '-')}
                   format='DD/MM/YYYY'
                   placeholder='DD/MM/YYYY'
                   mask={value => (value
-                    ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])}
+                    ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]
+                    : [])}
                   minDate={moment('01/01/1900', 'DD/MM/YYYY')}
                   maxDate={moment()}
-                  value={moment(this.state.date, 'DD/MM/YYYY')}
+                  value={moment(this.props.currentAnswer || null, 'DD/MM/YYYY')}
                   animateYearScrolling
                   className={classes.textField}
                   label={question.question}

@@ -11,6 +11,7 @@ export const defaultState = {
     emails: null,
     photos: null,
     address: null,
+    vriTaken: false,
     responseMap: [],
     __typename: 'User'
   }

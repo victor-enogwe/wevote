@@ -68,7 +68,6 @@ const userResponseSchema = new Schema({
   },
   answer: {
     type: String,
-    required: [true, 'answer required'],
     validate: [{
       validator (value) {
         if (!this.options) {

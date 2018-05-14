@@ -30,7 +30,6 @@ export const questionStyles = theme => ({
     minHeight: '100%'
   },
   title: {
-    backgroundColor: theme.palette.background.paper,
     textTransform: 'uppercase',
     width: '100%',
     padding: theme.spacing.unit,
@@ -42,9 +41,21 @@ export const questionStyles = theme => ({
   },
   question: {
     backgroundColor: theme.palette.background.paper,
-    margin: theme.spacing.unit
+    width: '100%',
+    textAlign: 'center',
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    padding: theme.spacing.unit
   }
 })
+
+export const recommendationsStyles = theme => {
+  const question = questionStyles(theme)
+  return {
+    grid: question.grid,
+    recomendationGrid: question.questionGrid
+  }
+}
 
 export const questionNavStyles = theme => ({
   stepper: {
@@ -226,7 +237,7 @@ export const selectInputStyles = theme => ({
       left: 0,
       top: `calc(100% + ${theme.spacing.unit}px)`,
       width: '100%',
-      zIndex: 2,
+      zIndex: 999999,
       maxHeight: ITEM_HEIGHT * 4.5
     },
     '.Select.is-focused:not(.is-open) > .Select-control': {

@@ -1,5 +1,4 @@
 import { GET_CURRENT_USER } from './queries'
-import { persistor } from '../index'
 
 function updateResponse (responseMap, record) {
   const index = responseMap

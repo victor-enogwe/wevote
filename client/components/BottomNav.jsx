@@ -33,7 +33,7 @@ class BottomNav extends React.Component {
         showLabels
         className={classes.root}
       >
-        {user ? <BottomNavigationAction label='Election' icon={<AccountCircle />} /> : null}
+        {user ? <BottomNavigationAction label='Elections' icon={<AccountCircle />} /> : null}
         {user ? <BottomNavigationAction label='Notifications' icon={<BookIcon />} /> : null}
         {user ? <BottomNavigationAction label='Social' icon={<TradeIcon />} /> : null}
       </BottomNavigation>

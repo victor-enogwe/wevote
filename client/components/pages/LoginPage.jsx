@@ -13,9 +13,9 @@ export default class Login extends Component {
     this.storeUser()
   }
 
-  storeUser (updateAuth, _id) {
+  storeUser (updateAuth, creatorId) {
     return updateAuth()
-      .then(() => this.props.setAuthState({ _id, skipUserQuery: false }))
+      .then(() => this.props.setAuthState({ creatorId, skipUserQuery: false }))
       .then(() => this.props.setAuthState({ skipUserQuery: true }))
       .then(() => this.props.history.push('/'))
       .catch(() => this.props.history.push('/'))

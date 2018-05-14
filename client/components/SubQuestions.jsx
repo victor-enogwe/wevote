@@ -8,133 +8,75 @@ import { ADD_UPDATE_RESPONSE } from '../store/mutations'
 import Paper from 'material-ui/Paper'
 import Grid from 'material-ui/Grid'
 import TextInput from './TextInput'
-import Options from './Options'
+import OptionsInput from './OptionsInput'
 import DateInput from './DateInput'
 import SelectInput from './SelectInput'
 import { subQuestionStyles } from '../data/styles'
-import states from '../data/States.js'
-
-const formatStates = (data) => data.reduce((a, b) => ({
-  ...a, state: { locals: [...a.state.locals, ...b.state.locals] }
-})).state.locals.map(value => ({
-  value: value.name.toLowerCase(), label: value.name.toLowerCase()
-}))
+import { questionInterface, subResponseMapInterface } from '../data/interfaces'
 
 class SubQuestions extends React.Component {
-  state = {
-    activeStep: 0,
-    stepAnswers: {
-      0: this.getSelectedAnswer()
-    }
-  };
+  state = { activeStep: 0 };
 
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    question: PropTypes.object.isRequired,
-    selected: PropTypes.object,
-    _id: PropTypes.string.isRequired,
-    updateStepValidity: PropTypes.func.isRequired
+    activeQuestion: questionInterface(false, false, true),
+    currentAnswers: PropTypes.arrayOf(subResponseMapInterface),
+    creatorId: PropTypes.string.isRequired
   }
 
-  getSelectedAnswer (value) {
-    const activeStep = this.state ? this.state.activeStep : 0
-    const { question, options } = value ||
-      this.props.question.subQuestions[activeStep]
-    let selected = null
+  formatCurrentAnswers = currentAnswers => {
+    return !currentAnswers ? [] : currentAnswers
+      .reduce((a, b, index) => {
+        return b ? ({ ...a, [b.question]: b.answer }) : a
+      }, {})
+  }
 
-    if (options.length > 0) {
-      const option = this.props.selected ? this.props.selected.subResponses
-        .filter(response => response.question === question)[0] : null
-      selected = option ? options
-        .filter(value => value.title === option.answer)[0] : null
+  updateSubQuestion = async (index, updateAnswer, record) => {
+    const {
+      currentAnswers,
+      creatorId,
+      activeQuestion: { questionId, question }
+    } = this.props
+    const subResponses = currentAnswers || []
+    const updateRecord = {
+      questionId, creatorId, question, subResponses: [...subResponses]
+    }
+
+    if (record) {
+      updateRecord.subResponses[index] = {
+        question: record.question, answer: record.answer
+      }
     } else {
-      selected = this.props.selected ? this.props.selected.subResponses
-        .filter(response => response.question === question)[0] : null
+      updateRecord.subResponses[index] = record
     }
 
-    return selected
+    updateAnswer({ variables: { record: { ...updateRecord, answer: null } } })
   }
 
-  handleNext = () => this.setState(prevState => {
-    const update = {
-      ...prevState,
-      activeStep: prevState.activeStep + 1,
-      stepAnswers: {
-        ...prevState.stepAnswers
-      }
-    }
-    let selected = {}
+  handleNext = activeStep => this
+    .setState(prevState => ({ activeStep: activeStep + 1 }))
 
-    if (!prevState.stepAnswers[prevState.activeStep + 1]) {
-      selected = this.getSelectedAnswer(
-        this.props.question.subQuestions[prevState.activeStep + 1]
-      )
-      update.stepAnswers[prevState.activeStep + 1] = selected
-    }
-
-    return update
-  })
-
-  saveStep = (updateResponse) => {
-    const subResponses = Object.keys(this.state.stepAnswers).map(item => {
-      return this.state.stepAnswers[item]
-    })
-    delete subResponses[5]
-    const { question: { questionId } } = this.props
-    const record = {
-      questionId,
-      creatorId: this.props._id,
-      answer: null,
-      subResponses: subResponses.filter(response => response)
-    }
-    updateResponse({ variables: { record } })
-    this.handleNext()
-  }
-
-  handleBack = () => this.setState(prevState => {
-    return ({
-      ...prevState,
-      activeStep: this.state.activeStep - 1
-    })
-  })
-
-  setAnswer = answer => this.setState(prevState => {
-    const update = {
-      ...prevState,
-      stepAnswers: {
-        ...prevState.stepAnswers,
-        [prevState.activeStep]: answer
-      }
-    }
-    let selected = {}
-    if (!prevState.stepAnswers[prevState.activeStep + 1]) {
-      selected = this.getSelectedAnswer(
-        this.props.question.subQuestions[prevState.activeStep + 1]
-      )
-      update.stepAnswers[prevState.activeStep + 1] = selected
-    }
-
-    return update
-  })
+  handleBack = activeStep => this
+    .setState(prevState => ({ activeStep: activeStep - 1 }))
 
   render () {
-    const {
-      classes, question: { subQuestions }, updateStepValidity, _id
-    } = this.props
-    const { activeStep, stepAnswers } = this.state
-    const stepAnswer = stepAnswers[activeStep]
+    const { classes, creatorId, currentAnswers } = this.props
+    const { subQuestions, questionId } = this.props.activeQuestion
+    const { activeStep } = this.state
+    const formattedAnswers = this.formatCurrentAnswers(currentAnswers)
 
     return (
       <Mutation
         mutation={ADD_UPDATE_RESPONSE}
-        children={(updateSubquestion, { data, loading, error }) => {
+        children={(updateAnswer, { data, loading, error }) => {
           return (
             <Paper square elevation={0} className={classes.resetContainer}>
               <Stepper activeStep={activeStep} orientation='vertical'>
                 {subQuestions.map((question, index) => {
-                  const { question: title, externalData } = question
+                  const { question: title, externalData, options } = question
                   const { inputType } = question
+                  const currentAnswer = formattedAnswers[title]
+
                   return (
                     <Step key={index}>
                       <StepLabel>{title}</StepLabel>
@@ -142,70 +84,74 @@ class SubQuestions extends React.Component {
                         <Grid className={classes.subStepContainer}>
                           <Grid item xs={12}>
                             {inputType === 'text' ? <TextInput
-                              question={question}
-                              selected={stepAnswer}
-                              subField
-                              _id={_id}
-                              updateStepValidity={this.setAnswer}
+                              question={title}
+                              currentAnswer={currentAnswer}
+                              creatorId={creatorId}
+                              questionId={questionId}
+                              subQuestionField
+                              updateSubQuestion={this.updateSubQuestion
+                                .bind(null, index, updateAnswer)}
                             /> : null}
 
                             {inputType === 'option'
-                              ? <Options
-                                question={question}
-                                selected={stepAnswer}
-                                subField
-                                _id={_id}
-                                updateStepValidity={this.setAnswer}
+                              ? <OptionsInput
+                                question={title}
+                                questionId={questionId}
+                                subQuestionField
+                                updateSubQuestion={this.updateSubQuestion
+                                  .bind(null, index, updateAnswer)}
+                                currentAnswer={currentAnswer}
+                                creatorId={creatorId}
+                                options={options}
                               />
                               : null }
 
                             {inputType === 'date'
                               ? <DateInput
-                                question={question}
-                                selected={stepAnswer}
-                                subField
-                                _id={_id}
-                                updateStepValidity={this.setAnswer}
+                                question={title}
+                                questionId={questionId}
+                                subQuestionField
+                                updateSubQuestion={this.updateSubQuestion
+                                  .bind(null, index, updateAnswer)}
+                                currentAnswer={currentAnswer}
+                                creatorId={creatorId}
                               />
                               : null}
 
                             {inputType === 'select' && externalData === 'lga'
                               ? <SelectInput
-                                question={question}
-                                selected={stepAnswer}
-                                options={formatStates(states)}
-                                label='Select your local government (the lga you live in)'
-                                subField
-                                _id={_id}
-                                updateStepValidity={this.setAnswer}
+                                question={title}
+                                questionId={questionId}
+                                subQuestionField
+                                updateSubQuestion={this.updateSubQuestion
+                                  .bind(null, index, updateAnswer)}
+                                currentAnswer={currentAnswer}
+                                creatorId={creatorId}
+                                externalData={externalData}
                               />
                               : null}
 
                             <div className={classes.actionsContainer}>
                               <Button
-                                disabled={!stepAnswer}
+                                disabled={!currentAnswer}
                                 variant='raised'
                                 color='primary'
                                 size='small'
-                                onClick={activeStep === subQuestions.length - 1
-                                  ? () => this.saveStep(
-                                    updateSubquestion, updateStepValidity
-                                  )
-                                  : this.handleNext}
+                                onClick={this.handleNext.bind(null, activeStep)}
                                 className={classes.button}
                               >
                                 {
                                   activeStep === subQuestions.length - 1
-                                    ? 'Save Step' : 'Next'
+                                    ? 'Finish' : 'Next'
                                 }
                               </Button>
                               <Button
                                 size='small'
                                 disabled={activeStep === 0}
-                                onClick={this.handleBack}
+                                onClick={this.handleBack.bind(null, activeStep)}
                                 className={classes.button}
                               >
-                        Back
+                                Back
                               </Button>
                             </div>
                           </Grid>

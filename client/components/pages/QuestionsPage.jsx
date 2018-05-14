@@ -6,155 +6,134 @@ import PropTypes from 'prop-types'
 import Loader from 'react-loader-advanced'
 import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
-import { GET_QUESTIONS } from '../../store/queries'
+import { GET_QUESTIONS, GET_CURRENT_USER } from '../../store/queries'
 import SubQuestions from '../SubQuestions'
-import Options from '../Options'
+import OptionsInput from '../OptionsInput'
 import DateInput from '../DateInput'
 import TextInput from '../TextInput'
 import { questionStyles } from '../../data/styles'
 import QuestionsNav from '../QuestionsNav'
 import QuestionsActions from '../QuestionsActions'
+import Recommendations from '../Recommendations'
+import { questionInterface, responseMapInterface } from '../../data/interfaces'
 
+export const formatQuestionAndResponseMap = data => data
+  .reduce((a, b, index) => ({ ...a, [b.questionId]: { ...b, index } }), {})
 class Questions extends Component {
-  state = {
-    question: this.props.questions[0],
-    prevQuestion: null,
-    stepAnswers: {}
-  }
+  state = { activeQuestionId: 1 }
 
   static propTypes = {
     classes: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    _id: PropTypes.string.isRequired
+    questions: PropTypes.arrayOf(questionInterface(false, false, false)),
+    creatorId: PropTypes.string.isRequired,
+    responseMap: responseMapInterface,
+    vriTaken: PropTypes.bool.isRequired
   }
 
-  componentDidMount () {
-    this.setState(prevState => ({
-      ...prevState,
-      stepAnswers: {
-        ...prevState.stepAnswers,
-        [this.state.question.questionId]: this.getSelectedAnswer()
-      }
-    }))
-  }
+  getCurrentAnswer = (questionId, responseMap) => {
+    try {
+      const response = responseMap[questionId]
 
-  getSelectedAnswer (question) {
-    const { questionId, options } = question ||
-      this.state.question
-    let selected = null
-
-    if (options && options.length > 0) {
-      const option = this.props.user ? this.props.user.responseMap
-        .filter(response => response.questionId === questionId)[0] : null
-      selected = option ? options
-        .filter(value => value.title === option.answer)[0] : null
-    } else {
-      selected = this.props.user ? this.props.user.responseMap
-        .filter(response => response.questionId === questionId)[0] : null
+      return response.answer || (response.subResponses.length > 0
+        ? response.subResponses : null)
+    } catch (error) {
+      return null
     }
-
-    return selected
   }
 
-  updateStepValidity = (stepAnswer) => {
-    const { questionId } = this.state.question
+  getNextQuestionId = (activeQuestion, currentAnswer) => {
+    let { nextQuestionId, options } = activeQuestion
+    const option = options && options.filter(
+      option => option.title === currentAnswer
+    )[0]
+    nextQuestionId = option ? option.nextQuestionId : nextQuestionId
+
+    return nextQuestionId
+  }
+
+  stepsFinished = (activeQuestion, currentAnswer) => (!this
+    .getNextQuestionId(activeQuestion, currentAnswer) && Boolean(currentAnswer))
+
+  next = (activeQuestion, currentAnswer, finished) => {
     this.setState(prevState => ({
-      ...prevState,
-      stepAnswers: { ...prevState.stepAnswers, [questionId]: stepAnswer }
+      activeQuestionId: this.getNextQuestionId(activeQuestion, currentAnswer)
     }))
+
+    if (finished) {
+      this.props.client.writeData({
+        id: `User:${this.props.creatorId}`, data: { vriTaken: true }
+      })
+    }
   }
 
-  next = (nextQuestionId) => this.setState(prevState => {
-    if (nextQuestionId) {
-      const question = this.props.questions[nextQuestionId - 1]
-      return {
-        ...prevState,
-        question,
-        stepAnswers: {
-          ...prevState.stepAnswers,
-          [question.questionId]: this.getSelectedAnswer(question)
-        },
-        prevQuestion: prevState.question
-      }
-    }
-  })
+  goTo = id => this.setState(prevState => ({ activeQuestionId: id }))
 
   render () {
-    const { questions, classes, user, _id } = this.props
-    const {
-      question,
-      question: {
-        questionId, question: title, nextQuestionId: id, subQuestions, options
-      },
-      stepAnswers
-    } = this.state
-    const { inputType } = question
-    const stepAnswer = stepAnswers[questionId]
-    const nextQuestionId = stepAnswer ? stepAnswer.nextQuestionId || id : null
-    const finished = !(
-      id || (options && options[0] && options[0].nextQuestionId)
-    )
-    const stepValid = subQuestions && subQuestions.length > 0 && stepAnswer
-      ? subQuestions.length === (stepAnswer.subResponses &&
-      stepAnswer.subResponses.length)
-      : Boolean(stepAnswer)
+    const { classes, creatorId, vriTaken } = this.props
+    const questions = formatQuestionAndResponseMap(this.props.questions)
+    const responseMap = formatQuestionAndResponseMap(this.props.responseMap)
+    const { activeQuestionId } = this.state
+    const currentAnswer = this.getCurrentAnswer(activeQuestionId, responseMap)
+    const activeQuestion = questions[activeQuestionId]
+    const { question, questionId, inputType, options } = activeQuestion
+    const finished = this.stepsFinished(activeQuestion, currentAnswer)
+    const stepValid = responseMap[activeQuestionId] &&
+      (responseMap[activeQuestionId].answer ||
+      responseMap[activeQuestionId].subResponses
+        .every(response => response.answer))
 
     return <Grid container className={classes.grid}>
       <Grid item xs={12}>
-        <Grid container className={classes.questionGrid}>
+        {!vriTaken ? <Grid container className={classes.questionGrid}>
           <QuestionsNav
             questions={questions}
-            activeStep={questionId - 1}
-            active={Object.keys(stepAnswers) || []}
-            goToQuestion={this.next}
+            activeStep={activeQuestion.index}
+            goTo={this.goTo}
           />
 
-          <Typography className={classes.title}>
-            <span>QUESTION {questionId}</span> : {title}
-          </Typography>
+          <Typography className={classes.question}>{question}</Typography>
 
           {inputType === 'text' ? <TextInput
             question={question}
-            selected={stepAnswer}
-            _id={_id}
-            updateStepValidity={this.updateStepValidity}
+            questionId={questionId}
+            currentAnswer={currentAnswer}
+            creatorId={creatorId}
           /> : null}
 
           {inputType === 'option'
-            ? <Options
+            ? <OptionsInput
               question={question}
-              selected={stepAnswer}
-              _id={_id}
-              updateStepValidity={this.updateStepValidity}
+              questionId={questionId}
+              currentAnswer={currentAnswer}
+              creatorId={creatorId}
+              options={options}
             />
             : null }
 
           {inputType === 'date'
             ? <DateInput
               question={question}
-              selected={stepAnswer}
-              _id={_id}
-              updateStepValidity={this.updateStepValidity}
+              questionId={questionId}
+              currentAnswer={currentAnswer}
+              creatorId={creatorId}
             />
             : null}
 
           {inputType === 'none'
             ? <SubQuestions
-              user={user}
-              question={question}
-              _id={_id}
-              selected={stepAnswer}
-              updateStepValidity={this.updateStepValidity}
+              activeQuestion={activeQuestion}
+              currentAnswers={currentAnswer}
+              creatorId={creatorId}
             />
             : null}
 
           <QuestionsActions
-            stepValidity={stepValid}
+            stepValidity={Boolean(stepValid)}
             finished={finished}
-            next={this.next.bind(null, nextQuestionId)}
+            next={this.next.bind(null, activeQuestion, currentAnswer, finished)}
           />
-        </Grid>
+        </Grid> : <Recommendations />}
       </Grid>
     </Grid>
   }
@@ -170,8 +149,6 @@ export default withStyles(questionStyles)(
   withApollo(withRouter(graphql(GET_QUESTIONS, {
     props: ({
       data: { QuestionFindMany: questions = null, error, loading }
-    }) => ({
-      loading, error, questions
-    })
+    }) => ({ loading, error, questions })
   })(QuestionContainer)))
 )

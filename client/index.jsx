@@ -37,7 +37,7 @@ export const stateLink = withClientState({
 
 export const persistor = new CachePersistor({
   cache,
-  storage: window.localStorage,
+  storage: window.sessionStorage,
   debug: NODE_ENV !== 'production'
 })
 
@@ -76,14 +76,14 @@ const Vote = graphql(GET_CURRENT_USER, {
     UserFindById: user, error, loading, refetch: fetchUser
   } }) => ({ loading, error, user, fetchUser, persistor }),
   options: props => ({
-    variables: { _id: props._id },
+    variables: { _id: props.creatorId },
     fetchPolicy: props.skipUserQuery ? 'cache-only' : 'cache-and-network'
   })
 })(App)
 
 class WeVote extends React.Component {
   state = {
-    _id: Client.readQuery({ query: GET_AUTH_STATUS }).Auth._id,
+    creatorId: Client.readQuery({ query: GET_AUTH_STATUS }).Auth._id,
     skipUserQuery: true
   }
 
@@ -96,7 +96,7 @@ class WeVote extends React.Component {
         <MuiThemeProvider theme={theme}>
           <ApolloProvider client={Client}>
             <Vote
-              {...this.props} _id={this.state._id}
+              {...this.props} creatorId={this.state.creatorId}
               setAuthState={this.setAuthState}
               loading={false}
               skipUserQuery={this.state.skipUserQuery}
@@ -109,4 +109,4 @@ class WeVote extends React.Component {
 }
 
 persistor.restore()
-  .then(() => render(<WeVote />, document.getElementById('vote')))
+  .then((per) => render(<WeVote />, document.getElementById('vote')))

@@ -16,7 +16,13 @@ import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { ADD_UPDATE_RESPONSE } from '../store/mutations'
 import { selectInputStyles } from '../data/styles'
+import states from '../data/States.js'
 
+const formatLgas = (data) => data.reduce((a, b) => ({
+  ...a, state: { locals: [...a.state.locals, ...b.state.locals] }
+})).state.locals.map(value => ({
+  value: value.name.toLowerCase(), label: value.name.toLowerCase()
+}))
 class Option extends React.Component {
   handleClick = event => {
     this.props.onSelect(this.props.option, event)
@@ -81,47 +87,51 @@ function SelectWrapped (props) {
 }
 
 class SelectInput extends React.Component {
-  state = {
-    value: this.props.selected ? this.props.selected.answer : '',
-    error: ''
-  }
+  state = { answer: this.props.currentAnswer, error: '' }
 
   static defaultProps = {
     subField: false
   }
 
-  handleChange = (name, updateResponse) => (value) => {
-    const error = !/\w+/.test(value)
-    this.setState({ value, error: error ? 'this field is required' : '' })
-
-    const answer = error ? null : {
-      answer: value,
-      question: this.props.question.question
+  getOptions = dataType => {
+    switch (dataType) {
+      case 'lga': return formatLgas(states)
     }
+  }
 
-    if (!this.props.subField && !error) {
-      const { question: { questionId } } = this.props
-      const record = { questionId, answer: value, creatorId: this.props._id }
+  handleChange = (name, updateResponse) => (answer) => {
+    const error = !/\w+/.test(answer)
+    this.setState({ answer, error: error ? 'this field is required' : '' })
+
+    const {
+      question, questionId, creatorId, subQuestionField, updateSubQuestion
+    } = this.props
+    const record = { questionId, question, answer, creatorId }
+
+    if (!error && !subQuestionField) {
       updateResponse({ variables: { record } })
+    } else if (!error && subQuestionField) {
+      updateSubQuestion(record)
     }
-
-    return this.props.updateStepValidity(answer)
   }
 
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    question: PropTypes.object.isRequired,
-    selected: PropTypes.object,
-    options: PropTypes.array.isRequired,
-    label: PropTypes.string.isRequired,
-    subField: PropTypes.bool,
-    updateStepValidity: PropTypes.func.isRequired,
-    _id: PropTypes.string.isRequired
+    question: PropTypes.string.isRequired,
+    currentAnswer: PropTypes.string,
+    creatorId: PropTypes.string.isRequired,
+    externalData: PropTypes.string.isRequired,
+    subQuestionField: PropTypes.bool,
+    updateSubQuestion: PropTypes.func
+  }
+
+  static defaultProps = {
+    subQuestionField: false
   }
 
   render () {
-    const { classes, options, label } = this.props
-    const { value } = this.state
+    const { classes, externalData } = this.props
+    const { answer } = this.state
 
     return (
       <Paper className={classes.paper} square elevation={0}>
@@ -132,16 +142,16 @@ class SelectInput extends React.Component {
               <Input
                 fullWidth
                 inputComponent={SelectWrapped}
-                value={value}
+                value={answer}
                 onChange={this.handleChange('single', updateResponse)}
-                placeholder={label}
-                id={`${label}-select`}
+                placeholder={externalData}
+                id={`${externalData}-select`}
                 inputProps={{
                   classes,
-                  name: `${label}-select`,
-                  instanceId: `${label}-select`,
+                  name: `${externalData}-select`,
+                  instanceId: `${externalData}-select`,
                   simpleValue: true,
-                  options
+                  options: this.getOptions(externalData)
                 }}
               />
             </Loader>
