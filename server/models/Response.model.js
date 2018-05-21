@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { composeWithMongoose } from 'graphql-compose-mongoose/node8'
 import { schemaComposer } from 'graphql-compose'
+import createMany from '../models/create-many-resolver'
 import {
   modifyResolver,
   setGlobalResolvers,
@@ -9,42 +10,14 @@ import {
   grantAccessOwner as owner
 } from '../middlewares'
 
-function extractOptions (questions) {
-  return questions.reduce((a, b) => a.options.concat(...b.options))
-    .map(option => option.title)
-}
-
 const Schema = mongoose.Schema
 const userSubResponseSchema = new Schema({
   question: {
     type: String,
-    required: [true, 'sub-question question required'],
-    validate: [{
-      validator (value) {
-        const doc = this.parent().questionDetails
-        if (!doc || !doc.subQuestions) {
-          return false
-        }
-        const questions = doc.subQuestions
-        return questions.map(question => question.question)
-          .includes(value)
-      },
-      message: 'sub-question does not exist'
-    }]
+    required: [true, 'sub-question question required']
   },
   answer: {
     type: String,
-    validate: [{
-      async validator (value) {
-        const doc = this.parent().questionDetails
-        if (!doc || !doc.subQuestions || !doc.subQuestions.options) {
-          return false
-        }
-        return extractOptions(doc.subQuestions)
-          .includes(value)
-      },
-      message: 'answer is not part of this questions options'
-    }],
     required: [true, 'sub-question answer required']
   }
 }, { _id: false, autoIndex: false })
@@ -55,53 +28,24 @@ const userResponseSchema = new Schema({
     required: [true, 'creator id required']
   },
   questionId: {
-    type: Number,
+    type: String,
     unique: true,
-    required: [true, 'question id required'],
-    validate: [{
-      validator (value) {
-        return this.questionDetails
-          ? this.questionDetails.questionId === value : false
-      },
-      message: 'question does not exist'
-    }]
+    required: [true, 'question id required']
   },
   answer: {
-    type: String,
-    validate: [{
-      validator (value) {
-        if (!this.options) {
-          return false
-        }
-        return this.questionDetails
-          ? this.questionDetails.options.map(option => option.title)
-            .includes(value) : false
-      },
-      message: 'answer not part of this questions options'
-    }]
+    type: String
   }
-})
+}, { autoIndex: false })
 
 userResponseSchema.add({
   subResponses: {
-    type: [userSubResponseSchema],
-    validate: [{
-      validator: value => value.length === this.questionDetails.options.length,
-      message: `all and only sub-questions must and can be answered`
-    }]
+    type: [userSubResponseSchema]
   }
-})
-
-const questionDetails = userResponseSchema.virtual('questionDetails')
-
-userResponseSchema.pre('validate', async function () {
-  const question = await this.model('Question').findById(this.questionId)
-  questionDetails.get(() => question)
 })
 
 const model = mongoose.model('Response', userResponseSchema)
 const modelTC = composeWithMongoose(model)
-
+modelTC.setResolver('createMany', createMany(model, modelTC))
 setGlobalResolvers(model, modelTC, 'Response')
 
 schemaComposer.rootQuery().addFields({
@@ -116,6 +60,7 @@ schemaComposer.rootQuery().addFields({
 
 schemaComposer.rootMutation().addFields({
   ResponseCreateOne: modifyResolver(modelTC.getResolver('createOne'), owner),
+  ResponseCreateMany: modifyResolver(modelTC.getResolver('createMany'), owner),
   ResponseUpdateOne: modifyResolver(modelTC.getResolver('updateOne'), owner)
 })
 
@@ -133,14 +78,6 @@ export default {
       resolver: modelTCS.User.getResolver('findById'),
       prepareArgs: { _id: source => source.creatorId },
       projection: { creatorId: true }
-    })
-
-    modelTC.addFields({
-      question: {
-        type: 'String',
-        description: 'the question title',
-        resolve: source => source._doc.question
-      }
     })
   }
 }

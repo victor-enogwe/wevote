@@ -30,7 +30,7 @@ export function modifyResolver (resolver, callback) {
 }
 
 export function setGlobalResolvers (model, modelTC, modelName) {
-  const findOrCreateType = modelTC.getResolver('createOne').getArgs()
+  const findOrCreateArgs = modelTC.getResolver('createOne').getArgs()
   const findManyResolver = (modelTC, resolver) => modelTC
     .getResolver(resolver)
     .addFilterArg({
@@ -53,7 +53,7 @@ export function setGlobalResolvers (model, modelTC, modelName) {
     kind: 'mutation',
     type: modelTC.getResolver('createOne').getType(),
     args: {
-      query: { type: findOrCreateType.record.type }, ...findOrCreateType
+      query: { type: findOrCreateArgs.record.type }, ...findOrCreateArgs
     },
     async resolve ({ source, args, context, info }) {
       const { doc: record } = await model
@@ -125,7 +125,13 @@ export function grantAccessOwner (...args) {
   const [arg, name, resolver, context] = args
   const { user } = context
   const [field, operation] = name.match(/[A-Z][a-z]+/g)
-  const owner = (arg.id || arg.record._id || arg.record.creatorId) === user._id
+  let owner = (arg.id ||
+    (arg.record ? (arg.record._id || arg.record.creatorId) : undefined)) ===
+      user._id
+
+  if (arg.records && arg.records[0].creatorId) {
+    owner = arg.records.every(record => record.creatorId === user._id)
+  }
 
   if (!owner && user.roleDetails) {
     throw new GraphQLError(`you  dont have permission to ${operation

@@ -2,13 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import withStyles from 'material-ui/styles/withStyles'
-import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation'
+import BottomNavigation,
+{ BottomNavigationAction } from 'material-ui/BottomNavigation'
 import BookIcon from 'material-ui-icons/LibraryBooks'
 import AccountCircle from 'material-ui-icons/AccountCircle'
 import TradeIcon from 'material-ui-icons/ShopTwo'
+import GTranslate from 'material-ui-icons/GTranslate'
 
 class BottomNav extends React.Component {
-  routes = ['/profile', '/profile/books', '/profile/trades']
+  routes = ['elect', '/elections', '/notifications', '/social']
   static styles = {
     root: {
       height: '10vh'
@@ -18,24 +20,38 @@ class BottomNav extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     history: PropTypes.shape().isRequired,
-    user: PropTypes.shape()
+    creatorId: PropTypes.string.isRequired
   }
 
-  handleChange = (event, value) => this.props.history.push(this.routes[value])
+  handleChange = (event, value) => {
+    if (value === 'language') {
+      return null
+    }
+    return this.props.history.push(value)
+  }
 
   render () {
-    const { classes, user, history } = this.props
+    const { classes, history, creatorId } = this.props
 
     return (
       <BottomNavigation
-        value={this.routes.indexOf(history.location.pathname)}
+        value={history.location.pathname.replace('/', '')}
         onChange={this.handleChange}
         showLabels
         className={classes.root}
       >
-        {user ? <BottomNavigationAction label='Elections' icon={<AccountCircle />} /> : null}
-        {user ? <BottomNavigationAction label='Notifications' icon={<BookIcon />} /> : null}
-        {user ? <BottomNavigationAction label='Social' icon={<TradeIcon />} /> : null}
+        <BottomNavigationAction
+          value='language' label='Language' icon={<GTranslate />}
+        />
+        <BottomNavigationAction
+          value='election' label='Election' icon={<AccountCircle />}
+        />
+        {creatorId === 'guest' ? null : <BottomNavigationAction
+          value='notifications' label='Notifications' icon={<BookIcon />}
+        />}
+        <BottomNavigationAction
+          value='social' label='Social' icon={<TradeIcon />}
+        />
       </BottomNavigation>
     )
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Mutation, withApollo } from 'react-apollo'
 import { withStyles } from 'material-ui/styles'
+import Grid from 'material-ui/Grid'
 import Loader from 'react-loader-advanced'
 import List, {
   ListItem, ListItemSecondaryAction, ListItemText
@@ -16,8 +17,7 @@ class Options extends React.Component {
 
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    questionId: PropTypes.number.isRequired,
-    question: PropTypes.string.isRequired,
+    questionId: PropTypes.string.isRequired,
     options: PropTypes.array.isRequired,
     creatorId: PropTypes.string.isRequired,
     currentAnswer: PropTypes.string,
@@ -38,13 +38,13 @@ class Options extends React.Component {
       subQuestionField,
       updateSubQuestion
     } = this.props
-    const record = { questionId, answer, creatorId, question }
+    const record = { questionId, answer, creatorId }
     const isNew = answer !== currentAnswer
 
     if (isNew && !subQuestionField) {
       updateAnswer({ variables: { record } })
     } else if (isNew && subQuestionField) {
-      updateSubQuestion(record)
+      updateSubQuestion({ ...record, question })
     }
   }
 
@@ -52,7 +52,7 @@ class Options extends React.Component {
     const { classes, options, currentAnswer } = this.props
 
     return (
-      <div className={classes.root}>
+      <Grid item xs={12}>
         <List>
           {options.map((option, index) => {
             const { title: answer } = option
@@ -92,7 +92,7 @@ class Options extends React.Component {
             )
           })}
         </List>
-      </div>
+      </Grid>
     )
   }
 }

@@ -15,21 +15,47 @@ const optionsSchema = new Schema({
     validate: [{
       validator: value => /\w{0,255}/.test(value),
       message: 'option title must be string between 0 and 255 characters'
-    }],
-    index: false
+    }]
   },
   nextQuestionId: {
     type: Number,
     required: true
+  },
+  score: {
+    type: Number,
+    validate: [{
+      validator: value => value >= 0,
+      message: 'please enter a positive score'
+    }],
+    default: 0
+  },
+  recommendation: {
+    type: String,
+    validate: [{
+      validator: value => /\w{0,255}/.test(value),
+      message: 'recommendation must be string between 0 and 1000 characters'
+    }]
+  },
+  externalData: {
+    type: String
   }
 }, { _id: false })
 const questionSchema = new Schema({
   questionId: {
-    type: Number,
+    type: String,
+    match: /\d+/,
     required: true,
     unique: true
   },
   question: { type: String, index: true, match: /\w{0,255}/, required: true },
+  label: {
+    type: String,
+    required: true,
+    validate: [{
+      validator: value => /\w{0,255}/.test(value),
+      message: 'labbel must be string between 0 and 20 characters'
+    }]
+  },
   inputType: {
     type: String,
     enum: ['text', 'option', 'select', 'date', 'none'],
@@ -48,22 +74,21 @@ const questionSchema = new Schema({
     }],
     index: false
   },
-  score: {
-    type: Number,
-    validate: [{
-      validator: value => value >= 0,
-      message: 'please enter a positive score'
-    }],
-    default: 0
-  },
   nextQuestionId: {
     type: Number,
     required: true
   },
   externalData: {
     type: String
+  },
+  recommendation: {
+    type: String,
+    validate: [{
+      validator: value => /\w{0,255}/.test(value),
+      message: 'recommendation must be string between 0 and 1000 characters'
+    }]
   }
-})
+}, { autoIndex: false })
 
 const subQuestionsSchema = questionSchema.clone()
 const subOptionsSchema = optionsSchema.clone()
@@ -111,13 +136,6 @@ questionSchema.add({
     ],
     index: false
   }
-})
-
-questionSchema.pre('save', function (next) {
-  this.score = this.subQuestions.map(question => question.score)
-    .reduce((a, b) => (a + b), 0)
-
-  next()
 })
 
 const model = mongoose.model('Question', questionSchema)

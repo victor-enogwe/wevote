@@ -3,12 +3,12 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { withApollo } from 'react-apollo'
-import { stateLink } from '../index'
 import Loader from 'react-loader-advanced'
 import Nav from './Nav'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import QuestionsPage from './pages/QuestionsPage'
+import NotificationsPage from './pages/NotificationsPage'
 import FourZeroFourPage from './pages/FourZeroFourPage'
 import BottomNav from './BottomNav'
 import Snack from './Snack'
@@ -23,20 +23,18 @@ class App extends Component {
 
   async logout (redirect, path = '/') {
     if (redirect) this.props.history.replace(path)
-    await this.props.client.cache.reset()
-    await stateLink.writeDefaults()
+    await this.props.client.resetStore()
     this.props.setAuthState({ creatorId: 'guest', skipUserQuery: true })
   }
 
   render () {
-    let { loading, user, error, setAuthState, fetchUser, classes } = this.props
-    const { _id: creatorId, responseMap } = this.props.user || {
-      _id: 'guest', responseMap: []
-    }
+    let {
+      loading, user, error, setAuthState, fetchUser, classes, creatorId
+    } = this.props
 
     return <Loader show={loading} message='please wait'>
       <Nav
-        title='WE-VOTE'
+        title='WEVOTE'
         pageTitle='home'
         logout={this.logout.bind(this)}
         user={user}
@@ -56,12 +54,17 @@ class App extends Component {
           <Route
             exact path='/vri'
             render={routerProps => <QuestionsPage
-              {...routerProps}
-              creatorId={creatorId}
-              vriTaken={user.vriTaken}
-              responseMap={responseMap}
+              {...routerProps} user={user} creatorId={creatorId}
             />}
           />
+
+          {creatorId === 'guest' ? null : <Route
+            exact path='/notifications'
+            render={routerProps => <NotificationsPage
+              {...routerProps} creatorId={creatorId}
+            />}
+          />}
+
           <Route component={FourZeroFourPage} />
         </Switch>
         <Snack
@@ -69,7 +72,7 @@ class App extends Component {
           message={'User not found! You need to login again.'}
         />
       </div>
-      <BottomNav user={user} />
+      <BottomNav creatorId={creatorId} />
     </Loader>
   }
 }

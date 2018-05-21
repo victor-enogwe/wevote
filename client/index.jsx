@@ -4,9 +4,11 @@ import createMuiTheme from 'material-ui/styles/createMuiTheme'
 import green from 'material-ui/colors/green'
 import lightGreen from 'material-ui/colors/lightGreen'
 import { render } from 'react-dom'
-import { ApolloClient } from 'apollo-boost'
+import { ApolloClient, split } from 'apollo-boost'
+import { getMainDefinition } from 'apollo-utilities'
 import { createHttpLink } from 'apollo-link-http'
 import { onError } from 'apollo-link-error'
+import { WebSocketLink } from 'apollo-link-ws'
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 import { ApolloProvider, graphql } from 'react-apollo'
 import { setContext } from 'apollo-link-context'
@@ -17,7 +19,9 @@ import { withClientState } from 'apollo-link-state'
 import { BrowserRouter } from 'react-router-dom'
 import { defaultState as defaults } from './store/store.configuration'
 import { typeDefs } from './store/type-definitions'
-import { UpdateAuthStatus, AddUpdateResponse } from './store/resolvers'
+import {
+  UpdateAuthStatus, AddUpdateResponse, resetResponseMap
+} from './store/resolvers'
 import App from './components/App.jsx'
 import './assets/main.scss'
 
@@ -28,7 +32,8 @@ export const stateLink = withClientState({
   resolvers: {
     Mutation: {
       UpdateAuthStatus,
-      AddUpdateResponse
+      AddUpdateResponse,
+      resetResponseMap
     }
   },
   defaults,
@@ -40,9 +45,25 @@ export const persistor = new CachePersistor({
   storage: window.sessionStorage,
   debug: NODE_ENV !== 'production'
 })
-
+const wsLink = new WebSocketLink({
+  uri: WS_HOST_NAME,
+  options: {
+    reconnect: true,
+    connectionParams: () => ({
+      authToken: Client.readQuery({ query: GET_AUTH_STATUS })
+    })
+  }
+})
 const httpLink = createHttpLink({ uri: '/graphql' })
-const persistedQueryLink = createPersistedQueryLink().concat(httpLink)
+const transportLink = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' && operation === 'subscription'
+  },
+  wsLink,
+  httpLink
+)
+const persistedQueryLink = createPersistedQueryLink().concat(transportLink)
 const contextLink = setContext(async (_, { headers = {} }) => {
   const { Auth: { token } } = Client.readQuery({ query: GET_AUTH_STATUS })
   if (token) {
@@ -66,7 +87,9 @@ export const Client = new ApolloClient({
   cache, link, connectToDevTools: NODE_ENV !== 'production'
 })
 
-const theme = createMuiTheme({
+Client.onResetStore(stateLink.writeDefaults)
+
+export const theme = createMuiTheme({
   palette: { primary: { main: '#008751' }, secondary: green },
   status: { danger: lightGreen }
 })
@@ -77,14 +100,14 @@ const Vote = graphql(GET_CURRENT_USER, {
   } }) => ({ loading, error, user, fetchUser, persistor }),
   options: props => ({
     variables: { _id: props.creatorId },
-    fetchPolicy: props.skipUserQuery ? 'cache-only' : 'cache-and-network'
+    fetchPolicy: props.skipQuery ? 'cache-only' : 'cache-and-network'
   })
 })(App)
 
 class WeVote extends React.Component {
   state = {
     creatorId: Client.readQuery({ query: GET_AUTH_STATUS }).Auth._id,
-    skipUserQuery: true
+    skipQuery: true
   }
 
   setAuthState = state => this
@@ -99,7 +122,7 @@ class WeVote extends React.Component {
               {...this.props} creatorId={this.state.creatorId}
               setAuthState={this.setAuthState}
               loading={false}
-              skipUserQuery={this.state.skipUserQuery}
+              skipQuery={this.state.skipQuery}
             />
           </ApolloProvider>
         </MuiThemeProvider>

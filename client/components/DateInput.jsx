@@ -4,17 +4,17 @@ import { Mutation, withApollo } from 'react-apollo'
 import UtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
+import Grid from 'material-ui/Grid'
 import Loader from 'react-loader-advanced'
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import DatePicker from 'material-ui-pickers/DatePicker'
-import Paper from 'material-ui/Paper'
 import { ADD_UPDATE_RESPONSE } from '../store/mutations'
 import { dateStyles } from '../data/styles'
 
 class DateInput extends PureComponent {
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    questionId: PropTypes.number.isRequired,
+    questionId: PropTypes.string.isRequired,
     question: PropTypes.string.isRequired,
     creatorId: PropTypes.string.isRequired,
     currentAnswer: PropTypes.string,
@@ -33,12 +33,12 @@ class DateInput extends PureComponent {
       question, questionId, subQuestionField, updateSubQuestion, creatorId
     } = this.props
     const dateValid = date ? date.isValid() : null
-    const record = { questionId, question, answer, creatorId }
+    const record = { questionId, answer, creatorId }
 
     if (dateValid && !subQuestionField) {
       updateResponse({ variables: { record } })
     } else if (dateValid && subQuestionField) {
-      updateSubQuestion(record)
+      updateSubQuestion({ ...record, question })
     }
   }
 
@@ -46,7 +46,7 @@ class DateInput extends PureComponent {
     const { classes, question } = this.props
 
     return (
-      <Paper className={classes.paper} square elevation={2}>
+      <Grid item xs={12} className={classes.dateGrid}>
         <UtilsProvider utils={MomentUtils}>
           <Mutation
             mutation={ADD_UPDATE_RESPONSE}
@@ -69,7 +69,6 @@ class DateInput extends PureComponent {
                   maxDate={moment()}
                   value={moment(this.props.currentAnswer || null, 'DD/MM/YYYY')}
                   animateYearScrolling
-                  className={classes.textField}
                   label={question.question}
                   disableOpenOnEnter
                   onChange={date => this.handleChange(date, updateResponse)}
@@ -78,7 +77,7 @@ class DateInput extends PureComponent {
             }}
           />
         </UtilsProvider>
-      </Paper>
+      </Grid>
     )
   }
 }

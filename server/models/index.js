@@ -14,8 +14,8 @@ const relations = {}
 fs
   .readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && ![
-    'validation-error-transform.plugin.js',
     'find-or-create.plugin.js',
+    'create-many-resolver.js',
     'index.js'
   ].includes(file))
   .forEach((file) => {

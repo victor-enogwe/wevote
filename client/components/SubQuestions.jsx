@@ -5,7 +5,6 @@ import { withStyles } from 'material-ui/styles'
 import Stepper, { Step, StepLabel, StepContent } from 'material-ui/Stepper'
 import Button from 'material-ui/Button'
 import { ADD_UPDATE_RESPONSE } from '../store/mutations'
-import Paper from 'material-ui/Paper'
 import Grid from 'material-ui/Grid'
 import TextInput from './TextInput'
 import OptionsInput from './OptionsInput'
@@ -35,11 +34,11 @@ class SubQuestions extends React.Component {
     const {
       currentAnswers,
       creatorId,
-      activeQuestion: { questionId, question }
+      activeQuestion: { questionId }
     } = this.props
     const subResponses = currentAnswers || []
     const updateRecord = {
-      questionId, creatorId, question, subResponses: [...subResponses]
+      questionId, creatorId, subResponses: [...subResponses]
     }
 
     if (record) {
@@ -66,11 +65,11 @@ class SubQuestions extends React.Component {
     const formattedAnswers = this.formatCurrentAnswers(currentAnswers)
 
     return (
-      <Mutation
-        mutation={ADD_UPDATE_RESPONSE}
-        children={(updateAnswer, { data, loading, error }) => {
-          return (
-            <Paper square elevation={0} className={classes.resetContainer}>
+      <Grid item xs={12} className={classes.subQuestions}>
+        <Mutation
+          mutation={ADD_UPDATE_RESPONSE}
+          children={(updateAnswer, { data, loading, error }) => {
+            return (
               <Stepper activeStep={activeStep} orientation='vertical'>
                 {subQuestions.map((question, index) => {
                   const { question: title, externalData, options } = question
@@ -81,79 +80,77 @@ class SubQuestions extends React.Component {
                     <Step key={index}>
                       <StepLabel>{title}</StepLabel>
                       <StepContent>
-                        <Grid className={classes.subStepContainer}>
-                          <Grid item xs={12}>
-                            {inputType === 'text' ? <TextInput
+                        <Grid container className={classes.subStepContainer}>
+                          {inputType === 'text' ? <TextInput
+                            question={title}
+                            currentAnswer={currentAnswer}
+                            creatorId={creatorId}
+                            questionId={questionId}
+                            subQuestionField
+                            updateSubQuestion={this.updateSubQuestion
+                              .bind(null, index, updateAnswer)}
+                          /> : null}
+
+                          {inputType === 'option'
+                            ? <OptionsInput
                               question={title}
-                              currentAnswer={currentAnswer}
-                              creatorId={creatorId}
                               questionId={questionId}
                               subQuestionField
                               updateSubQuestion={this.updateSubQuestion
                                 .bind(null, index, updateAnswer)}
-                            /> : null}
+                              currentAnswer={currentAnswer}
+                              creatorId={creatorId}
+                              options={options}
+                            />
+                            : null }
 
-                            {inputType === 'option'
-                              ? <OptionsInput
-                                question={title}
-                                questionId={questionId}
-                                subQuestionField
-                                updateSubQuestion={this.updateSubQuestion
-                                  .bind(null, index, updateAnswer)}
-                                currentAnswer={currentAnswer}
-                                creatorId={creatorId}
-                                options={options}
-                              />
-                              : null }
+                          {inputType === 'date'
+                            ? <DateInput
+                              question={title}
+                              questionId={questionId}
+                              subQuestionField
+                              updateSubQuestion={this.updateSubQuestion
+                                .bind(null, index, updateAnswer)}
+                              currentAnswer={currentAnswer}
+                              creatorId={creatorId}
+                            />
+                            : null}
 
-                            {inputType === 'date'
-                              ? <DateInput
-                                question={title}
-                                questionId={questionId}
-                                subQuestionField
-                                updateSubQuestion={this.updateSubQuestion
-                                  .bind(null, index, updateAnswer)}
-                                currentAnswer={currentAnswer}
-                                creatorId={creatorId}
-                              />
-                              : null}
+                          {inputType === 'select' && externalData
+                            ? <SelectInput
+                              question={title}
+                              questionId={questionId}
+                              subQuestionField
+                              updateSubQuestion={this.updateSubQuestion
+                                .bind(null, index, updateAnswer)}
+                              currentAnswer={currentAnswer}
+                              creatorId={creatorId}
+                              externalData={externalData}
+                            />
+                            : null}
 
-                            {inputType === 'select' && externalData === 'lga'
-                              ? <SelectInput
-                                question={title}
-                                questionId={questionId}
-                                subQuestionField
-                                updateSubQuestion={this.updateSubQuestion
-                                  .bind(null, index, updateAnswer)}
-                                currentAnswer={currentAnswer}
-                                creatorId={creatorId}
-                                externalData={externalData}
-                              />
-                              : null}
-
-                            <div className={classes.actionsContainer}>
-                              <Button
-                                disabled={!currentAnswer}
-                                variant='raised'
-                                color='primary'
-                                size='small'
-                                onClick={this.handleNext.bind(null, activeStep)}
-                                className={classes.button}
-                              >
-                                {
-                                  activeStep === subQuestions.length - 1
-                                    ? 'Finish' : 'Next'
-                                }
-                              </Button>
-                              <Button
-                                size='small'
-                                disabled={activeStep === 0}
-                                onClick={this.handleBack.bind(null, activeStep)}
-                                className={classes.button}
-                              >
+                          <Grid item xs={12} className={classes.actions}>
+                            <Button
+                              disabled={!currentAnswer}
+                              variant='raised'
+                              color='primary'
+                              size='small'
+                              onClick={this.handleNext.bind(null, activeStep)}
+                              className={classes.button}
+                            >
+                              {
+                                activeStep === subQuestions.length - 1
+                                  ? 'Finish' : 'Next'
+                              }
+                            </Button>
+                            <Button
+                              size='small'
+                              disabled={activeStep === 0}
+                              onClick={this.handleBack.bind(null, activeStep)}
+                              className={classes.button}
+                            >
                                 Back
-                              </Button>
-                            </div>
+                            </Button>
                           </Grid>
                         </Grid>
                       </StepContent>
@@ -161,10 +158,10 @@ class SubQuestions extends React.Component {
                   )
                 })}
               </Stepper>
-            </Paper>
-          )
-        }}
-      />
+            )
+          }}
+        />
+      </Grid>
     )
   }
 }

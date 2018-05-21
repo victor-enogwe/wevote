@@ -27,8 +27,10 @@ export const GET_CURRENT_USER = gql`
         state
       }
       vriTaken
+      roleDetails {
+        title
+      }
       responseMap {
-        question
         creatorId
         questionId
         answer
@@ -45,21 +47,27 @@ export const GET_QUESTIONS = gql`
     QuestionFindMany (sort: QUESTIONID_ASC) {
       questionId
       question
+      recommendation
+      label
       inputType
       options {
         title
         nextQuestionId
+        score
+        recommendation
       }
       nextQuestionId
-      score
       externalData
       subQuestions {
         question
+        label
+        recommendation
         inputType
         options {
+          recommendation
           title
+          score
         }
-        score
         externalData
       }
     }
@@ -76,6 +84,27 @@ export const GET_USER_RESPONSE_MAP = gql`
       subResponses {
         question
         answer
+      }
+    }
+  }
+`
+export const GET_NOTIFICATIONS = gql`
+  query ($sort: SortConnectionNotificationEnum) {
+    NotificationConnection(first: 1, sort: $sort, last: 1, after: "opaqueCursor") {
+      count
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          title
+          message
+          createdAt
+        }
       }
     }
   }

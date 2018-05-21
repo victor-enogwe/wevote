@@ -12,18 +12,18 @@ export const appStyles = theme => ({
 })
 export const questionStyles = theme => ({
   grid: {
-    height: 'calc(80vh - 15px)',
+    height: 'calc(80vh - 24px)',
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'center',
     alignContent: 'center',
-    maxWidth: 800,
+    // maxWidth: 800,
     overflowY: 'scroll',
-    padding: theme.spacing.unit,
     marginBottom: theme.spacing.unit
   },
   questionGrid: {
     display: 'flex',
+    flexGrow: 1,
     flexFlow: 'row wrap',
     justifyContent: 'center',
     alignContent: 'center',
@@ -39,20 +39,140 @@ export const questionStyles = theme => ({
       color: '#fff'
     }
   },
-  question: {
+  questionTitleGrid: {
     backgroundColor: theme.palette.background.paper,
-    width: '100%',
+    padding: theme.spacing.unit * 3
+  },
+  question: {
     textAlign: 'center',
     fontWeight: '900',
-    textTransform: 'uppercase',
-    padding: theme.spacing.unit
+    textTransform: 'uppercase'
+  }
+})
+
+export const notificationsPagesStyles = theme => {
+  const question = questionStyles(theme)
+  return {
+    grid: {
+      ...question.grid,
+      backgroundColor: theme.palette.background.paper
+    },
+    root: {
+      flexGrow: 1
+    },
+    appFrame: {
+      zIndex: 1,
+      overflow: 'hidden',
+      position: 'relative',
+      display: 'flex',
+      width: '100%'
+    },
+    appBar: {
+      position: 'absolute',
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      })
+    },
+    appBarShift: {
+      width: `calc(100% - ${240}px)`,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen
+      })
+    },
+    'appBarShift-left': {
+      marginLeft: 240
+    },
+    'appBarShift-right': {
+      marginRight: 240
+    },
+    menuButton: {
+      marginLeft: 12,
+      marginRight: 20
+    },
+    hide: {
+      display: 'none'
+    },
+    drawerPaper: {
+      position: 'relative',
+      width: 240
+    },
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      padding: '0 8px',
+      ...theme.mixins.toolbar
+    },
+    content: {
+      flexGrow: 1,
+      backgroundColor: theme.palette.background.default,
+      padding: theme.spacing.unit * 3,
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      })
+    },
+    'content-left': {
+      marginLeft: -240
+    },
+    'content-right': {
+      marginRight: -240
+    },
+    contentShift: {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen
+      })
+    },
+    'contentShift-left': {
+      marginLeft: 0
+    },
+    'contentShift-right': {
+      marginRight: 0
+    }
+  }
+}
+
+export const heroStyles = theme => ({
+  hero: {
+    backgroundColor: theme.palette.primary.main,
+    height: 'calc(80vh - 15px)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexFlow: 'row wrap'
+  },
+  heroText: {
+    height: 'auto',
+    padding: theme.spacing.unit * 2,
+    maxWidth: '400px',
+    flex: '1 16%'
+  },
+  heroBook: {
+    height: '50vh',
+    maxWidth: '400px',
+    padding: theme.spacing.unit * 2,
+    flex: '1 16%'
+  },
+  title: {
+    ...theme.typography.headline,
+    fontWeight: 900,
+    color: '#FFFFFF'
+  },
+  subHeading: {
+    ...theme.typography.subheading,
+    color: '#FFFFFF'
+  },
+  cta: {
+
   }
 })
 
 export const recommendationsStyles = theme => {
   const question = questionStyles(theme)
   return {
-    grid: question.grid,
     recomendationGrid: question.questionGrid
   }
 }
@@ -71,11 +191,7 @@ export const questionActionStyles = theme => ({
 })
 
 export const optionStyles = theme => ({
-  root: {
-    width: '100%'
-  },
   paper: {
-    width: '100%',
     marginTop: theme.spacing.unit
   },
   listItem: {
@@ -127,38 +243,33 @@ export const navStyles = (theme) => ({
 })
 
 export const dateStyles = theme => ({
-  paper: {
-    width: '100%',
-    padding: theme.spacing.unit * 2
-  },
-  textField: {
-    width: '100%'
+  dateGrid: {
+    backgroundColor: theme.palette.background.paper,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 4
   }
 })
 
 export const subQuestionStyles = theme => ({
-  subStepContainer: {
-    margin: theme.spacing.unit
-  },
   button: {
     marginTop: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     float: 'right'
   },
-  actionsContainer: {
+  actions: {
     marginBottom: theme.spacing.unit * 2
   },
-  resetContainer: {
-    width: '100%',
-    padding: theme.spacing.unit * 3
+  subQuestions: {
+    backgroundColor: theme.palette.background.paper
+  },
+  subStepContainer: {
+    padding: theme.spacing.unit
   }
 })
 
 export const textInputStyles = theme => ({
-  paper: {
-    width: '100%',
-    padding: theme.spacing.unit * 2
-  },
   textField: {
     width: '100%'
   }
@@ -266,5 +377,75 @@ export const selectInputStyles = theme => ({
       width: 1,
       margin: -1
     }
+  }
+})
+
+export const scoreStyles = theme => ({
+  expansion: {
+    width: '100%'
+  },
+  actions: {
+    display: 'flex'
+  },
+  share: {
+    marginLeft: 'auto'
+  },
+  barWrapper: {
+    top: 0,
+    left: 350,
+    lineHeight: 24
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    textTransform: 'uppercase',
+    flexShrink: 0
+  },
+  subHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary
+  },
+  notice: {
+    fontSize: theme.typography.pxToRem(14),
+    color: '#000000'
+  },
+  chip: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing.unit,
+    color: '#FFFFFF'
+  },
+  expansionIcon: {
+    marginBottom: -6,
+    marginRight: 10
+  },
+  mapGrid: {
+    minHeight: 200
+  },
+  map: {
+    height: '100%',
+    width: '100%',
+    position: 'relative !important',
+    paddingBottom: 20,
+    minHeight: 200
+  }
+})
+
+export const listRecommendationsStyles = theme => ({
+  expansion: {
+    width: '100%'
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    textTransform: 'uppercase',
+    flexShrink: 0
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary
+  },
+  expansionIcon: {
+    marginBottom: -6,
+    marginRight: 10
   }
 })

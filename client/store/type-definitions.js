@@ -26,7 +26,7 @@ export const typeDefs = `
   }
 
   type Response {
-    questionId: Number!
+    questionId: String!
     creatorId: String!
     answer: String
     subResponses: [ResponseSubResponses]
@@ -46,6 +46,7 @@ export const typeDefs = `
   type Mutation {
     UpdateAuthStatus(token: String!, _id: String!): Auth
     AddUpdateResponse(record: Response)
+    reseResponseMap(creatorId: String!)
   }
 
   type Query {

@@ -49,6 +49,25 @@ export async function AddUpdateResponse (_, { record }, { cache }) {
   return data
 }
 
+export async function resetResponseMap (_, { creatorId }, { cache }) {
+  const query = cache.readQuery({
+    query: GET_CURRENT_USER, variables: { _id: creatorId }
+  })
+  const { UserFindById } = query
+  const data = {
+    ...query,
+    UserFindById: {
+      ...UserFindById, vriTaken: false, responseMap: []
+    }
+  }
+
+  cache.writeQuery({
+    query: GET_CURRENT_USER, variables: { _id: creatorId }, data
+  })
+
+  return data
+}
+
 export function omitTypeName (record) {
   return JSON.parse(JSON.stringify(record), (key, value) => {
     return key === '__typename' || value === null ? undefined : value

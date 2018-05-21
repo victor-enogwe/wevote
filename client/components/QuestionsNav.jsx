@@ -6,21 +6,31 @@ import Stepper, { Step, StepButton } from 'material-ui/Stepper'
 import { questionNavStyles } from '../data/styles'
 
 function QuestionNav (props) {
-  const { questions, activeStep, classes, goTo } = props
+  const {
+    questions,
+    activeStep,
+    classes,
+    goTo,
+    getCurrentAnswer,
+    responseMap,
+    checkStepValidity
+  } = props
 
   return (
     <Grid item xs={12}>
       <Stepper activeStep={activeStep} alternativeLabel nonLinear>
         {Object.keys(questions).map(key => {
           const question = questions[key]
-          // const disabled = !active.includes(String(question.questionId))
+          const { questionId } = question
+          const currentAnswer = getCurrentAnswer(questionId, responseMap)
+          const stepValid = !checkStepValidity(question, currentAnswer)
           return (<Step
-            // disabled={disabled}
-            key={question.questionId}
+            disabled={stepValid}
+            key={questionId}
             className={classes.stepper}
           >
             <StepButton
-              // disabled={disabled}
+              disabled={stepValid}
               onClick={goTo.bind(null, question.questionId)}
             />
           </Step>)
@@ -33,7 +43,10 @@ function QuestionNav (props) {
 QuestionNav.propTypes = {
   questions: PropTypes.object.isRequired,
   activeStep: PropTypes.number.isRequired,
-  goTo: PropTypes.func.isRequired
+  goTo: PropTypes.func.isRequired,
+  checkStepValidity: PropTypes.func.isRequired,
+  getCurrentAnswer: PropTypes.func.isRequired,
+  responseMap: PropTypes.object.isRequired
 }
 
 export default withStyles(questionNavStyles)(QuestionNav)

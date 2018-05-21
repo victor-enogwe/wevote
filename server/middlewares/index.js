@@ -1,4 +1,4 @@
-import devMiddleware from './dev.middleware'
+import devMiddleware, { html } from './dev.middleware'
 import passport from './passport.middleware'
 import {
   authFields,
@@ -27,6 +27,7 @@ export function catchBlock (devMode, callback, errorCb) {
 
 module.exports.passport = passport
 module.exports.devMiddleware = devMiddleware
+module.exports.html = html
 module.exports.authFields = authFields
 module.exports.modifyResolver = modifyResolver
 module.exports.setGlobalResolvers = setGlobalResolvers

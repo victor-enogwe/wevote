@@ -23,7 +23,7 @@ class QuestionsActions extends Component {
         disabled={!stepValidity}
         variant='raised'
         color='secondary'
-        onClick={finished ? null : next}
+        onClick={next}
       >
         {finished ? 'SEE RECOMMENDATIONS' : 'Next'}
       </Button>

@@ -4,6 +4,7 @@ import debug from 'debug'
 import path from 'path'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
+import { execute, subscribe } from 'graphql'
 import favicon from 'serve-favicon'
 import logger from 'morgan'
 import Logger from 'js-logger'
@@ -11,10 +12,11 @@ import bodyParser from 'body-parser'
 import DataLoader from 'dataloader'
 import https from 'https'
 import helmet from 'helmet'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
 import { database, graphqlSchema as schema, Question } from './models'
 import Routes from './routes'
 import { getUser } from './controllers/auth.controller'
-import { devMiddleware, passport } from './middlewares'
+import { html, devMiddleware, passport } from './middlewares'
 
 config()
 debug('wevote:app')
@@ -102,8 +104,16 @@ app.use(logger('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(passport.initialize())
+app.use('/api/v1/inec', Routes.inec)
 app.use('/api/v1/auth', Routes.auth)
-app.use('/graphql', getUser, (req, res) => graphqlHTTP({
+app.use('/graphql', (req, res, next) => {
+  const query = req.query.query || req.body.query
+  const message = 'query size exceeded'
+  if (query && query.length > 2000 && !isDevMode) {
+    return res.status(500).json({ status: 'error', message })
+  }
+  next()
+}, getUser, (req, res) => graphqlHTTP({
   schema,
   graphiql: isDevMode,
   context: {
@@ -126,35 +136,7 @@ if (isDevMode) {
 } else {
   app.use('*', (req, res) => {
     res.set('content-type', 'text/html')
-    return res.send(`<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <title>WE VOTE</title>
-        <meta name="viewport" content="width=device-width" />
-        <meta charset="UTF-8">
-        <meta name="description" content="Check your voter readiness and stay\
-informed to ensure you vote" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="keywords" content="vote, election, nigeria" />
-        <meta name="author" content="Team WeVote" />
-        <title>WeVote - Get Yourself Ready To Vote</title>
-        <meta property="og:url"           content="https://wevote-ng.herokuapp.\
-com" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="WeVote - Be Vote Ready"/>
-        <meta property="og:description" content="Check your voter readiness and\
- stay informed to ensure you vote" />
-        <meta property="og:image" content="https://raw.githubusercontent.com/ig\
-natiusukwuoma/wevote-client/master/src/assets/nigeria-bgrd.jpg" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=\
-Roboto:300,400,500|Material+Icons">
-      </head>
-      <body>
-        <div id="vote"></div>
-        <script type="text/javascript" src="/public/assets/bundle.js"></script>
-      </body>
-    </html>
-    `)
+    return res.send(html)
   })
 }
 
@@ -168,7 +150,9 @@ database.once('open', () => {
 
   server.on('listening', onListening.bind(null, server)).on('error', onError)
 
-  server.listen(port)
+  server.listen(port, () => new SubscriptionServer(
+    { execute, subscribe, schema }, { server, path: '/graphqlws' }
+  ))
 })
 
 export default app

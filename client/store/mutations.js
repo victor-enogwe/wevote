@@ -5,6 +5,12 @@ export const ADD_UPDATE_RESPONSE = gql`
     AddUpdateResponse(record: $record) @client
   }
 `
+export const RESET_RESPONSE = gql`
+  mutation resetResponseMap ($creatorId: String!) {
+    resetResponseMap(creatorId: $creatorId) @client
+  }
+`
+
 export const UPDATE_AUTH_STATUS = gql`
   mutation UpdateAuthStatus ($token: String!, $_id: String!) {
     UpdateAuthStatus(token: $token, _id: $_id) @client
@@ -28,10 +34,16 @@ export const UPDATE_USER_PROFILE = gql`
           street
           city
           state
-          country
-          zip
         }
       }
+    }
+  }
+`
+
+export const CREATE_USER_RESPONSE_MAP = gql`
+  mutation ResponseCreateMany ($records: [CreateManyResponseInput!]) {
+    ResponseCreateMany (records: $records) {
+      message
     }
   }
 `

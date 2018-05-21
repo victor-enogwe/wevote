@@ -6,41 +6,7 @@ import compose from 'recompose/compose'
 // import Hidden from 'material-ui/Hidden'
 import Button from 'material-ui/Button'
 import withWidth from 'material-ui/utils/withWidth'
-
-const styles = theme => ({
-  hero: {
-    backgroundColor: theme.palette.primary.main,
-    height: 'calc(80vh - 15px)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexFlow: 'row wrap'
-  },
-  heroText: {
-    height: 'auto',
-    padding: theme.spacing.unit * 2,
-    maxWidth: '400px',
-    flex: '1 16%'
-  },
-  heroBook: {
-    height: '50vh',
-    maxWidth: '400px',
-    padding: theme.spacing.unit * 2,
-    flex: '1 16%'
-  },
-  title: {
-    ...theme.typography.headline,
-    fontWeight: 900,
-    color: '#FFFFFF'
-  },
-  subHeading: {
-    ...theme.typography.subheading,
-    color: '#FFFFFF'
-  },
-  cta: {
-
-  }
-})
+import { heroStyles } from '../data/styles'
 
 function Hero (props) {
   return <div className={props.classes.hero}>
@@ -69,4 +35,4 @@ Hero.propTypes = {
   history: PropTypes.shape().isRequired
 }
 
-export default compose(withStyles(styles), withWidth(), withRouter)(Hero)
+export default compose(withStyles(heroStyles), withWidth(), withRouter)(Hero)

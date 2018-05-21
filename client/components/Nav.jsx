@@ -25,6 +25,7 @@ import MenuIcon from 'material-ui-icons/Menu'
 import Facebook from 'material-ui-next-community-icons/icons/facebook-box'
 import AccountCircle from 'material-ui-icons/AccountCircle'
 import BookIcon from 'material-ui-icons/LibraryBooks'
+import { Poll } from 'material-ui-icons'
 import { navStyles } from '../data/styles'
 
 export const UserAvatar = (props) => {
@@ -58,7 +59,7 @@ class Nav extends Component {
   }
   static LoginLink = props => <a href={'/api/v1/auth/facebook'} {...props} />
   static propTypes = {
-    title: PropTypes.string,
+    title: PropTypes.string.isRequired,
     classes: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
     user: PropTypes.shape(),
@@ -165,10 +166,17 @@ class Nav extends Component {
             }
 
             <MenuItem
-              onClick={this.handleCloseMenu.bind(null, '/news')}
+              onClick={this.handleCloseMenu.bind(null, '/vri')}
               className={classes.menuItem}
             >
-              <BookIcon className={classes.menuIcon} /> Election News
+              <Poll className={classes.menuIcon} /> Check VRI
+            </MenuItem>
+
+            <MenuItem
+              onClick={this.handleCloseMenu.bind(null, '/faqs')}
+              className={classes.menuItem}
+            >
+              <BookIcon className={classes.menuIcon} /> Election Faqs
             </MenuItem>
           </Menu>
         </Toolbar>

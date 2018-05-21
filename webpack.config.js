@@ -2,10 +2,10 @@ const env = require('dotenv')
 const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 env.config()
-const { NODE_ENV, HOST_NAME } = process.env
+const { NODE_ENV, HOST_NAME, WS_HOST_NAME, MAPS_KEY } = process.env
 const isDevMode = NODE_ENV === 'development'
 
 const config = {
@@ -41,7 +41,9 @@ const config = {
     new webpack.DefinePlugin({
       API_URL: JSON.stringify(`${HOST_NAME}/api/v1/`),
       HOST_NAME: JSON.stringify(`${HOST_NAME}`),
-      NODE_ENV: JSON.stringify(`${NODE_ENV}`)
+      WS_HOST_NAME: JSON.stringify(`${WS_HOST_NAME}`),
+      NODE_ENV: JSON.stringify(`${NODE_ENV}`),
+      MAPS_KEY: JSON.stringify(`${MAPS_KEY}`)
     }),
     new HtmlWebpackPlugin({
       title: 'FCC PINTEREST',

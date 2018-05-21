@@ -5,17 +5,19 @@ export const subResponseMapInterface = PropTypes.shape({
   answer: PropTypes.string
 })
 
-export const responseMapInterface = PropTypes.arrayOf(PropTypes.shape({
-  question: PropTypes.string.isRequired,
-  questionId: PropTypes.number.isRequired,
+export const responseInterface = PropTypes.shape({
+  questionId: PropTypes.string.isRequired,
   creatorId: PropTypes.string.isRequired,
   answer: PropTypes.string,
   subResponses: PropTypes.arrayOf(subResponseMapInterface)
-}))
+})
+
+export const responseMapInterface = PropTypes.arrayOf(responseInterface)
 
 export const optionsInterface = PropTypes.arrayOf(PropTypes.shape({
   title: PropTypes.string.isRequired,
-  nextQuestionId: PropTypes.number
+  nextQuestionId: PropTypes.string,
+  score: PropTypes.number.isRequired
 }))
 
 export const subQuestionsInterface = PropTypes.arrayOf(PropTypes.shape({
@@ -25,11 +27,10 @@ export const subQuestionsInterface = PropTypes.arrayOf(PropTypes.shape({
 }))
 
 export const questionInterface = (next, options, sub) => PropTypes.shape({
-  questionId: PropTypes.number.isRequired,
+  questionId: PropTypes.string.isRequired,
   question: PropTypes.string.isRequired,
   inputType: PropTypes.string.isRequired,
-  score: PropTypes.number.isRequired,
-  nextQuestionId: PropTypes.number[next ? 'isRequired' : ''],
+  nextQuestionId: PropTypes.string[next ? 'isRequired' : ''],
   externalData: PropTypes.string,
   options: optionsInterface[options ? 'isRequired' : ''],
   subQuestions: subQuestionsInterface[sub ? 'isRequired' : '']

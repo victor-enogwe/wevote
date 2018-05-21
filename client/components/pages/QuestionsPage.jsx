@@ -6,29 +6,48 @@ import PropTypes from 'prop-types'
 import Loader from 'react-loader-advanced'
 import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
-import { GET_QUESTIONS, GET_CURRENT_USER } from '../../store/queries'
+import { GET_QUESTIONS } from '../../store/queries'
+import {
+  CREATE_USER_RESPONSE_MAP, UPDATE_USER_PROFILE
+} from '../../store/mutations'
 import SubQuestions from '../SubQuestions'
 import OptionsInput from '../OptionsInput'
 import DateInput from '../DateInput'
 import TextInput from '../TextInput'
+import SelectInput from '../SelectInput'
 import { questionStyles } from '../../data/styles'
 import QuestionsNav from '../QuestionsNav'
 import QuestionsActions from '../QuestionsActions'
 import Recommendations from '../Recommendations'
-import { questionInterface, responseMapInterface } from '../../data/interfaces'
+import { questionInterface } from '../../data/interfaces'
+import { omitTypeName } from '../../store/resolvers'
 
 export const formatQuestionAndResponseMap = data => data
   .reduce((a, b, index) => ({ ...a, [b.questionId]: { ...b, index } }), {})
-class Questions extends Component {
+class QuestionsPage extends Component {
   state = { activeQuestionId: 1 }
+
+  componentDidMount () {
+    const { responseMap } = this.props.user
+    this.setState(prevState => ({
+      ...prevState, activeQuestionId: this.setQuestionIdOnLoad(responseMap)
+    }))
+  }
 
   static propTypes = {
     classes: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     questions: PropTypes.arrayOf(questionInterface(false, false, false)),
-    creatorId: PropTypes.string.isRequired,
-    responseMap: responseMapInterface,
-    vriTaken: PropTypes.bool.isRequired
+    user: PropTypes.object.isRequired,
+    creatorId: PropTypes.string.isRequired
+  }
+
+  setQuestionIdOnLoad = responseMap => {
+    const lastQuestion = responseMap.slice(-1)
+    const lastQuestionId = lastQuestion.length > 0
+      ? lastQuestion[0].questionId : 1
+
+    return lastQuestionId
   }
 
   getCurrentAnswer = (questionId, responseMap) => {
@@ -52,47 +71,92 @@ class Questions extends Component {
     return nextQuestionId
   }
 
-  stepsFinished = (activeQuestion, currentAnswer) => (!this
-    .getNextQuestionId(activeQuestion, currentAnswer) && Boolean(currentAnswer))
+  stepValid = (activeQuestion, currentAnswer) => {
+    let hasAnswer = false
+    if (Array.isArray(currentAnswer)) {
+      hasAnswer = currentAnswer.length === activeQuestion.subQuestions.length &&
+        currentAnswer.every(answer => answer.answer)
+    } else {
+      hasAnswer = Boolean(currentAnswer)
+    }
 
-  next = (activeQuestion, currentAnswer, finished) => {
-    this.setState(prevState => ({
-      activeQuestionId: this.getNextQuestionId(activeQuestion, currentAnswer)
-    }))
+    return hasAnswer
+  }
 
+  stepsFinished = (activeQuestion, currentAnswer) => {
+    const lastQuestion = !this.getNextQuestionId(activeQuestion, currentAnswer)
+    let hasAnswer = this.stepValid(activeQuestion, currentAnswer)
+
+    return lastQuestion && hasAnswer
+  }
+
+  next = async (activeQuestion, currentAnswer, finished) => {
     if (finished) {
-      this.props.client.writeData({
+      await this.props.client.writeData({
         id: `User:${this.props.creatorId}`, data: { vriTaken: true }
       })
+    }
+
+    if (finished && this.props.creatorId !== 'guest') {
+      await this.props.client.mutate({
+        mutation: CREATE_USER_RESPONSE_MAP,
+        variables: { records: this.props.user.responseMap.map(response => {
+          const { answer, questionId, creatorId } = response
+          const subResponses = response.subResponses.map(subResponse => {
+            const { answer, question } = subResponse
+
+            return { answer, question }
+          })
+          return { answer, questionId, creatorId, subResponses }
+        }) }
+      })
+      const { responseMap, ...record } = omitTypeName(this.props.user)
+
+      await this.props.client.mutate({
+        mutation: UPDATE_USER_PROFILE,
+        variables: { record }
+      })
+    }
+
+    if (!finished) {
+      this.setState(prevState => ({
+        activeQuestionId: this.getNextQuestionId(activeQuestion, currentAnswer)
+      }))
     }
   }
 
   goTo = id => this.setState(prevState => ({ activeQuestionId: id }))
 
   render () {
-    const { classes, creatorId, vriTaken } = this.props
-    const questions = formatQuestionAndResponseMap(this.props.questions)
-    const responseMap = formatQuestionAndResponseMap(this.props.responseMap)
+    const { classes, creatorId, user, questions } = this.props
+    const { vriTaken, responseMap } = user
+    const formattedQquestions = formatQuestionAndResponseMap(questions)
+    const formattedResponseMap = formatQuestionAndResponseMap(responseMap)
     const { activeQuestionId } = this.state
-    const currentAnswer = this.getCurrentAnswer(activeQuestionId, responseMap)
-    const activeQuestion = questions[activeQuestionId]
-    const { question, questionId, inputType, options } = activeQuestion
+    const currentAnswer = this
+      .getCurrentAnswer(activeQuestionId, formattedResponseMap)
+    const activeQuestion = formattedQquestions[activeQuestionId]
+    const {
+      question, questionId, inputType, options, externalData
+    } = activeQuestion
     const finished = this.stepsFinished(activeQuestion, currentAnswer)
-    const stepValid = responseMap[activeQuestionId] &&
-      (responseMap[activeQuestionId].answer ||
-      responseMap[activeQuestionId].subResponses
-        .every(response => response.answer))
+    const stepValid = this.stepValid(activeQuestion, currentAnswer)
 
     return <Grid container className={classes.grid}>
       <Grid item xs={12}>
         {!vriTaken ? <Grid container className={classes.questionGrid}>
           <QuestionsNav
-            questions={questions}
+            questions={formattedQquestions}
+            responseMap={formattedResponseMap}
+            getCurrentAnswer={this.getCurrentAnswer}
+            checkStepValidity={this.stepValid}
             activeStep={activeQuestion.index}
             goTo={this.goTo}
           />
 
-          <Typography className={classes.question}>{question}</Typography>
+          <Grid item xs={12} className={classes.questionTitleGrid}>
+            <Typography className={classes.question}>{question}</Typography>
+          </Grid>
 
           {inputType === 'text' ? <TextInput
             question={question}
@@ -120,6 +184,16 @@ class Questions extends Component {
             />
             : null}
 
+          {inputType === 'select' && externalData
+            ? <SelectInput
+              question={question}
+              questionId={questionId}
+              currentAnswer={currentAnswer}
+              creatorId={creatorId}
+              externalData={externalData}
+            />
+            : null}
+
           {inputType === 'none'
             ? <SubQuestions
               activeQuestion={activeQuestion}
@@ -129,11 +203,15 @@ class Questions extends Component {
             : null}
 
           <QuestionsActions
-            stepValidity={Boolean(stepValid)}
+            stepValidity={stepValid}
             finished={finished}
             next={this.next.bind(null, activeQuestion, currentAnswer, finished)}
           />
-        </Grid> : <Recommendations />}
+        </Grid> : <Recommendations
+          responseMap={formattedResponseMap}
+          questions={formattedQquestions}
+          creatorId={creatorId}
+        />}
       </Grid>
     </Grid>
   }
@@ -141,7 +219,7 @@ class Questions extends Component {
 
 const QuestionContainer = (props) => (
   <Loader show={props.loading} message='please wait'>
-    {!props.loading ? <Questions {...props} /> : null}
+    {!props.loading ? <QuestionsPage {...props} /> : null}
   </Loader>
 )
 

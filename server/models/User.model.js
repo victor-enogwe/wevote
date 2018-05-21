@@ -11,9 +11,9 @@ import {
 
 const Schema = mongoose.Schema
 const addressSchema = new Schema({
-  street: { type: String, index: true },
-  city: { type: String, index: true },
-  state: { type: String, index: true }
+  street: { type: String },
+  city: { type: String },
+  state: { type: String }
 }, { autoIndex: false })
 const userSchema = new Schema({
   socialId: {
@@ -25,8 +25,7 @@ const userSchema = new Schema({
   displayName: {
     type: String,
     required: [true, 'displayName is required'],
-    match: /^([A-Za-z]+((\s[A-Za-z]+)+)?)$/,
-    index: true
+    match: /^([A-Za-z]+((\s[A-Za-z]+)+)?)$/
   },
   emails: [{ value: {
     type: String,
@@ -54,7 +53,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   }
-})
+}, { autoIndex: false })
 
 const model = mongoose.model('User', userSchema)
 const modelTC = composeWithMongoose(model, {

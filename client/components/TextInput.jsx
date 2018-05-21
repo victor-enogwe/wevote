@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { Mutation, withApollo } from 'react-apollo'
-import Paper from 'material-ui/Paper'
+import Grid from 'material-ui/Grid'
 import Loader from 'react-loader-advanced'
 import Input, { InputLabel } from 'material-ui/Input'
 import { FormControl, FormHelperText } from 'material-ui/Form'
@@ -21,12 +21,12 @@ class TextInput extends Component {
     return this.setState(prevState => {
       const answer = event.target.value || ''
       const error = !/\w+/.test(answer)
-      const record = { questionId, answer, creatorId, question }
+      const record = { questionId, answer, creatorId }
 
       if (!error && !subQuestionField) {
         updateAnswer({ variables: { record } })
       } else if (subQuestionField) {
-        updateSubQuestion(record)
+        updateSubQuestion({ ...record, question })
       }
 
       return { error: !/\w+/.test(answer) }
@@ -35,7 +35,7 @@ class TextInput extends Component {
 
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    questionId: PropTypes.number.isRequired,
+    questionId: PropTypes.string.isRequired,
     question: PropTypes.string.isRequired,
     creatorId: PropTypes.string.isRequired,
     currentAnswer: PropTypes.string,
@@ -52,7 +52,7 @@ class TextInput extends Component {
     const { error } = this.state
 
     return (
-      <Paper className={classes.paper} square elevation={0}>
+      <Grid item xs={12}>
         <Mutation
           mutation={ADD_UPDATE_RESPONSE}
           children={(updateAnswer, { data, loading, error: Error }) => {
@@ -82,7 +82,7 @@ class TextInput extends Component {
             </Loader>
           }}
         />
-      </Paper>
+      </Grid>
     )
   }
 }
