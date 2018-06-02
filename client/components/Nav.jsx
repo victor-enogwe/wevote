@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import withStyles from 'material-ui/styles/withStyles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Img from 'react-image'
 import Loader from 'react-loader-advanced'
 import compose from 'recompose/compose'
-import Hidden from 'material-ui/Hidden'
-import withWidth from 'material-ui/utils/withWidth'
+import Hidden from '@material-ui/core/Hidden'
+import withWidth from '@material-ui/core/withWidth'
 import { withApollo } from 'react-apollo'
 import {
   AppBar,
@@ -20,12 +20,12 @@ import {
   Menu,
   MenuItem,
   IconButton
-} from 'material-ui'
-import MenuIcon from 'material-ui-icons/Menu'
+} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 import Facebook from 'material-ui-next-community-icons/icons/facebook-box'
-import AccountCircle from 'material-ui-icons/AccountCircle'
-import BookIcon from 'material-ui-icons/LibraryBooks'
-import { Poll } from 'material-ui-icons'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import BookIcon from '@material-ui/icons/LibraryBooks'
+import Poll from '@material-ui/icons/Poll'
 import { navStyles } from '../data/styles'
 
 export const UserAvatar = (props) => {
@@ -61,13 +61,18 @@ class Nav extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     classes: PropTypes.object.isRequired,
-    logout: PropTypes.func.isRequired,
     user: PropTypes.shape(),
     history: PropTypes.shape().isRequired
   }
 
   static contextTypes: {
     router: PropTypes.func.isRequired
+  }
+
+  logout = async (redirect, path = '/') => {
+    this.setState({ creatorId: 'guest' })
+    await this.props.client.resetStore()
+    if (redirect) this.props.history.replace(path)
   }
 
   handleOpenMenu = event => {
@@ -83,7 +88,7 @@ class Nav extends Component {
   };
 
   render () {
-    const { user, classes, title, logout, history } = this.props
+    const { user, classes, title, history } = this.props
     const auth = user && user.emails !== null
     const { anchorEl } = this.state
     const open = Boolean(anchorEl)
@@ -92,7 +97,7 @@ class Nav extends Component {
         control={
           <Switch
             checked={auth}
-            onChange={logout.bind(null, true, '/')}
+            onChange={this.logout.bind(null, true, '/')}
             aria-label='LoginSwitch'
           />
         }
@@ -155,16 +160,6 @@ class Nav extends Component {
             open={open}
             onClose={this.handleCloseMenu}
           >
-            { auth && history.location.pathname !== '/profile'
-              ? <MenuItem
-                onClick={this.handleCloseMenu.bind(null, '/profile')}
-                className={classes.menuItem}
-              >
-                <AccountCircle className={classes.menuIcon} /> View Profile
-              </MenuItem>
-              : null
-            }
-
             <MenuItem
               onClick={this.handleCloseMenu.bind(null, '/vri')}
               className={classes.menuItem}

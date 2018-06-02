@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import ExpansionPanel, {
-  ExpansionPanelDetails, ExpansionPanelSummary
-} from 'material-ui/ExpansionPanel'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import Loader from 'react-loader-advanced'
-import Grid from 'material-ui/Grid'
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react'
-import PlaceIcon from 'material-ui-icons/Place'
-import Typography from 'material-ui/Typography'
-import { withStyles } from 'material-ui/styles'
+import Grid from '@material-ui/core/Grid'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { Map, Marker, GoogleApiWrapper } from 'google-maps-react'
+import Typography from '@material-ui/core/Typography'
+import withStyles from '@material-ui/core/styles/withStyles'
 import { scoreStyles } from '../../data/styles'
 import states from '../../data/States'
 
@@ -27,6 +27,10 @@ class PollingUnits extends Component {
     }
   }
   static propTypes = {
+    classes: PropTypes.object.isRequired,
+    lga: PropTypes.string.isRequired,
+    expanded: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
   mapdefaultProps = { center: { lat: 9.0820, lng: 8.6753 } }
@@ -69,7 +73,7 @@ class PollingUnits extends Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { classes, expanded, onChange } = this.props
     const { center } = this.mapdefaultProps
     const {
       inecLoading, data: { count, lat, lng, photos }
@@ -80,8 +84,10 @@ class PollingUnits extends Component {
       bounds.extend(photos[i])
     }
 
-    return <ExpansionPanel expanded className={classes.expansion}>
-      <ExpansionPanelSummary>
+    return <ExpansionPanel
+      expanded={expanded} onChange={onChange()} className={classes.expansion}
+    >
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Typography className={classes.heading} variant='title'>
           {count} Polling Centers In your LGA
         </Typography>

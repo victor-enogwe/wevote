@@ -1,8 +1,9 @@
 import React from 'react'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import createMuiTheme from 'material-ui/styles/createMuiTheme'
-import green from 'material-ui/colors/green'
-import lightGreen from 'material-ui/colors/lightGreen'
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
+import { BrowserRouter } from 'react-router-dom'
+import green from '@material-ui/core/colors/green'
+import lightGreen from '@material-ui/core/colors/lightGreen'
 import { render } from 'react-dom'
 import { ApolloClient, split } from 'apollo-boost'
 import { getMainDefinition } from 'apollo-utilities'
@@ -16,7 +17,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { CachePersistor } from 'apollo-cache-persist'
 import { GET_AUTH_STATUS, GET_CURRENT_USER } from './store/queries'
 import { withClientState } from 'apollo-link-state'
-import { BrowserRouter } from 'react-router-dom'
 import { defaultState as defaults } from './store/store.configuration'
 import { typeDefs } from './store/type-definitions'
 import {
@@ -94,42 +94,29 @@ export const theme = createMuiTheme({
   status: { danger: lightGreen }
 })
 
-const Vote = graphql(GET_CURRENT_USER, {
-  props: ({ data: {
-    UserFindById: user, error, loading, refetch: fetchUser
-  } }) => ({ loading, error, user, fetchUser, persistor }),
-  options: props => ({
-    variables: { _id: props.creatorId },
-    fetchPolicy: props.skipQuery ? 'cache-only' : 'cache-and-network'
-  })
-})(App)
+const Vote = graphql(GET_AUTH_STATUS, {
+  props: ({ data: { Auth: { _id: creatorId } } }) => ({ creatorId })
+})(graphql(GET_CURRENT_USER, {
+  props: ({ data: { UserFindById: user, error, loading } }) => ({
+    loading, error, user, persistor
+  }),
+  options: props => {
+    const { creatorId } = props
 
-class WeVote extends React.Component {
-  state = {
-    creatorId: Client.readQuery({ query: GET_AUTH_STATUS }).Auth._id,
-    skipQuery: true
+    return {
+      variables: { _id: creatorId },
+      fetchPolicy: creatorId === 'guest' ? 'cache-only' : 'cache-and-network'
+    }
   }
+})(App))
 
-  setAuthState = state => this
-    .setState(prevState => ({ ...prevState, ...state }))
-
-  render () {
-    return (
-      <BrowserRouter>
-        <MuiThemeProvider theme={theme}>
-          <ApolloProvider client={Client}>
-            <Vote
-              {...this.props} creatorId={this.state.creatorId}
-              setAuthState={this.setAuthState}
-              loading={false}
-              skipQuery={this.state.skipQuery}
-            />
-          </ApolloProvider>
-        </MuiThemeProvider>
-      </BrowserRouter>
-    )
-  }
-}
+const WeVote = () => (<BrowserRouter>
+  <MuiThemeProvider theme={theme}>
+    <ApolloProvider client={Client}>
+      <Vote />
+    </ApolloProvider>
+  </MuiThemeProvider>
+</BrowserRouter>)
 
 persistor.restore()
   .then((per) => render(<WeVote />, document.getElementById('vote')))

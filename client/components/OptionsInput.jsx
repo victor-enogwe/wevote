@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Mutation, withApollo } from 'react-apollo'
-import { withStyles } from 'material-ui/styles'
-import Grid from 'material-ui/Grid'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Loader from 'react-loader-advanced'
-import List, {
-  ListItem, ListItemSecondaryAction, ListItemText
-} from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import Paper from 'material-ui/Paper'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
+import Grid from '@material-ui/core/Grid'
+import Checkbox from '@material-ui/core/Checkbox'
+import Paper from '@material-ui/core/Paper'
 import { ADD_UPDATE_RESPONSE } from '../store/mutations'
 import { optionStyles } from '../data/styles'
 

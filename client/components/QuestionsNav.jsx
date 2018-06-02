@@ -1,8 +1,10 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
-import Grid from 'material-ui/Grid'
 import PropTypes from 'prop-types'
-import Stepper, { Step, StepButton } from 'material-ui/Stepper'
+import withStyles from '@material-ui/core/styles/withStyles'
+import Grid from '@material-ui/core/Grid'
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepButton from '@material-ui/core/StepButton'
 import { questionNavStyles } from '../data/styles'
 
 function QuestionNav (props) {

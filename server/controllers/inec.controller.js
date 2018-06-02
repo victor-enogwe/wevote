@@ -9,7 +9,21 @@ data=%7B"state"%3A"${state}"%2C"lga"%3A"${lgaId}"%7D`
 
     return res.status(200).json({ status: 'success', data })
   } catch (error) {
-    console.log(error)
+    return res.status(500).json({ status: 'error', error })
+  }
+}
+
+export async function getRegCenters (req, res) {
+  try {
+    const { data } = await axios({
+      url: req.query.url,
+      headers: { Accept: 'application/pdf' },
+      responseType: 'stream'
+    })
+    res.set('Content-type', 'application/pdf')
+
+    return data.pipe(res)
+  } catch (error) {
     return res.status(500).json({ status: 'error', error })
   }
 }

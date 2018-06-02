@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
-import { withStyles } from 'material-ui/styles'
-import Grid from 'material-ui/Grid'
+import { withStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
 import { questionActionStyles } from '../data/styles'
 
 class QuestionsActions extends Component {

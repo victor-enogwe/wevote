@@ -1,11 +1,11 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import withStyles from 'material-ui/styles/withStyles'
+import withStyles from '@material-ui/core/styles/withStyles'
 import compose from 'recompose/compose'
-// import Hidden from 'material-ui/Hidden'
-import Button from 'material-ui/Button'
-import withWidth from 'material-ui/utils/withWidth'
+// import Hidden from '@material-ui/core/Hidden'
+import Button from '@material-ui/core/Button'
+import withWidth from '@material-ui/core/withWidth'
 import { heroStyles } from '../data/styles'
 
 function Hero (props) {

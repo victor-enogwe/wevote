@@ -12,6 +12,10 @@ export const defaultState = {
     photos: null,
     address: null,
     vriTaken: false,
+    roleDetails: {
+      title: 'guest',
+      __typename: 'Role'
+    },
     responseMap: [],
     __typename: 'User'
   }

@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { graphql, withApollo } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import Grid from 'material-ui/Grid'
+import Grid from '@material-ui/core/Grid'
 import PropTypes from 'prop-types'
 import Loader from 'react-loader-advanced'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import { GET_QUESTIONS } from '../store/queries'
 import ListRecommendations from './recommendations/ListRecommendations'
 import { recommendationsStyles } from '../data/styles'
 import Score from './recommendations/Score'
-import PollingUnits from './recommendations/PollingUnits'
 
 class Recommendations extends Component {
   state = { activeQuestionId: 1 }
@@ -115,8 +114,8 @@ class Recommendations extends Component {
         responseMap={responseMap}
         questions={questions}
         scoreData={scoreData}
+        lga={lga}
       />
-      <PollingUnits lga={lga} />
     </Grid>
   }
 }

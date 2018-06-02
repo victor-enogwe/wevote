@@ -2,6 +2,7 @@ const env = require('dotenv')
 const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 env.config()
@@ -51,7 +52,6 @@ const config = {
       filename: path.resolve(__dirname, 'dist/public/index.html')
     })
   ],
-
   resolve: { extensions: ['.js', '.jsx'] }
 }
 

@@ -90,7 +90,7 @@ export const GET_USER_RESPONSE_MAP = gql`
 `
 export const GET_NOTIFICATIONS = gql`
   query ($sort: SortConnectionNotificationEnum) {
-    NotificationConnection(first: 1, sort: $sort, last: 1, after: "opaqueCursor") {
+    NotificationConnection(first: 6, sort: $sort, last: 6, after: "opaqueCursor") {
       count
       pageInfo {
         hasNextPage

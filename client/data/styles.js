@@ -2,22 +2,13 @@ export const appStyles = theme => ({
   page: {
     backgroundColor: theme.palette.primary.main,
     height: `calc(80vh - ${theme.spacing.unit}px)`,
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexFlow: 'row wrap',
     padding: theme.spacing.unit
   }
 })
 export const questionStyles = theme => ({
   grid: {
+    backgroundColor: theme.palette.primary.main,
     height: 'calc(80vh - 24px)',
-    display: 'flex',
-    flexFlow: 'row wrap',
-    justifyContent: 'center',
-    alignContent: 'center',
-    // maxWidth: 800,
     overflowY: 'scroll',
     marginBottom: theme.spacing.unit
   },
@@ -96,6 +87,8 @@ export const notificationsPagesStyles = theme => {
     },
     drawerPaper: {
       position: 'relative',
+      height: 'calc(80vh - 25px)',
+      overflowY: 'scroll',
       width: 240
     },
     drawerHeader: {
@@ -107,8 +100,9 @@ export const notificationsPagesStyles = theme => {
     },
     content: {
       flexGrow: 1,
+      height: 'calc(80vh - 25px)',
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 3,
+      padding: theme.spacing.unit,
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -134,6 +128,27 @@ export const notificationsPagesStyles = theme => {
     }
   }
 }
+
+export const notificationStyles = theme => ({
+  drawerContent: {
+    height: 'calc(72vh - 8px)',
+    marginTop: theme.spacing.unit,
+    padding: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit * 3,
+    overflowY: 'scroll',
+    overflowX: 'hidden'
+  },
+  notice: theme.mixins.gutters({
+    minWidth: 200,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2
+  })
+})
+
+export const notificationSettingsStyles = theme => ({
+  drawerContent: notificationStyles(theme).drawerContent
+})
 
 export const heroStyles = theme => ({
   hero: {
@@ -428,6 +443,9 @@ export const scoreStyles = theme => ({
     position: 'relative !important',
     paddingBottom: 20,
     minHeight: 200
+  },
+  progress: {
+    margin: '0 auto'
   }
 })
 

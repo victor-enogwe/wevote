@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { graphql, withApollo } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import Grid from 'material-ui/Grid'
 import PropTypes from 'prop-types'
 import Loader from 'react-loader-advanced'
-import { withStyles } from 'material-ui/styles'
-import Typography from 'material-ui/Typography'
+import Grid from '@material-ui/core/Grid'
+import withStyles from '@material-ui/core/styles/withStyles'
+import Typography from '@material-ui/core/Typography'
 import { GET_QUESTIONS } from '../../store/queries'
 import {
   CREATE_USER_RESPONSE_MAP, UPDATE_USER_PROFILE
@@ -142,8 +142,13 @@ class QuestionsPage extends Component {
     const finished = this.stepsFinished(activeQuestion, currentAnswer)
     const stepValid = this.stepValid(activeQuestion, currentAnswer)
 
-    return <Grid container className={classes.grid}>
-      <Grid item xs={12}>
+    return <Grid
+      container
+      className={classes.grid}
+      justify='center'
+      alignContent='center'
+    >
+      <Grid item xs={12} sm={12} lg={8}>
         {!vriTaken ? <Grid container className={classes.questionGrid}>
           <QuestionsNav
             questions={formattedQquestions}

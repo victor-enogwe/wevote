@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import withStyles from 'material-ui/styles/withStyles'
-import BottomNavigation,
-{ BottomNavigationAction } from 'material-ui/BottomNavigation'
-import BookIcon from 'material-ui-icons/LibraryBooks'
-import AccountCircle from 'material-ui-icons/AccountCircle'
-import TradeIcon from 'material-ui-icons/ShopTwo'
-import GTranslate from 'material-ui-icons/GTranslate'
+import withStyles from '@material-ui/core/styles/withStyles'
+import BottomNavigation from '@material-ui/core/BottomNavigation'
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import BookIcon from '@material-ui/icons/LibraryBooks'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import TradeIcon from '@material-ui/icons/ShopTwo'
+// import GTranslate from '@material-ui/icons/GTranslate'
 
 class BottomNav extends React.Component {
   routes = ['elect', '/elections', '/notifications', '/social']
@@ -40,9 +40,9 @@ class BottomNav extends React.Component {
         showLabels
         className={classes.root}
       >
-        <BottomNavigationAction
+        {/* <BottomNavigationAction
           value='language' label='Language' icon={<GTranslate />}
-        />
+        /> */}
         <BottomNavigationAction
           value='election' label='Election' icon={<AccountCircle />}
         />
