@@ -191,12 +191,12 @@ app.use('/graphql', function (req, res, next) {
 
 if (isDevMode) {
   (0, _middlewares.devMiddleware)(app);
-} else {
-  app.use('*', function (req, res) {
-    res.set('content-type', 'text/html');
-    return res.send(_middlewares.html);
-  });
 }
+
+app.use('*', function (req, res) {
+  res.set('content-type', 'text/html');
+  return res.send(_middlewares.html);
+});
 
 _models.database.on('error', function () {
   return _jsLogger2.default.info('connection error');
@@ -206,7 +206,10 @@ _models.database.once('open', function () {
     cert: _fs2.default.readFileSync(_path2.default.join(__dirname, 'ssl/cert.pem')),
     key: _fs2.default.readFileSync(_path2.default.join(__dirname, 'ssl/key.pem'))
   } : {};
-  var server = _https2.default.createServer(options, app);
+  var server = _https2.default.createServer({
+    cert: _fs2.default.readFileSync(_path2.default.join(__dirname, 'ssl/cert.pem')),
+    key: _fs2.default.readFileSync(_path2.default.join(__dirname, 'ssl/key.pem'))
+  }, app);
 
   server.on('listening', onListening.bind(null, server)).on('error', onError);
 

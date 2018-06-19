@@ -31,16 +31,12 @@ Roboto:300,400,500|Material+Icons">
 </body>
 </html>`
 
-export default function devMiddleware (app) {
-  const compiler = webpack(webpackConfig)
-  app.use(webpackDev(compiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath
-  }))
-  app.use(webpackHot(compiler))
+export default function devMiddleware (app, isDevMode) {
+  if (isDevMode) {
+    const compiler = webpack(webpackConfig)
 
-  app.use('*', (req, res) => {
-    res.set('content-type', 'text/html')
-    return res.send(html)
-  })
+    return app.use(webpackDev(compiler, {
+      noInfo: true, publicPath: webpackConfig.output.publicPath
+    }), webpackHot(compiler))
+  }
 };

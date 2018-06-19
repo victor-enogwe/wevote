@@ -84,7 +84,7 @@ const questionSchema = new Schema({
   recommendation: {
     type: String,
     validate: [{
-      validator: value => /\w{0,255}/.test(value),
+      validator: value => /\w{0,1000}/.test(value),
       message: 'recommendation must be string between 0 and 1000 characters'
     }]
   }

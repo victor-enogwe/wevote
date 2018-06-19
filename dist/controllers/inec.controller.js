@@ -9,6 +9,14 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+/**
+ * Get Polling Units co-ordinates from Inec
+ *
+ * @export
+ * @param {Object} req the request object
+ * @param {Object} res the response object
+ * @returns {Object} polling units co-ordinates
+ */
 var getPollingUnits = exports.getPollingUnits = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
     var _req$query, state, lgaId, url, _ref2, data;
@@ -46,6 +54,17 @@ var getPollingUnits = exports.getPollingUnits = function () {
   };
 }();
 
+/**
+ * Get Reg Centers in LGA from Inec
+ * needs takes a url query param
+ *
+ * @export
+ * @param {Object} req the request object
+ * @param {Object} res the response object
+ * @returns {Object} reg centers in an lga
+ */
+
+
 var getRegCenters = exports.getRegCenters = function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(req, res) {
     var _ref4, data;
@@ -59,16 +78,16 @@ var getRegCenters = exports.getRegCenters = function () {
             return (0, _axios2.default)({
               url: req.query.url,
               headers: { Accept: 'application/pdf' },
-              responseType: 'blob'
+              responseType: 'stream'
             });
 
           case 3:
             _ref4 = _context2.sent;
             data = _ref4.data;
 
-            res.type = 'application/pdf';
+            res.set('Content-type', 'application/pdf');
 
-            return _context2.abrupt('return', res.status(200).json(data));
+            return _context2.abrupt('return', data.pipe(res));
 
           case 9:
             _context2.prev = 9;

@@ -28,14 +28,8 @@ var html = exports.html = '<!DOCTYPE html><html lang="en">\n<head>\n  <title>WE 
 
 function devMiddleware(app) {
   var compiler = (0, _webpack2.default)(_webpack4.default);
-  app.use((0, _webpackDevMiddleware2.default)(compiler, {
-    noInfo: true,
-    publicPath: _webpack4.default.output.publicPath
-  }));
-  app.use((0, _webpackHotMiddleware2.default)(compiler));
 
-  app.use('*', function (req, res) {
-    res.set('content-type', 'text/html');
-    return res.send(html);
-  });
+  return app.use((0, _webpackDevMiddleware2.default)(compiler, {
+    noInfo: true, publicPath: _webpack4.default.output.publicPath
+  }), (0, _webpackHotMiddleware2.default)(compiler));
 };

@@ -9,6 +9,15 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+/**
+ * Assign User roles
+ *
+ * @export
+ * @param {Object} req the request object
+ * @param {Object} res the response object
+ * @param {Function} next the callback
+ * @returns {Function} the callback if successful
+ */
 var assignRole = exports.assignRole = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res, next) {
     var _ref2, roleId;
@@ -53,6 +62,7 @@ var assignRole = exports.assignRole = function () {
     return _ref.apply(this, arguments);
   };
 }();
+
 /**
  * generate Jwt
  *

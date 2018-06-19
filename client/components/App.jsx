@@ -10,6 +10,8 @@ import LoginPage from './pages/LoginPage'
 import QuestionsPage from './pages/QuestionsPage'
 import NotificationsPage from './pages/NotificationsPage'
 import FourZeroFourPage from './pages/FourZeroFourPage'
+import SocialPage from './pages/SocialPage'
+import ElectionsPage from './pages/ElectionsPage'
 import BottomNav from './BottomNav'
 import Snack from './Snack'
 import { appStyles } from '../data/styles'
@@ -32,6 +34,8 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route exact path='/login' component={LoginPage} />
+          <Route exact path='/social' component={SocialPage} />
+          <Route exact path='/elections' component={ElectionsPage} />
 
           <Route
             exact path='/vri'

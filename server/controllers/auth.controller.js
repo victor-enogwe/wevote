@@ -2,7 +2,15 @@ import jsonwebtoken from 'jsonwebtoken'
 import { Role } from '../models'
 
 const { JWT_SECRET } = process.env
-
+/**
+ * Assign User roles
+ *
+ * @export
+ * @param {Object} req the request object
+ * @param {Object} res the response object
+ * @param {Function} next the callback
+ * @returns {Function} the callback if successful
+ */
 export async function assignRole (req, res, next) {
   try {
     if (!req.user.roleId) {
@@ -16,6 +24,7 @@ export async function assignRole (req, res, next) {
     return res.status(500).json({ status: 'error', message: error.message })
   }
 }
+
 /**
  * generate Jwt
  *

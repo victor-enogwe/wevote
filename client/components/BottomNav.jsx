@@ -44,7 +44,7 @@ class BottomNav extends React.Component {
           value='language' label='Language' icon={<GTranslate />}
         /> */}
         <BottomNavigationAction
-          value='election' label='Election' icon={<AccountCircle />}
+          value='elections' label='Elections' icon={<AccountCircle />}
         />
         {creatorId === 'guest' ? null : <BottomNavigationAction
           value='notifications' label='Notifications' icon={<BookIcon />}

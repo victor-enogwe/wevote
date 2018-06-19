@@ -1,5 +1,8 @@
-import { config } from 'dotenv'
-import fs from 'fs'
+import { load } from 'dotenv'
+import { create as createCert, Greenlock } from 'greenlock'
+import { create as storeCert } from 'le-store-certbot'
+import { create as leHttpChallenge } from 'le-challenge-fs'
+import { create as leSniChallenge } from 'le-challenge-sni'
 import debug from 'debug'
 import path from 'path'
 import express from 'express'
@@ -18,14 +21,31 @@ import Routes from './routes'
 import { getUser } from './controllers/auth.controller'
 import { html, devMiddleware, passport } from './middlewares'
 
-config()
+load()
 debug('wevote:app')
 Logger.useDefaults()
 
 const app = express()
-const { NODE_ENV, PORT, HOST_NAME } = process.env
-
+const { NODE_ENV, PORT, HOST_NAME, ADMIN_EMAIL } = process.env
 export const isDevMode = NODE_ENV === 'development'
+export const isProd = NODE_ENV === 'production'
+const sniChallenge = leSniChallenge({ debug: isDevMode })
+const leProdUrl = 'https://acme-v02.api.letsencrypt.org/directory'
+const leStagingUrl = 'https://acme-staging-v02.api.letsencrypt.org/directory'
+const ssl = createCert({
+  server: isProd ? leProdUrl : leStagingUrl,
+  email: ADMIN_EMAIL,
+  agreeTos: true,
+  approveDomains: [HOST_NAME],
+  store: storeCert({ webrootPath: './' }),
+  challenges: {
+    'http-01': leHttpChallenge({ webrootPath: './', debug: isDevMode }),
+    'tls-sni-01': sniChallenge,
+    'tls-sni-02': sniChallenge
+  },
+  debug: isDevMode,
+  version: 'v02'
+})
 
 /**
  * Normalize a port into a number, string, or false.
@@ -44,7 +64,7 @@ export const normalizePort = (val) => {
   return false
 }
 
-const port = normalizePort(PORT || '3000')
+const port = normalizePort(isDevMode ? 3000 : (PORT || 3000))
 
 /**
  * Event listener for HTTP server "error" event.
@@ -131,22 +151,14 @@ app.use('/graphql', (req, res, next) => {
   formatError: err => ({ message: err.message, status: err.status })
 })(req, res))
 
-if (isDevMode) {
-  devMiddleware(app)
-} else {
-  app.use('*', (req, res) => {
-    res.set('content-type', 'text/html')
-    return res.send(html)
-  })
-}
+devMiddleware(app, isDevMode)
+app.get('/health-check', (req, res) => res.status(200)
+  .json({ status: 200, message: 'wevote server up' }))
+app.use('*', (req, res) => res.set('content-type', 'text/html').send(html))
 
 database.on('error', () => Logger.info('connection error'))
 database.once('open', () => {
-  const options = isDevMode ? {
-    cert: fs.readFileSync(path.join(__dirname, 'ssl/cert.pem')),
-    key: fs.readFileSync(path.join(__dirname, 'ssl/key.pem'))
-  } : {}
-  const server = https.createServer(options, app)
+  const server = https.createServer(ssl.httpsOptions, ssl.middleware(app))
 
   server.on('listening', onListening.bind(null, server)).on('error', onError)
 

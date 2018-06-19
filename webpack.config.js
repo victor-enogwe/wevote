@@ -1,9 +1,9 @@
 const env = require('dotenv')
 const webpack = require('webpack')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 
 env.config()
 const { NODE_ENV, HOST_NAME, WS_HOST_NAME, MAPS_KEY } = process.env
@@ -16,7 +16,8 @@ const config = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist/public/assets'),
-    publicPath: '/public/assets/'
+    publicPath: '/public/assets/',
+    globalObject: 'this'
   },
   module: {
     rules: [
@@ -46,10 +47,10 @@ const config = {
       NODE_ENV: JSON.stringify(`${NODE_ENV}`),
       MAPS_KEY: JSON.stringify(`${MAPS_KEY}`)
     }),
-    new HtmlWebpackPlugin({
-      title: 'FCC PINTEREST',
-      template: './server/public/index.html',
-      filename: path.resolve(__dirname, 'dist/public/index.html')
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new UglifyJsPlugin({
+      sourceMap: false,
+      uglifyOptions: { mangle: true, compress: true }
     })
   ],
   resolve: { extensions: ['.js', '.jsx'] }
@@ -61,8 +62,8 @@ if (isDevMode) {
     'webpack-hot-middleware/client?reload=true&quiet=true'
   ]
   config.plugins = [
-    ...config.plugins,
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    ...config.plugins
     // new BundleAnalyzerPlugin()
   ]
 }
