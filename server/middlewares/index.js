@@ -1,5 +1,16 @@
-import devMiddleware, { html } from './dev.middleware'
 import passport from './passport.middleware'
+import {
+  devMiddleware,
+  errorFourZeroFourMiddleware,
+  httpErrorMiddleware,
+  httpRequestLoggingMiddleware,
+  setHeadersMiddleware,
+  healthCheckMiddleware,
+  graphqlExpressMiddleware,
+  checkQuerySizeMiddleware,
+  filterKeysMiddleware,
+  frontendMiddleware
+} from './express.middleware'
 import {
   authFields,
   modifyResolver,
@@ -25,13 +36,23 @@ export function catchBlock (devMode, callback, errorCb) {
   }
 }
 
-module.exports.passport = passport
-module.exports.devMiddleware = devMiddleware
-module.exports.html = html
-module.exports.authFields = authFields
-module.exports.modifyResolver = modifyResolver
-module.exports.setGlobalResolvers = setGlobalResolvers
-module.exports.grantAccessAdmin = grantAccessAdmin
-module.exports.grantAccessAdminOrOwner = grantAccessAdminOrOwner
-module.exports.grantAccessUser = grantAccessUser
-module.exports.grantAccessOwner = grantAccessOwner
+module.exports = {
+  passport,
+  devMiddleware,
+  errorFourZeroFourMiddleware,
+  httpErrorMiddleware,
+  httpRequestLoggingMiddleware,
+  setHeadersMiddleware,
+  healthCheckMiddleware,
+  graphqlExpressMiddleware,
+  checkQuerySizeMiddleware,
+  filterKeysMiddleware,
+  frontendMiddleware,
+  authFields,
+  modifyResolver,
+  setGlobalResolvers,
+  grantAccessAdmin,
+  grantAccessAdminOrOwner,
+  grantAccessUser,
+  grantAccessOwner
+}

@@ -1,7 +1,7 @@
-import express from 'express'
+import { Router } from 'express'
 import passport from '../middlewares/passport.middleware'
 import { assignRole, generateJwt } from '../controllers/auth.controller'
-const auth = express.Router()
+const auth = Router()
 
 auth.get('/facebook', passport.authenticate('facebook'))
   .get('/facebook/callback', passport.authenticate('facebook', {

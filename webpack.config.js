@@ -1,9 +1,11 @@
 const env = require('dotenv')
+const path = require('path')
 const webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const path = require('path')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+// .BundleAnalyzerPlugin
 
 env.config()
 const { NODE_ENV, HOST_NAME, WS_HOST_NAME, MAPS_KEY } = process.env
@@ -15,8 +17,8 @@ const config = {
   entry: './client/index.jsx',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist/public/assets'),
-    publicPath: '/public/assets/',
+    path: path.resolve(__dirname, 'dist/client'),
+    publicPath: '/',
     globalObject: 'this'
   },
   module: {
@@ -51,9 +53,40 @@ const config = {
     new UglifyJsPlugin({
       sourceMap: false,
       uglifyOptions: { mangle: true, compress: true }
-    })
+    }),
+    new HtmlWebpackPlugin({
+      title: 'We Vote',
+      filename: 'index.html',
+      template: './client/index.html',
+      favicon: './favicon.ico',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+        keywords: 'vote, election, nigeria',
+        author: 'Team WeVote',
+        'og:url': 'https://wevote-ng.herokuapp.com',
+        'og:type': 'website',
+        'og:title': 'WeVote - Be Vote Ready',
+        'og:description': 'Be Vote Ready Today'
+      },
+      minify: !isDevMode,
+      showErrors: isDevMode,
+      alwaysWriteToDisk: true
+      // cache: true
+    }),
+    new HtmlWebpackHarddiskPlugin()
   ],
-  resolve: { extensions: ['.js', '.jsx'] }
+  resolve: { extensions: ['.js', '.jsx'] },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'initial'
+        }
+      }
+    }
+  }
 }
 
 if (isDevMode) {

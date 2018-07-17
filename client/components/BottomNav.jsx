@@ -27,7 +27,7 @@ class BottomNav extends React.Component {
     if (value === 'language') {
       return null
     }
-    return this.props.history.push(value)
+    return this.props.history.replace(`/${value}`)
   }
 
   render () {

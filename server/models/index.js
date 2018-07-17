@@ -38,7 +38,7 @@ Object.keys(relations).map(name => relations[name](modelTCS))
 dotenv.config()
 mongoose.set('debug', process.env.NODE_ENV === 'development')
 mongoose.Promise = Promise
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 
 export const database = mongoose.connection
 module.exports.graphqlSchemas = graphqlSchemas

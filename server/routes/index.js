@@ -1,6 +1,6 @@
-import auth from './auth.route'
-import inec from './inec.route'
+import authMiddleware from './auth.route'
+import inecMiddleware from './inec.route'
 
-export default {
-  auth, inec
+module.exports = {
+  authMiddleware, inecMiddleware
 }

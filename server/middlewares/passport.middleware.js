@@ -10,7 +10,7 @@ passport.use(new FacebookStrategy({
   callbackURL: `${HOST_NAME}/api/v1/auth/facebook/callback`,
   clientID: FACEBOOK_APP_ID,
   clientSecret: FACEBOOK_APP_SECRET,
-  profileFields: ['id', 'displayName', 'picture.type(large)', 'email'],
+  profileFields: ['id', 'displayName', 'picture', 'email'],
   scope: ['email', 'public_profile'],
   session: false
 }, async (...args) => {
