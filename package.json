@@ -1,6 +1,9 @@
 {
   "name": "wevote",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=9.8.0"
+  },
   "description": "A citizens mobilization app",
   "main": "./server/server.js",
   "scripts": {
