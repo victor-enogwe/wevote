@@ -48,6 +48,7 @@ On the the **Faceook Login** page on the dashboard,
   npm run start:dev
   ```
 - visit the app at https://**Your-github-username**.serveo.net
+- to fix issues with facebook login locally add **NODE_TLS_REJECT_UNAUTHORIZED=0** to your .env file
 
 # Testing New Branches
 To test a new branch prior to merging a pull request:

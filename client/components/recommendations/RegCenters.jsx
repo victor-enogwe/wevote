@@ -5,8 +5,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { Document, Page } from 'react-pdf/dist/entry.noworker'
-import 'react-pdf/dist/Page/AnnotationLayer.css'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -54,41 +52,45 @@ class RegCenters extends Component {
   }
 
   render () {
-    const { classes, lga, expanded, onChange } = this.props
-    const { pageIndex } = this.state
-    const pdfUrl = regCenters[this.getStateFromLga(lga)]
-    const url = `${API_URL}inec/centers?url=${pdfUrl}`
+    return import(/* webpackChunkName: "pdf" */ 'react-pdf/dist/entry.noworker')
+      .then(pdfLib => {
+        const { Document, Page } = pdfLib.default
+        const { classes, lga, expanded, onChange } = this.props
+        const { pageIndex } = this.state
+        const pdfUrl = regCenters[this.getStateFromLga(lga)]
+        const url = `${API_URL}inec/centers?url=${pdfUrl}`
 
-    return <ExpansionPanel
-      expanded={expanded} onChange={onChange()} className={classes.expansion}
-    >
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography className={classes.heading} variant='title'>
-          Registration Centers In your LGA
-        </Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        <Grid container className={classes.mapGrid}>
-          <Grid item xs={12}>
-            <Grid container justify='center' alignContent='center'>
-              <Document
-                file={url}
-                loading={<CircularProgress
-                  size={200} thickness={1} className={classes.progress}
-                />}
-                onLoadSuccess={this.onLoadPdf}
-              >
-                <Page
-                  pageIndex={pageIndex}
-                  onLoadSuccess={this.onLoadPdfPageLoad}
-                  onGetTextSuccess={this.onGetTextSuccess}
-                />
-              </Document>
+        return <ExpansionPanel
+          expanded={expanded} onChange={onChange()} className={classes.expansion}
+        >
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography className={classes.heading} variant='title'>
+              Registration Centers In your LGA
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Grid container className={classes.mapGrid}>
+              <Grid item xs={12}>
+                <Grid container justify='center' alignContent='center'>
+                  <Document
+                    file={url}
+                    loading={<CircularProgress
+                      size={200} thickness={1} className={classes.progress}
+                    />}
+                    onLoadSuccess={this.onLoadPdf}
+                  >
+                    <Page
+                      pageIndex={pageIndex}
+                      onLoadSuccess={this.onLoadPdfPageLoad}
+                      onGetTextSuccess={this.onGetTextSuccess}
+                    />
+                  </Document>
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      })
   }
 }
 

@@ -4,8 +4,7 @@ const webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-// .BundleAnalyzerPlugin
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 env.config()
 const { NODE_ENV, HOST_NAME, WS_HOST_NAME, MAPS_KEY } = process.env
@@ -13,11 +12,12 @@ const isDevMode = NODE_ENV === 'development'
 
 const config = {
   mode: NODE_ENV,
-  devtool: 'source-map',
+  // devtool: 'source-map',
   entry: './client/index.jsx',
   output: {
-    filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist/client'),
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
     publicPath: '/',
     globalObject: 'this'
   },
@@ -78,14 +78,23 @@ const config = {
   resolve: { extensions: ['.js', '.jsx'] },
   optimization: {
     splitChunks: {
+      automaticNameDelimiter: '-',
       cacheGroups: {
         commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
+          maxInitialRequests: 5,
+          minChunks: 5,
           chunks: 'initial'
+        },
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'initial',
+          name: 'vendor',
+          priority: 10,
+          enforce: true
         }
       }
-    }
+    },
+    runtimeChunk: true
   }
 }
 
@@ -96,8 +105,8 @@ if (isDevMode) {
   ]
   config.plugins = [
     new webpack.HotModuleReplacementPlugin(),
-    ...config.plugins
-    // new BundleAnalyzerPlugin()
+    ...config.plugins,
+    new BundleAnalyzerPlugin()
   ]
 }
 
