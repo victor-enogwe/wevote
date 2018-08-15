@@ -35,7 +35,7 @@ export function onListening (server) {
     ? `pipe ${addr}`
     : `port ${addr.port}`
 
-  logger.info(`🚧 Wirebot is Listening on ${bind}`)
+  logger.info(`🚧 WeVote is Listening on ${bind}`)
 }
 
 /**

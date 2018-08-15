@@ -54,7 +54,7 @@ app.use(httpErrorMiddleware)
 
 server.on('listening', onListening.bind(null, server)).on('error', onError)
 
-// Only run this section if file is loaded directly (eg `node wirebot.js`)
+// Only run this section if file is loaded directly (eg `node server.js`)
 // module loaded by something else eg. test or cyclic dependency
 // Fixes error: "Trying to open unclosed connection."
 if (require.main === module) {

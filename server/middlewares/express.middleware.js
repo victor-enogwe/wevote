@@ -71,7 +71,7 @@ export function graphqlExpressMiddleware (req, res) {
 }
 
 /**
- * Wirebots Http Request Logging Middlware
+ * wevotes Http Request Logging Middlware
  *
  * @export
  * @param {Object} req the http request object
@@ -120,7 +120,7 @@ export function setHeadersMiddleware (req, res) {
  * @returns {Object} the next middleware function
  */
 export function errorFourZeroFourMiddleware (req, res, next) {
-  const error = new Error('Wirebot Route Does Not Exist')
+  const error = new Error('WeVote Route Does Not Exist')
   error.status = 404
 
   return next(error)
