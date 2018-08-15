@@ -1,6 +1,6 @@
 import passport from './passport.middleware'
+import devMiddleware from './webpack.middleware'
 import {
-  devMiddleware,
   errorFourZeroFourMiddleware,
   httpErrorMiddleware,
   httpRequestLoggingMiddleware,

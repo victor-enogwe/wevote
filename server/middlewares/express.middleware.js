@@ -2,33 +2,11 @@ import morgan from 'morgan'
 import path from 'path'
 import graphqlHTTP from 'express-graphql'
 import DataLoader from 'dataloader'
-import webpackDev from 'webpack-dev-middleware'
-import webpackHot from 'webpack-hot-middleware'
-import webpack from 'webpack'
-import webpackConfig from '../../webpack.config'
 import { database, graphqlSchema as schema, Question } from '../models'
 import logger from '../logs'
 import { logServiceError, isDevMode } from '../utils'
 
 const { ALLOWED_ORIGINS, API_URL, APP_URL } = process.env
-
-/**
- * Webpack Dev Middleware
- *
- * @export
- * @param {Object} app express app
- * @param {Boolean} isDevMode app in development
- * @returns {Function} function webpack dev middleware
- */
-export function devMiddleware (app, isDevMode) {
-  if (isDevMode) {
-    const compiler = webpack(webpackConfig)
-
-    return app.use(webpackDev(compiler, {
-      noInfo: true, publicPath: webpackConfig.output.publicPath
-    }), webpackHot(compiler))
-  }
-};
 
 /**
  * Filter Express Keys
