@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ignatiusukwuoma/wevote-client.git"
+    "url": "git+https://github.com/iykyvic/wevote.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ignatiusukwuoma/wevote-client/issues"
+    "url": "https://github.com/iykyvic/wevote.git/issues"
   },
-  "homepage": "https://github.com/ignatiusukwuoma/wevote-client/#readme",
+  "homepage": "https://github.com/iykyvic/wevote.git/#readme",
   "dependencies": {
     "@material-ui/core": "^1.3.1",
     "@material-ui/icons": "^1.1.0",

@@ -17,7 +17,7 @@ Ensure you have the following installed locally:
 ### Installing
 Clone this git repository:
 ```sh
-$ git clone git@github.com:iykyvic/wevote-api.git
+$ git clone git@github.com:iykyvic/wevote.git
 ```
 Navigate into the root of the cloned directory:
 ```sh
