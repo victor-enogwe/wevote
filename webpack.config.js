@@ -12,12 +12,12 @@ const isDevMode = NODE_ENV === 'development'
 
 const config = {
   mode: NODE_ENV,
-  // devtool: 'source-map',
+  devtool: 'source-map',
   entry: './client/index.jsx',
   output: {
     path: path.resolve(__dirname, 'dist/client'),
     filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js',
+    // chunkFilename: '[name].bundle.js',
     publicPath: '/',
     globalObject: 'this'
   },
